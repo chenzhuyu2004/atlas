@@ -4,7 +4,9 @@
 # ATLAS Docker 镜像标签管理脚本
 # ==============================================================================
 
-set -e
+set -Eeuo pipefail
+IFS=$'\n\t'
+trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
 
 # Colors / 颜色
 GREEN='\033[0;32m'

@@ -5,7 +5,9 @@
 # 推送镜像到 Docker Hub 或私有仓库
 # ==============================================================================
 
-set -e
+set -Eeuo pipefail
+IFS=$'\n\t'
+trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
 
 # Colors / 颜色
 GREEN='\033[0;32m'

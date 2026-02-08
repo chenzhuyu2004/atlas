@@ -3,7 +3,9 @@
 # ATLAS Docker Container Run Script
 # ATLAS Docker 容器运行脚本
 # ==============================================================================
-
+set -Eeuo pipefail
+IFS=$'\n\t'
+trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
 set -e  # Exit on error / 出错时退出
 
 # Configuration / 配置
