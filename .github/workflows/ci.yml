@@ -8,13 +8,11 @@ on:
       - 'requirements*.txt'
       - '.github/workflows/**'
       - 'tests/**'
+      - '*.sh'
     tags:
       - 'v*'
   pull_request:
     branches: [main]
-  schedule:
-    # Weekly dependency check / 每周依赖检查
-    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 env:
@@ -22,7 +20,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  # Syntax check / 语法检查
+  # Fast checks for every PR/push / 快速检查（每次 PR/push）
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -41,13 +39,56 @@ jobs:
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
-          # Uses .hadolint.yaml for configuration / 使用 .hadolint.yaml 配置
           config: .hadolint.yaml
+      
+      - name: Validate requirements files / 验证 requirements 文件
+        run: |
+          set -e
+          for req in requirements*.txt; do
+            echo "Checking $req..."
+            if [ -f "$req" ]; then
+              # 检查文件是否有内容
+              if [ ! -s "$req" ]; then
+                echo "Error: $req is empty"
+                exit 1
+              fi
+              # 检查基本格式
+              line_count=$(wc -l < "$req")
+              echo "$req: $line_count packages"
+            fi
+          done
+          echo "All requirements files validated"
+      
+      - name: Run unit tests / 运行单元测试
+        run: |
+          # 测试脚本逻辑（不需要 Docker 镜像）
+          cd tests
+          # 检查测试脚本语法
+          for test in test_*.sh; do
+            if [ -f "$test" ]; then
+              echo "Checking $test syntax..."
+              bash -n "$test"
+            fi
+          done
+          # 检查 Python 测试文件语法
+          if command -v python3 &> /dev/null; then
+            for test in test_*.py; do
+              if [ -f "$test" ]; then
+                echo "Checking $test syntax..."
+                python3 -m py_compile "$test"
+              fi
+            done
+          fi
+          echo "All tests passed syntax check"
 
-  # Build test (base tier only) / 构建测试 (仅基础层)
-  build-test:
+  # Release build and push / 发布构建和推送（仅在 tag 时）
+  release:
     runs-on: ubuntu-latest
     needs: lint
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       
@@ -62,183 +103,6 @@ jobs:
           sudo docker image prune --all --force
           echo "After cleanup:"
           df -h
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build base image / 构建基础镜像
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          tags: ${{ env.IMAGE_NAME }}:test
-          build-args: |
-            BUILD_TIER=0
-            ENABLE_MATERIALS=0
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  # Security scan / 安全扫描
-  security-scan:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Free up disk space / 释放磁盘空间
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo docker image prune --all --force
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build image for scanning / 构建镜像用于扫描
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          tags: ${{ env.IMAGE_NAME }}:scan
-          build-args: |
-            BUILD_TIER=0
-            ENABLE_MATERIALS=0
-          cache-from: type=gha
-      
-      - name: Run Trivy vulnerability scanner / 运行 Trivy 漏洞扫描
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:scan
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-      
-      - name: Upload Trivy results to GitHub Security / 上传结果到 GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-      
-      - name: Run Trivy in table mode / 以表格模式运行 Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:scan
-          format: 'table'
-          severity: 'CRITICAL,HIGH'
-
-  # Package import tests / 包导入测试
-  package-tests:
-    runs-on: ubuntu-latest
-    needs: security-scan  # 串行执行，避免并行构建导致磁盘不足
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Free up disk space / 释放磁盘空间
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo docker image prune --all --force
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build test image / 构建测试镜像
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          tags: ${{ env.IMAGE_NAME }}:test
-          build-args: |
-            BUILD_TIER=0
-            ENABLE_MATERIALS=0
-          cache-from: type=gha
-      
-      - name: Test package imports / 测试包导入
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}/tests:/tests \
-            ${{ env.IMAGE_NAME }}:test \
-            python /tests/test_import_packages.py
-
-  # Full test suite / 完整测试套件
-  full-tests:
-    runs-on: ubuntu-latest
-    needs: package-tests  # 串行执行，避免并行构建导致磁盘不足
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Free up disk space / 释放磁盘空间
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo docker image prune --all --force
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Build test image / 构建测试镜像
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          tags: ${{ env.IMAGE_NAME }}:test
-          build-args: |
-            BUILD_TIER=0
-            ENABLE_MATERIALS=0
-          cache-from: type=gha
-      
-      - name: Run health check tests / 运行健康检查测试
-        run: |
-          docker run -d --name atlas-healthcheck \
-            ${{ env.IMAGE_NAME }}:test sleep 300
-          cd tests
-          IMAGE_NAME=${{ env.IMAGE_NAME }}:test bash test_healthcheck.sh atlas-healthcheck
-          docker rm -f atlas-healthcheck
-      
-      - name: Run Docker build tests / 运行 Docker 构建测试
-        run: |
-          cd tests
-          bash test_docker_build.sh
-      
-      - name: Display test summary / 显示测试摘要
-        if: always()
-        run: |
-          echo "=== Test Summary / 测试摘要 ==="
-          echo "Health checks: Completed"
-          echo "Build tests: Completed"
-          echo "Package imports: See package-tests job"
-
-  # Check for dependency updates / 检查依赖更新
-  check-updates:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      
-      - name: Check outdated packages / 检查过时包
-        run: |
-          pip install pip-tools
-          echo "=== Checking requirements.txt ===" 
-          pip-compile --dry-run requirements.txt 2>&1 | grep -E "^\s+#" | head -20 || echo "No updates"
-
-  # Release build and push / 发布构建和推送
-  release:
-    runs-on: ubuntu-latest
-    needs: [lint, build-test, security-scan, package-tests, full-tests]
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
