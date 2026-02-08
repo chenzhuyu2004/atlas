@@ -5,19 +5,19 @@
 flowchart TD
     subgraph Build
         A[build.sh / scripts/build.sh] --> B[pre-check.sh]
-        B --> C[Dockerfile 构建分层]
-        C --> D[requirements*.txt]
+        B --> C[Dockerfile]
+        C --> D[requirements.txt]
     end
-    subgraph CI/CD
-        E[.github/workflows/ci.yml] --> F[pre-commit 检查]
+    subgraph CI_CD
+        E[.github/workflows/ci.yml] --> F[pre-commit]
         F --> G[Shell/Python/Lint]
-        G --> H[Release 构建推送]
-        E --> I[单元测试/健康检查]
-        E --> J[安全扫描(Trivy)]
+        G --> H[Release]
+        E --> I[Unit Test]
+        E --> J[Trivy Scan]
     end
     subgraph Usage
-        K[run.sh / scripts/run.sh] --> L[容器启动]
-        L --> M[JupyterLab/交互]
+        K[run.sh / scripts/run.sh] --> L[Container Start]
+        L --> M[JupyterLab]
     end
     C --> E
     H --> K
