@@ -142,6 +142,30 @@ docker run --gpus all -it --rm \
 make tag TAG_VERSION=1.0.0 SOURCE=v0.6-llm
 ```
 
+## CI/CD
+
+### Continuous Integration / 持续集成
+
+本项目采用轻量级 CI 策略，针对大型 Docker 镜像进行了优化：
+
+- **Pull Request / Push**: 仅运行快速语法检查和 lint（~1分钟）
+  - Shell 脚本检查 (shellcheck)
+  - Dockerfile 检查 (hadolint)
+  - Requirements 文件验证
+  - 单元测试语法检查
+
+- **Release 构建**: 仅在打 tag 时触发（如 `v0.7.0`）
+  - 构建 tier 0 基础镜像
+  - 运行完整测试套件
+  - 推送至 GitHub Container Registry
+
+- **Nightly 构建**: 每晚 02:00 UTC (北京时间 10:00) 自动运行
+  - 构建 tier 0 和 tier 1 镜像
+  - 运行包导入、健康检查、安全扫描
+  - 推送 `nightly-tier0` 和 `nightly-tier1` 标签供测试使用
+
+可以在 Actions 页面手动触发 nightly 构建进行测试。
+
 ## License
 
 MIT
