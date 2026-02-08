@@ -65,8 +65,11 @@ if [ -n "${CONTAINER_NAME}" ]; then
     elif [ "${HEALTH_STATUS}" = "none" ]; then
       print_warn "⚠ No HEALTHCHECK defined in image"
       ((TEST_PASSED++))
+    elif [ "${HEALTH_STATUS}" = "unhealthy" ]; then
+      print_error "✗ Container is unhealthy"
+      ((TEST_FAILED++))
     else
-      print_warn "⚠ Health status: ${HEALTH_STATUS}"
+      print_warn "⚠ Unknown health status: ${HEALTH_STATUS}"
       ((TEST_PASSED++))
     fi
   else
@@ -118,14 +121,19 @@ echo ""
 # Test 4: Health check exit codes / 健康检查退出码
 print_test "Test 4: Health check exit codes"
 if command -v nvidia-smi &> /dev/null && nvidia-smi &> /dev/null; then
-  if docker run --gpus all --rm "${IMAGE_NAME}" python -c "import sys, torch; sys.exit(0 if torch.cuda.is_available() else 1)"; then
-    EXIT_CODE=$?
-    if [ $EXIT_CODE -eq 0 ]; then
-      print_info "✓ Health check returns exit code 0 (CUDA available)"
-      ((TEST_PASSED++))
-    else
-      print_warn "Health check returns exit code ${EXIT_CODE}"
-    fi
+  print_info "Testing health check exit codes with GPU"
+  docker run --gpus all --rm "${IMAGE_NAME}" python -c "import sys, torch; sys.exit(0 if torch.cuda.is_available() else 1)"
+  EXIT_CODE=$?
+  
+  if [ $EXIT_CODE -eq 0 ]; then
+    print_info "✓ Health check returns exit code 0 (CUDA available)"
+    ((TEST_PASSED++))
+  elif [ $EXIT_CODE -eq 1 ]; then
+    print_error "✗ Health check returns exit code 1 (CUDA not available in container)"
+    ((TEST_FAILED++))
+  else
+    print_error "✗ Unexpected exit code: ${EXIT_CODE}"
+    ((TEST_FAILED++))
   fi
 else
   print_info "Skipping GPU exit code test (no NVIDIA runtime)"
