@@ -205,26 +205,29 @@ main() {
 
   case "$command" in
   tag)
-    if [ -z "$2" ]; then
+    local version="${2:-}"
+    local source_tag="${3:-}"
+    if [ -z "${version}" ]; then
       print_error "Version required"
       show_help
       exit 1
     fi
-    tag_image "$2" "$3"
+    tag_image "${version}" "${source_tag}"
     ;;
   list)
     list_tags
     ;;
   inspect)
-    inspect_image "$2"
+    inspect_image "${2:-}"
     ;;
   promote)
-    if [ -z "$2" ]; then
+    local version="${2:-}"
+    if [ -z "${version}" ]; then
       print_error "Version required"
       show_help
       exit 1
     fi
-    promote_version "$2"
+    promote_version "${version}"
     ;;
   cleanup)
     cleanup_images

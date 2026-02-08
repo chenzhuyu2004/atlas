@@ -6,7 +6,6 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
-set -e # Exit on error / 出错时退出
 
 # Configuration / 配置
 IMAGE_NAME="${1:-atlas:v0.6-base}"
@@ -26,7 +25,8 @@ print_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 # Show usage / 显示用法
-if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+ARG1="${1:-}"
+if [ "${ARG1}" == "-h" ] || [ "${ARG1}" == "--help" ]; then
   cat << HELP
 Usage / 用法: $(basename "$0") [IMAGE] [CONTAINER_NAME] [GPU_DEVICE]
 

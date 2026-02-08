@@ -62,14 +62,27 @@ EOF
 }
 
 # Parse args / 解析参数
+require_arg() {
+  local opt="$1"
+  local val="${2:-}"
+  if [[ -z "${val}" ]]; then
+    print_error "Option ${opt} requires a value"
+    print_error "参数 ${opt} 需要值"
+    exit 1
+  fi
+}
+
 DRY_RUN=0
+TAG_FILTER=""
 while [[ $# -gt 0 ]]; do
   case $1 in
   -r | --registry)
+    require_arg "$1" "${2:-}"
     REGISTRY="$2"
     shift 2
     ;;
   -n | --namespace)
+    require_arg "$1" "${2:-}"
     NAMESPACE="$2"
     shift 2
     ;;
@@ -93,10 +106,10 @@ if [[ -z "$NAMESPACE" ]]; then
 fi
 
 # Get tags to push / 获取要推送的标签
-if [[ -n "$TAG_FILTER" ]]; then
+if [[ -n "${TAG_FILTER}" ]]; then
   TAGS=("$TAG_FILTER")
 else
-  mapfile -t TAGS < <(docker images atlas --format "{{.Tag}}" | grep "^v${VERSION}")
+  mapfile -t TAGS < <(docker images atlas --format "{{.Tag}}" | grep "^v${VERSION}" || true)
 fi
 
 if [[ ${#TAGS[@]} -eq 0 ]]; then
