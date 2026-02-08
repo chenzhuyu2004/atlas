@@ -128,8 +128,8 @@ results = [(n, importlib.util.find_spec(m)) for m, n in mods]; \
 [print(f'{n}: installed / 已安装') if spec else print(f'{n}: not installed / 未安装') for n, spec in results]" || \
     echo "(Some optional modules not installed - OK for base tier)"
 
-# Health check / 健康检查
+# Health check (works with or without GPU) / 健康检查（支持 GPU 和 CPU 环境）
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=2 \
-    CMD python -c "import torch; assert torch.cuda.is_available()" || exit 1
+    CMD python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')" || exit 1
 
 CMD ["python"]

@@ -22,35 +22,48 @@ print_header() { echo -e "\n${BLUE}=== $1 ===${NC}\n"; }
 # Show help / 显示帮助
 show_help() {
     cat << EOF
-Usage: $(basename "$0") COMMAND [VERSION]
+Usage: $(basename "$0") COMMAND [VERSION] [SOURCE_TAG]
 
 Commands:
-  tag VERSION       Tag image with version (e.g., 1.0.0)
-                    为镜像标记版本（例如 1.0.0）
-  list              List all image tags
-                    列出所有镜像标签
-  inspect VERSION   Inspect image metadata
-                    检查镜像元数据
-  promote VERSION   Promote version to stable
-                    将版本升级为稳定版
-  cleanup           Remove old versions
-                    删除旧版本
-  help              Show this help
-                    显示此帮助
+  tag VERSION [SOURCE]  Tag image with version (e.g., 1.0.0)
+                        为镜像标记版本（例如 1.0.0）
+  list                  List all image tags
+                        列出所有镜像标签
+  inspect [VERSION]     Inspect image metadata
+                        检查镜像元数据
+  promote VERSION       Promote version to stable
+                        将版本升级为稳定版
+  cleanup               Remove old versions
+                        删除旧版本
+  help                  Show this help
+                        显示此帮助
 
 Examples:
-  $(basename "$0") tag 1.0.0           # Tag as v1.0.0, v1.0, v1
-  $(basename "$0") tag 1.1.0           # Tag as v1.1.0, v1.1, v1 (update)
-  $(basename "$0") promote 1.0.0       # Promote to stable
-  $(basename "$0") list                # List all tags
-  $(basename "$0") cleanup             # Clean old images
+  $(basename "$0") tag 1.0.0              # Tag v0.6-base as v1.0.0
+  $(basename "$0") tag 1.0.0 v0.6-llm     # Tag v0.6-llm as v1.0.0
+  $(basename "$0") promote 1.0.0          # Promote to stable
+  $(basename "$0") list                   # List all tags
+  $(basename "$0") cleanup                # Clean old images
 
 EOF
+}
+
+# Get script directory / 获取脚本目录
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Read VERSION file / 读取版本文件
+get_current_version() {
+    if [ -f "${SCRIPT_DIR}/VERSION" ]; then
+        cat "${SCRIPT_DIR}/VERSION" | tr -d '[:space:]'
+    else
+        echo "0.6"
+    fi
 }
 
 # Tag image with semantic version / 用语义化版本标记镜像
 tag_image() {
     local version=$1
+    local source_tag=${2:-}  # Optional source tag / 可选的源标签
     local image_name="atlas"
     
     if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -66,28 +79,38 @@ tag_image() {
     local patch=$(echo $version | cut -d. -f3)
     local major_minor="${major}.${minor}"
     
-    # Check if source image exists
-    if ! docker images | grep -q "${image_name}:latest"; then
-        print_error "Image not found: ${image_name}:latest"
-        print_info "Please build image first: ./build.sh"
+    # Determine source tag / 确定源标签
+    if [ -z "$source_tag" ]; then
+        local current_ver=$(get_current_version)
+        source_tag="v${current_ver}-base"
+    fi
+    
+    # Check if source image exists / 检查源镜像是否存在
+    if ! docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^${image_name}:${source_tag}$"; then
+        print_error "Image not found: ${image_name}:${source_tag}"
+        print_info "Available images:"
+        docker images --format '{{.Repository}}:{{.Tag}}' | grep "^${image_name}:" || true
+        print_info "\nUsage: $(basename $0) tag VERSION [SOURCE_TAG]"
+        print_info "Example: $(basename $0) tag 1.0.0 v0.6-base"
         return 1
     fi
     
-    # Create tags
+    # Create tags / 创建标签
+    print_info "Source image: ${image_name}:${source_tag}"
     print_info "Creating tags..."
     
-    docker tag "${image_name}:latest" "${image_name}:${version}"
+    docker tag "${image_name}:${source_tag}" "${image_name}:${version}"
     print_info "✓ Tagged as: ${image_name}:${version}"
     
-    docker tag "${image_name}:latest" "${image_name}:${major_minor}"
+    docker tag "${image_name}:${source_tag}" "${image_name}:${major_minor}"
     print_info "✓ Tagged as: ${image_name}:${major_minor}"
     
-    docker tag "${image_name}:latest" "${image_name}:v${major}"
+    docker tag "${image_name}:${source_tag}" "${image_name}:v${major}"
     print_info "✓ Tagged as: ${image_name}:v${major}"
     
-    # Show all tags
+    # Show all tags / 显示所有标签
     print_info "\nAll tags for this version:"
-    docker images | grep "${image_name}" | grep -E "(${version}|${major_minor}|v${major}|latest)" || true
+    docker images | grep "${image_name}" | grep -E "(${version}|${major_minor}|v${major})" || true
 }
 
 # List all tags / 列出所有标签
@@ -106,8 +129,10 @@ inspect_image() {
     local version=$1
     local image="${version:+atlas:$version}"
     
+    # Default to VERSION-base if no version specified / 默认使用 VERSION-base
     if [ -z "$image" ]; then
-        image="atlas:latest"
+        local current_ver=$(get_current_version)
+        image="atlas:v${current_ver}-base"
     fi
     
     print_header "Image Details: $image"
@@ -194,7 +219,7 @@ main() {
                 show_help
                 exit 1
             fi
-            tag_image "$2"
+            tag_image "$2" "$3"
             ;;
         list)
             list_tags
