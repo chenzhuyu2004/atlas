@@ -110,14 +110,20 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 ┌─────────────────┬──────────────────┬─────────────────┐
 │  PR/Push (Fast) │  Release (Tag)   │  Nightly        │
 ├─────────────────┼──────────────────┼─────────────────┤
-│ ✅ bash -n       │ ✅ Build tier 0   │ ✅ Build tier 0  │
-│ ✅ hadolint      │ ✅ Full tests     │ ✅ Build tier 1  │
-│ ✅ requirements  │ ✅ Security scan  │ ✅ Full tests    │
-│ ✅ syntax check  │ ✅ Push to GHCR   │ ✅ Security scan │
-│ ~1 minute       │ ~15 minutes      │ ✅ Push nightly  │
-│                 │                  │ ~30 minutes     │
+│ ✅ shellcheck    │ ✅ Build tier 0   │ ✅ Build tier 0  │
+│ ✅ bash -n       │ ✅ Push to GHCR   │ ✅ Build tier 1  │
+│ ✅ hadolint      │ ~10 minutes      │ ✅ Full tests    │
+│ ✅ requirements  │ (构建+推送)      │ ✅ Security scan │
+│ ✅ syntax check  │                  │ ✅ Push nightly  │
+│ ~2 minutes      │                  │ ~30 minutes     │
+│ (仅 lint)       │                  │                 │
 └─────────────────┴──────────────────┴─────────────────┘
 ```
+
+> **重要**：
+> - **PR/Push**: 仅运行 lint 检查（shellcheck、bash -n、hadolint 等静态分析）
+> - **Release (tag)**: 构建 tier 0 镜像并推送到 GHCR，**不运行测试**
+> - **Nightly**: 完整构建（tier 0+1）、测试套件、安全扫描（如已配置）
 
 ### 1. CI Workflow / 持续集成工作流
 
@@ -125,7 +131,7 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 
 #### Lint Job / 语法检查任务
 
-在每次 PR/push 时运行，提供快速反馈：
+在每次 PR/push 时运行，提供快速反馈（**不构建镜像**）：
 
 ```yaml
 triggers:
@@ -140,10 +146,11 @@ checks:
 ```
 
 **运行时间**: ~1 分钟
+**范围**: 仅静态检查，不进行 Docker 构建、包测试或安全扫描
 
 #### Release Job / 发布任务
 
-仅在打 tag 时触发（如 `v0.7.0`）：
+**仅在打 tag 时触发**（如 `v0.7.0`），执行镜像构建和发布：
 
 ```yaml
 triggers:
@@ -151,38 +158,42 @@ triggers:
 
 steps:
   1. Clean up disk space (~12GB freed)
-  2. Build tier 0 image
-  3. Run package import tests
-  4. Run health check tests
-  5. Security scan (Trivy)
-  6. Push to GHCR
+  2. Set up Docker Buildx
+  3. Login to GHCR
+  4. Build tier 0 image
+  5. Push to GHCR
+  6. Output release summary (version, digest, pull commands)
 ```
 
-**运行时间**: ~15 分钟
+**运行时间**: ~10 分钟
+**范围**: 镜像构建和推送（不包含测试和安全扫描）
+
+> **注意**: Release job 专注于快速发布。完整测试应在 release 前本地运行，安全扫描在 nightly build 中执行。
 
 ### 2. Nightly Build Workflow / 定时构建工作流
 
-**File**: `.github/workflows/nightly-build.yml`
+**File**: `.github/workflows/nightly-build.yml` (如已配置)
 
-每晚 02:00 UTC (北京时间 10:00) 自动运行完整构建和测试：
+每晚定期运行完整构建和测试（需配置）：
 
 ```yaml
 schedule:
-  - cron: '0 2 * * *'
+  - cron: '0 2 * * *'  # 示例：02:00 UTC
 
 matrix:
   tier: [0, 1]  # Tier 2 excluded due to vLLM compatibility
 
 steps:
   1. Clean up disk space
-  2. Build tier 0 and tier 1 (parallel)
+  2. Build tier 0 and tier 1
   3. Run package import tests
   4. Run health check tests
   5. Security scan (Trivy)
-  6. Push nightly-tier0 and nightly-tier1 to GHCR
+  6. Push nightly tags to GHCR
 ```
 
 **运行时间**: ~30 分钟
+**状态**: 如需完整 CI（测试+安全扫描），建议配置 nightly workflow
 
 **手动触发**：
 ```bash
@@ -219,7 +230,7 @@ gh pr merge <PR-number> --auto --squash
 
 ### Trivy Container Scanning / Trivy 容器扫描
 
-所有构建的镜像都会通过 Trivy 进行安全扫描：
+可以对构建的镜像进行 Trivy 安全扫描（手动或在 nightly build 中自动执行）：
 
 ```bash
 # Manual scan / 手动扫描
@@ -231,6 +242,8 @@ trivy image --severity HIGH,CRITICAL atlas:v0.6-base
 # Output to SARIF for GitHub / 输出 SARIF 格式给 GitHub
 trivy image --format sarif --output trivy-results.sarif atlas:v0.6-base
 ```
+
+> **注意**: Release job 不包含自动安全扫描。建议在本地运行 Trivy 或配置 nightly workflow 进行定期扫描。
 
 ### Vulnerability Management / 漏洞管理
 

@@ -84,9 +84,11 @@ Scripts respect the following environment variables:
 
 - `BUILD_TIER`: Build tier (0, 1, or 2) / 构建层级
 - `ENABLE_MATERIALS`: Enable materials science packages (0 or 1) / 启用材料科学包
-- `IMAGE_TAG`: Docker image tag to use / 使用的 Docker 镜像标签
 - `REGISTRY`: Container registry for push/pull / 容器注册表
 - `MAX_JOBS`: Build parallelism (default: 2) / 构建并发数
+
+> **Note**: `run.sh` uses positional parameters instead of `IMAGE_TAG` environment variable. Use `./run.sh <image:tag>` to specify image.
+> **注意**：`run.sh` 使用位置参数而非 `IMAGE_TAG` 环境变量。使用 `./run.sh <镜像:标签>` 指定镜像。
 
 ## See Also / 相关文档
 

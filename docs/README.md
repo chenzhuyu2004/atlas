@@ -48,12 +48,26 @@ ATLAS Docker 镜像项目的完整文档。
 
 ---
 
+### ❓ [FAQ.md](FAQ.md) - 常见问题
+**Frequently Asked Questions / 常见问题解答**
+
+- 构建问题（OOM、磁盘空间、vLLM 兼容性）
+- 运行时问题（CUDA 不可用、权限错误）
+- 配置问题（自定义包、CUDA 版本）
+- CI/CD 问题排查
+- 最佳实践建议
+
+**适用场景**: 遇到问题先看这里、快速故障排除
+
+---
+
 ## Other Resources / 其他资源
 
 - 📜 [CHANGELOG.md](../CHANGELOG.md) - 版本历史和变更记录
 - 🤝 [CONTRIBUTING.md](../CONTRIBUTING.md) - 贡献指南和开发规范
 - 🔒 [SECURITY.md](../SECURITY.md) - 安全策略和漏洞报告
-- 💡 [examples/](../examples/) - 示例项目和配置模板
+- � [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) - 第三方组件许可声明
+- �💡 [examples/](../examples/) - 示例项目和配置模板
 
 ## Quick Links / 快速链接
 

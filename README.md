@@ -14,7 +14,7 @@
 - 🚀 **GPU-First Design**: PyTorch 2.10.0 + CUDA 13.0 + cuDNN 9
 - 🧪 **Tiered Build System**: 从核心数据科学到完整 LLM 支持的可选构建层级
 - 🔬 **Materials Science Support**: 可选的材料科学工具包集成
-- 📊 **Production Ready**: 完整的测试套件、CI/CD 和安全扫描
+- 📊 **Production Ready**: 轻量级 CI/CD（PR/Push 做 lint 含 shellcheck，Release 仅构建推送，测试在本地/nightly）
 - 💻 **Memory Optimized**: 针对 16GB RAM 笔记本优化的构建参数
 
 ## Quick Start / 快速开始
@@ -70,6 +70,7 @@ ENABLE_MATERIALS=1 ./build.sh
 - 🚀 [运行指南 (Run Guide)](docs/RUN.md) - 容器运行、GPU 配置、JupyterLab 使用
 - 🧪 [测试与 CI (Tests & CI)](docs/TESTS.md) - 测试套件使用、CI 策略、健康检查
 - 💡 [示例项目 (Examples)](examples/README.md) - Docker Compose 配置、训练示例
+- ❓ [常见问题 (FAQ)](docs/FAQ.md) - 常见问题与解决方案
 
 ## Contributing / 贡献
 

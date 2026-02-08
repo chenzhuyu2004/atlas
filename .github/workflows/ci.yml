@@ -27,23 +27,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Check shell scripts / 检查 shell 脚本
+      - name: Check shell scripts with shellcheck / 使用 shellcheck 检查脚本
         run: |
+          # Install shellcheck / 安装 shellcheck
+          sudo apt-get update && sudo apt-get install -y shellcheck
+          
           # Check root wrappers / 检查根目录 wrapper
           for script in *.sh; do
             if [ -f "$script" ]; then
-              echo "Checking $script..."
+              echo "Checking $script with shellcheck..."
+              shellcheck -x "$script"
+              echo "Checking $script syntax..."
               bash -n "$script"
             fi
           done
+          
           # Check actual scripts / 检查实际脚本
           for script in scripts/*.sh; do
             if [ -f "$script" ]; then
-              echo "Checking $script..."
+              echo "Checking $script with shellcheck..."
+              shellcheck -x "$script"
+              echo "Checking $script syntax..."
               bash -n "$script"
             fi
           done
-          echo "All scripts OK"
+          
+          echo "✅ All scripts passed checks"
       
       - name: Check Dockerfile / 检查 Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
@@ -136,6 +145,7 @@ jobs:
             type=semver,pattern={{major}}
       
       - name: Build and push base image / 构建和推送基础镜像
+        id: docker_build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -148,3 +158,34 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+      
+      - name: Output release summary / 输出发布摘要
+        run: |
+          echo "## 🚀 Release Summary / 发布摘要" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Version Information / 版本信息" >> $GITHUB_STEP_SUMMARY
+          echo "- **Git Tag**: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: \`$(cat VERSION)\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Time**: \`$(date -u +'%Y-%m-%d %H:%M:%S UTC')\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Image Information / 镜像信息" >> $GITHUB_STEP_SUMMARY
+          echo "- **Registry**: \`${{ env.REGISTRY }}/${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tags**: " >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image Digest**: \`${{ steps.docker_build.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Pull Commands / 拉取命令" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "# Pull by tag / 通过标签拉取" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Pull by digest (immutable) / 通过摘要拉取（不可变）" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.REGISTRY }}/${{ github.repository }}@${{ steps.docker_build.outputs.digest }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Security / 安全" >> $GITHUB_STEP_SUMMARY
+          echo "- Use digest for production deployments to ensure immutability" >> $GITHUB_STEP_SUMMARY
+          echo "- 生产环境部署请使用摘要以确保不可变性" >> $GITHUB_STEP_SUMMARY

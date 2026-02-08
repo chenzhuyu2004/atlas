@@ -77,11 +77,28 @@ Tests that all required packages can be imported:
 Tests run automatically in GitHub Actions:
 测试在 GitHub Actions 中自动运行：
 
-- **Build tests**: On every push/PR / 每次 push/PR
-- **Package import tests**: On every push/PR / 每次 push/PR
-- **Health check tests**: On every push/PR / 每次 push/PR
-- **Security scans**: On every push/PR / 每次 push/PR
-- **Dependency checks**: Weekly / 每周
+**On every push/PR / 每次 push/PR**:
+- **Lint checks only**: Shell script syntax (shellcheck + bash -n), Dockerfile (hadolint), requirements validation
+- **仅 lint 检查**：Shell 脚本语法（shellcheck）、Dockerfile、requirements 验证
+
+**On release (tag v*) / 发布时（打 tag v*）**:
+- **Build and push only**: Docker image build (tier 0) + push to GHCR
+- **仅构建和推送**：构建 tier 0 镜像并推送到 GHCR
+- ⚠️ **No automated tests or security scans in release job**
+- ⚠️ **release job 不包含自动化测试和安全扫描**
+
+**Nightly builds / 定时构建**（如已配置）:
+- **Build tests**: Tier 0 and tier 1 builds
+- **Package import tests**: Import all declared packages
+- **Health check tests**: Container health and CUDA availability
+- **Security scans**: Trivy container scanning (if configured)
+- **完整测试套件**：所有层级构建 + 包导入 + 健康检查 + 安全扫描（如已启用）
+
+**Dependency checks / 依赖检查**: Weekly via Dependabot / 每周通过 Dependabot
+
+> **Important / 重要**: For releases, run full tests locally before tagging. See Release Checklist in [CHANGELOG.md](../CHANGELOG.md).
+> 
+> **重要**：发布前请在本地运行完整测试。详见 [CHANGELOG.md](../CHANGELOG.md) 中的发布检查清单。
 
 See `.github/workflows/ci.yml` for details.
 详见 `.github/workflows/ci.yml`。

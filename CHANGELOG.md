@@ -1,6 +1,68 @@
 # ATLAS Docker Image Changelog
 # ATLAS Docker 镜像更新日志
 
+## Release Checklist / 发布检查清单
+
+Before creating a new release, ensure all items are checked:
+在创建新版本前，确保所有项目已检查：
+
+### Pre-release / 发布前
+- [ ] All tests pass locally / 本地所有测试通过
+  ```bash
+  ./tests/run_all_tests.sh
+  ```
+- [ ] Update VERSION file / 更新 VERSION 文件
+  ```bash
+  echo "0.7" > VERSION
+  ```
+- [ ] Update CHANGELOG.md with new version / 更新 CHANGELOG.md 添加新版本
+  - Document all changes / 记录所有变更
+  - Include version comparison table / 包含版本对比表
+- [ ] Run pre-check / 运行预检查
+  ```bash
+  ./pre-check.sh
+  ```
+- [ ] Build and test all tiers / 构建并测试所有层级
+  ```bash
+  ./build.sh && docker run --gpus all --rm atlas:v0.7-base python -c "import torch; print(torch.cuda.is_available())"
+  BUILD_TIER=1 ./build.sh && docker run --gpus all --rm atlas:v0.7-llm python -c "import transformers"
+  ```
+- [ ] Run security scan locally / 本地运行安全扫描
+  ```bash
+  trivy image atlas:v0.7-base
+  ```
+- [ ] Update documentation if needed / 如需要更新文档
+  - [ ] README.md - version badges / 版本徽章
+  - [ ] docs/BUILD.md - build instructions / 构建说明
+  - [ ] docs/RUN.md - runtime examples / 运行示例
+
+### Release / 发布
+- [ ] Create and push git tag / 创建并推送 git 标签
+  ```bash
+  git tag -a v0.7.0 -m "Release v0.7.0"
+  git push origin v0.7.0
+  ```
+- [ ] Monitor CI/CD pipeline / 监控 CI/CD 流水线
+  - [ ] Release job completes / Release job 完成
+  - [ ] Image pushed to GHCR / 镜像推送到 GHCR
+  - [ ] Release summary generated / 生成发布摘要
+- [ ] Create GitHub Release / 创建 GitHub Release
+  - [ ] Copy CHANGELOG entry / 复制 CHANGELOG 条目
+  - [ ] Add installation instructions / 添加安装说明
+  - [ ] Include image digest / 包含镜像摘要
+
+### Post-release / 发布后
+- [ ] Test pull from registry / 测试从注册表拉取
+  ```bash
+  docker pull ghcr.io/chenzhuyu2004/atlas:v0.7.0
+  ```
+- [ ] Verify image digest matches / 验证镜像摘要匹配
+- [ ] Update project board / 更新项目看板
+- [ ] Close related issues / 关闭相关 issue
+- [ ] Announce release (optional) / 发布公告（可选）
+
+---
+
 ## [0.6.1] - 2026-02-08
 
 ### Fixes / 修复
