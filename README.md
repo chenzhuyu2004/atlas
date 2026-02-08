@@ -1,5 +1,10 @@
 # ATLAS Docker Image v0.6
 
+[![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.10.0-EE4C2C.svg)](https://pytorch.org/)
+[![CUDA](https://img.shields.io/badge/CUDA-13.0-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
+
 **ML/DS Docker environment optimized for Intel 13980HX + RTX 4060 Laptop (16GB RAM)**
 
 针对 **Intel 13980HX + RTX 4060 笔记本 (16GB 内存)** 优化的 ML/DS Docker 环境
