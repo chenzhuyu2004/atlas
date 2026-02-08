@@ -53,7 +53,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Read VERSION file once / 读取 VERSION 文件（一次）
-CURRENT_VERSION="$(cat "${PROJECT_ROOT}/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "0.6")"
+CURRENT_VERSION="$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")"
 
 # Tag image with semantic version / 用语义化版本标记镜像
 tag_image() {
@@ -69,8 +69,10 @@ tag_image() {
     print_header "Tagging Image with Version: $version"
     
     # Extract major.minor
-    local major=$(echo $version | cut -d. -f1)
-    local minor=$(echo $version | cut -d. -f2)
+    local major
+    major=$(echo "$version" | cut -d. -f1)
+    local minor
+    minor=$(echo "$version" | cut -d. -f2)
     local major_minor="${major}.${minor}"
     
     # Check if source image exists / 检查源镜像是否存在
@@ -78,8 +80,8 @@ tag_image() {
         print_error "Image not found: ${image_name}:${source_tag}"
         print_info "Available images:"
         docker images --format '{{.Repository}}:{{.Tag}}' | grep "^${image_name}:" || true
-        print_info "\nUsage: $(basename $0) tag VERSION [SOURCE_TAG]"
-        print_info "Example: $(basename $0) tag 1.0.0 v0.6-base"
+        print_info "\nUsage: $(basename "$0") tag VERSION [SOURCE_TAG]"
+        print_info "Example: $(basename "$0") tag 1.0.0 v0.6-base"
         return 1
     fi
     

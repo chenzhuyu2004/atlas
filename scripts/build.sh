@@ -74,7 +74,7 @@ EOF
 [[ "$1" == "-h" || "$1" == "--help" ]] && usage
 
 # 读取版本号
-VERSION=$(cat "${PROJECT_ROOT}/VERSION" 2>/dev/null | tr -d '\n' || echo "0.6")
+VERSION=$(tr -d '\n' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")
 
 # 生成标签
 generate_tag() {
@@ -93,7 +93,8 @@ generate_tag() {
 
 # 构建函数
 build_image() {
-    local tag=$(generate_tag)
+    local tag
+    tag=$(generate_tag)
     local cache_opt=""
     [[ "${NO_CACHE:-0}" == "1" ]] && cache_opt="--no-cache"
     
@@ -129,7 +130,8 @@ build_image() {
     print_info "预估大小: ${est_size}"
     
     # 检查磁盘空间
-    local avail_space=$(df -BG "${PROJECT_ROOT}" | awk 'NR==2 {print $4}' | tr -d 'G')
+    local avail_space
+    avail_space=$(df -BG "${PROJECT_ROOT}" | awk 'NR==2 {print $4}' | tr -d 'G')
     if [[ "${avail_space}" -lt 30 ]]; then
         print_warn "磁盘空间不足30GB (当前: ${avail_space}GB)，可能导致构建失败"
         read -p "是否继续? [y/N] " -n 1 -r
@@ -138,7 +140,8 @@ build_image() {
     fi
     
     # 检查内存 (16GB优化)
-    local total_mem=$(free -g | awk '/^Mem:/{print $2}')
+    local total_mem
+    total_mem=$(free -g | awk '/^Mem:/{print $2}')
     if [[ "${total_mem}" -le 16 ]]; then
         print_warn "检测到内存 ${total_mem}GB，已启用低内存模式 (MAX_JOBS=2)"
         if [[ "${BUILD_TIER}" -ge 2 ]]; then
@@ -150,16 +153,14 @@ build_image() {
     print_step "开始构建..."
     export DOCKER_BUILDKIT=1
     
-    docker build \
+    if docker build \
         --file "${DOCKERFILE}" \
         --tag "${IMAGE_NAME}:${tag}" \
         --build-arg BUILD_TIER="${BUILD_TIER}" \
         --build-arg ENABLE_MATERIALS="${ENABLE_MATERIALS}" \
         --progress=plain \
         ${cache_opt} \
-        "${PROJECT_ROOT}"
-    
-    if [[ $? -eq 0 ]]; then
+        "${PROJECT_ROOT}"; then
         print_info "============================================"
         print_info "✓ 构建成功!"
         print_info "============================================"

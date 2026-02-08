@@ -85,7 +85,7 @@ main() {
     
     docker run -it \
         --name "${CONTAINER_NAME}" \
-        ${GPU_ARG} \
+        "${GPU_ARG}" \
         -v "${WORK_DIR}:/workspace" \
         -w /workspace \
         --rm \

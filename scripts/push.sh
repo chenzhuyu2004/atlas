@@ -23,7 +23,7 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REGISTRY="${REGISTRY:-docker.io}"
 NAMESPACE="${NAMESPACE:-}"  # e.g., your-username
 IMAGE_NAME="${IMAGE_NAME:-atlas}"
-VERSION=$(cat "${PROJECT_ROOT}/VERSION" 2>/dev/null | tr -d '\n' || echo "0.6")
+VERSION=$(tr -d '\n' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")
 
 # Usage / 用法
 usage() {
