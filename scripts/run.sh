@@ -6,7 +6,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
-set -e  # Exit on error / 出错时退出
+set -e # Exit on error / 出错时退出
 
 # Configuration / 配置
 IMAGE_NAME="${1:-atlas:v0.6-base}"
@@ -21,13 +21,13 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 # Functions / 函数
-print_info()  { echo -e "${GREEN}[INFO]${NC} $1"; }
-print_warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
+print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
+print_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 # Show usage / 显示用法
 if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
-    cat << HELP
+  cat << HELP
 Usage / 用法: $(basename "$0") [IMAGE] [CONTAINER_NAME] [GPU_DEVICE]
 
 Arguments / 参数:
@@ -45,53 +45,53 @@ Examples / 示例:
   $(basename "$0") atlas:stable mycontainer 0  # GPU 0 only / 仅 GPU 0
 
 HELP
-    exit 0
+  exit 0
 fi
 
 # Main / 主函数
 main() {
-    print_info "Container Configuration / 容器配置"
-    print_info "Image / 镜像: ${IMAGE_NAME}"
-    print_info "Container / 容器: ${CONTAINER_NAME}"
-    print_info "GPU: ${GPU_DEVICE}"
-    print_info "Workspace / 工作目录: ${WORK_DIR}"
-    
-    # Check Docker / 检查 Docker
-    if ! command -v docker &> /dev/null; then
-        print_error "Docker not installed / Docker 未安装"
-        exit 1
-    fi
-    
-    # Check image / 检查镜像
-    if ! docker image inspect "${IMAGE_NAME}" &> /dev/null; then
-        print_error "Image not found / 镜像不存在: ${IMAGE_NAME}"
-        print_info "Available images / 可用镜像:"
-        docker images --filter "reference=atlas*" --format "  {{.Repository}}:{{.Tag}}" || true
-        exit 1
-    fi
-    
-    # GPU configuration / GPU 配置
-    if [[ ! "$GPU_DEVICE" =~ ^(all|[0-9]+(,[0-9]+)*)$ ]]; then
-        print_warn "Invalid GPU format, using 'all' / GPU 格式无效，使用 'all'"
-        GPU_DEVICE="all"
-    fi
+  print_info "Container Configuration / 容器配置"
+  print_info "Image / 镜像: ${IMAGE_NAME}"
+  print_info "Container / 容器: ${CONTAINER_NAME}"
+  print_info "GPU: ${GPU_DEVICE}"
+  print_info "Workspace / 工作目录: ${WORK_DIR}"
 
-    if [ "$GPU_DEVICE" = "all" ]; then
-        GPU_ARG="--gpus all"
-    else
-        GPU_ARG="--gpus device=${GPU_DEVICE}"
-    fi
-    
-    # Run container / 运行容器
-    print_info "Starting container... / 启动容器..."
-    
-    docker run -it \
-        --name "${CONTAINER_NAME}" \
-        "${GPU_ARG}" \
-        -v "${WORK_DIR}:/workspace" \
-        -w /workspace \
-        --rm \
-        "${IMAGE_NAME}"
+  # Check Docker / 检查 Docker
+  if ! command -v docker &> /dev/null; then
+    print_error "Docker not installed / Docker 未安装"
+    exit 1
+  fi
+
+  # Check image / 检查镜像
+  if ! docker image inspect "${IMAGE_NAME}" &> /dev/null; then
+    print_error "Image not found / 镜像不存在: ${IMAGE_NAME}"
+    print_info "Available images / 可用镜像:"
+    docker images --filter "reference=atlas*" --format "  {{.Repository}}:{{.Tag}}" || true
+    exit 1
+  fi
+
+  # GPU configuration / GPU 配置
+  if [[ ! "$GPU_DEVICE" =~ ^(all|[0-9]+(,[0-9]+)*)$ ]]; then
+    print_warn "Invalid GPU format, using 'all' / GPU 格式无效，使用 'all'"
+    GPU_DEVICE="all"
+  fi
+
+  if [ "$GPU_DEVICE" = "all" ]; then
+    GPU_ARG="--gpus all"
+  else
+    GPU_ARG="--gpus device=${GPU_DEVICE}"
+  fi
+
+  # Run container / 运行容器
+  print_info "Starting container... / 启动容器..."
+
+  docker run -it \
+    --name "${CONTAINER_NAME}" \
+    "${GPU_ARG}" \
+    -v "${WORK_DIR}:/workspace" \
+    -w /workspace \
+    --rm \
+    "${IMAGE_NAME}"
 }
 
 main

@@ -23,34 +23,34 @@ echo ""
 
 # Check each requirements file / 检查每个依赖文件
 check_file() {
-    local file="$1"
-    local name="$2"
-    
-    if [[ ! -f "$file" ]]; then
-        echo -e "${YELLOW}⚠ $name not found${NC}"
-        return
+  local file="$1"
+  local name="$2"
+
+  if [[ ! -f "$file" ]]; then
+    echo -e "${YELLOW}⚠ $name not found${NC}"
+    return
+  fi
+
+  echo -e "${GREEN}=== $name ===${NC}"
+
+  # Extract package names and versions / 提取包名和版本
+  grep -E "^[a-zA-Z].*==" "$file" | while read -r line; do
+    pkg=$(echo "$line" | cut -d'=' -f1 | tr -d ' ')
+    current=$(echo "$line" | grep -oP '==\K[0-9.]+')
+
+    # Get latest version from PyPI / 从 PyPI 获取最新版本
+    latest=$(curl -s "https://pypi.org/pypi/${pkg}/json" 2> /dev/null |
+      python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('info',{}).get('version','?'))" 2> /dev/null || echo "?")
+
+    if [[ "$latest" == "?" ]]; then
+      echo -e "  ${pkg}: ${current} -> ${YELLOW}(cannot check)${NC}"
+    elif [[ "$current" == "$latest" ]]; then
+      echo -e "  ${pkg}: ${current} ${GREEN}✓${NC}"
+    else
+      echo -e "  ${pkg}: ${current} -> ${YELLOW}${latest}${NC} ${RED}(update available)${NC}"
     fi
-    
-    echo -e "${GREEN}=== $name ===${NC}"
-    
-    # Extract package names and versions / 提取包名和版本
-    grep -E "^[a-zA-Z].*==" "$file" | while read -r line; do
-        pkg=$(echo "$line" | cut -d'=' -f1 | tr -d ' ')
-        current=$(echo "$line" | grep -oP '==\K[0-9.]+')
-        
-        # Get latest version from PyPI / 从 PyPI 获取最新版本
-        latest=$(curl -s "https://pypi.org/pypi/${pkg}/json" 2>/dev/null | \
-                 python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('info',{}).get('version','?'))" 2>/dev/null || echo "?")
-        
-        if [[ "$latest" == "?" ]]; then
-            echo -e "  ${pkg}: ${current} -> ${YELLOW}(cannot check)${NC}"
-        elif [[ "$current" == "$latest" ]]; then
-            echo -e "  ${pkg}: ${current} ${GREEN}✓${NC}"
-        else
-            echo -e "  ${pkg}: ${current} -> ${YELLOW}${latest}${NC} ${RED}(update available)${NC}"
-        fi
-    done
-    echo ""
+  done
+  echo ""
 }
 
 # Check all files / 检查所有文件
