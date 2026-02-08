@@ -105,10 +105,22 @@ If you update materials packages, keep versions pinned and rebuild the image.
 ```
 build/atlas/
 ├── Dockerfile              # Build file / 构建文件
-├── build.sh                # Build script / 构建脚本
-├── run.sh                  # Run script / 运行脚本
-├── pre-check.sh            # Pre-check script / 预检查脚本
-├── tag.sh                  # Tag management / 标签管理
+├── VERSION                 # Version number / 版本号
+│
+├── scripts/                # Actual scripts / 实际脚本目录
+│   ├── build.sh            # Build implementation / 构建实现
+│   ├── run.sh              # Run implementation / 运行实现
+│   ├── pre-check.sh        # Pre-check implementation / 预检查实现
+│   ├── tag.sh              # Tag management / 标签管理
+│   ├── push.sh             # Push to registry / 推送到注册表
+│   └── check-updates.sh    # Check package updates / 检查包更新
+│
+├── build.sh                # Wrapper (→ scripts/build.sh)
+├── run.sh                  # Wrapper (→ scripts/run.sh)
+├── pre-check.sh            # Wrapper (→ scripts/pre-check.sh)
+├── tag.sh                  # Wrapper (→ scripts/tag.sh)
+├── push.sh                 # Wrapper (→ scripts/push.sh)
+├── check-updates.sh        # Wrapper (→ scripts/check-updates.sh)
 │
 ├── requirements.txt        # Core dependencies / 核心依赖
 ├── requirements-llm.txt    # LLM base / LLM 基础
@@ -117,9 +129,19 @@ build/atlas/
 │
 ├── README.md               # Main documentation / 主文档
 ├── CHANGELOG.md            # Version history / 版本历史
-└── docs/
-    └── BUILD.md            # This file / 本文件
+├── docs/                   # Detailed documentation / 详细文档
+│   ├── README.md           # Documentation index / 文档索引
+│   ├── BUILD.md            # This file / 本文件
+│   ├── RUN.md              # Runtime guide / 运行指南
+│   └── TESTS.md            # Testing guide / 测试指南
+└── tests/                  # Test suite / 测试套件
+    └── test_*.{py,sh}      # Test scripts / 测试脚本
 ```
+
+> **Note**: Root directory scripts are wrappers for backward compatibility.
+> Actual implementations are in `scripts/` directory.
+> 
+> **注意**: 根目录的脚本是向后兼容的 wrapper，实际实现在 `scripts/` 目录中。
 
 ## Troubleshooting / 故障排除
 

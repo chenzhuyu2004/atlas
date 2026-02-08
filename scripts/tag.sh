@@ -50,9 +50,10 @@ EOF
 
 # Get script directory / 获取脚本目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Read VERSION file once / 读取 VERSION 文件（一次）
-CURRENT_VERSION="$(cat "${SCRIPT_DIR}/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "0.6")"
+CURRENT_VERSION="$(cat "${PROJECT_ROOT}/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "0.6")"
 
 # Tag image with semantic version / 用语义化版本标记镜像
 tag_image() {

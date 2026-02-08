@@ -21,7 +21,8 @@ print_step()  { echo -e "${BLUE}[STEP]${NC} $1"; }
 
 # 目录设置
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DOCKERFILE="${SCRIPT_DIR}/Dockerfile"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DOCKERFILE="${PROJECT_ROOT}/Dockerfile"
 
 # 默认配置
 IMAGE_NAME="${IMAGE_NAME:-atlas}"
@@ -73,7 +74,7 @@ EOF
 [[ "$1" == "-h" || "$1" == "--help" ]] && usage
 
 # 读取版本号
-VERSION=$(cat "${SCRIPT_DIR}/VERSION" 2>/dev/null | tr -d '\n' || echo "0.6")
+VERSION=$(cat "${PROJECT_ROOT}/VERSION" 2>/dev/null | tr -d '\n' || echo "0.6")
 
 # 生成标签
 generate_tag() {
@@ -128,7 +129,7 @@ build_image() {
     print_info "预估大小: ${est_size}"
     
     # 检查磁盘空间
-    local avail_space=$(df -BG "${SCRIPT_DIR}" | awk 'NR==2 {print $4}' | tr -d 'G')
+    local avail_space=$(df -BG "${PROJECT_ROOT}" | awk 'NR==2 {print $4}' | tr -d 'G')
     if [[ "${avail_space}" -lt 30 ]]; then
         print_warn "磁盘空间不足30GB (当前: ${avail_space}GB)，可能导致构建失败"
         read -p "是否继续? [y/N] " -n 1 -r
@@ -156,7 +157,7 @@ build_image() {
         --build-arg ENABLE_MATERIALS="${ENABLE_MATERIALS}" \
         --progress=plain \
         ${cache_opt} \
-        "${SCRIPT_DIR}"
+        "${PROJECT_ROOT}"
     
     if [[ $? -eq 0 ]]; then
         print_info "============================================"

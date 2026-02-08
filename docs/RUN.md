@@ -186,8 +186,9 @@ docker-compose up -d
 交互式容器启动脚本：
 
 ```bash
-./run.sh                    # 启动 v0.6-base
-IMAGE_TAG=v0.6-llm ./run.sh # 指定镜像标签
+./run.sh                      # 启动 v0.6-base (默认)
+./run.sh atlas:v0.6-llm       # 指定镜像标签
+./run.sh atlas:v0.6-llm myname all  # 完整参数：镜像、容器名、GPU
 ```
 
 ### tag.sh

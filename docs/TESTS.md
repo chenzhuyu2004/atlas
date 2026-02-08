@@ -110,7 +110,7 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 ┌─────────────────┬──────────────────┬─────────────────┐
 │  PR/Push (Fast) │  Release (Tag)   │  Nightly        │
 ├─────────────────┼──────────────────┼─────────────────┤
-│ ✅ shellcheck    │ ✅ Build tier 0   │ ✅ Build tier 0  │
+│ ✅ bash -n       │ ✅ Build tier 0   │ ✅ Build tier 0  │
 │ ✅ hadolint      │ ✅ Full tests     │ ✅ Build tier 1  │
 │ ✅ requirements  │ ✅ Security scan  │ ✅ Full tests    │
 │ ✅ syntax check  │ ✅ Push to GHCR   │ ✅ Security scan │
@@ -133,7 +133,7 @@ triggers:
   - push to main
 
 checks:
-  - shellcheck: *.sh scripts/*.sh
+  - bash -n: *.sh (shell script syntax)
   - hadolint: Dockerfile
   - validate: requirements*.txt
   - syntax: Python unit tests
@@ -247,8 +247,16 @@ trivy image --format sarif --output trivy-results.sarif atlas:v0.6-base
 镜像内置健康检查命令：
 
 ```dockerfile
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD python -c "import sys; import torch; sys.exit(0 if torch.cuda.is_available() else 1)"
+HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=2 \
+  CMD python -c "import sys, importlib.util; \
+spec = importlib.util.find_spec('torch'); \
+if spec is None: \
+    print('Torch import failed: module not found'); \
+    sys.exit(2); \
+import torch; \
+ok = torch.cuda.is_available(); \
+print(f'PyTorch {torch.__version__}, CUDA: {ok}'); \
+sys.exit(0 if ok else 1)"
 ```
 
 **Exit Codes / 退出码**：
@@ -279,7 +287,7 @@ docker rm test-health
 
 ## Branch Protection / 分支保护
 
-Main 分支已配置分支保护规则：
+Main 分支已配置分支保护规则（但允许 admin bypass）：
 
 ```json
 {
