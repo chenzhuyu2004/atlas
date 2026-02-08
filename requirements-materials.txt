@@ -6,13 +6,13 @@
 
 # ===== Core / 核心 =====
 # Atomic Simulation Environment / 原子模拟环境
-ase==3.24.0
+ase==3.27.0
 
 # Materials Analysis / 材料分析
-pymatgen==2025.1.24
+pymatgen==2025.10.7
 
 # Symmetry Analysis / 对称性分析
-spglib==2.6.0
+spglib==2.7.0
 
 # Periodic Table / 元素周期表
 mendeleev==1.2.0
