@@ -1,0 +1,387 @@
+# Testing & CI/CD / 测试与持续集成
+
+Complete guide for ATLAS testing infrastructure and CI/CD workflows.
+
+ATLAS 测试基础设施和 CI/CD 工作流的完整说明。
+
+## Test Suite Overview / 测试套件概览
+
+ATLAS 项目包含多层测试体系：
+
+| Test Type / 测试类型 | Location / 位置 | Purpose / 用途 |
+|---------------------|-----------------|---------------|
+| Package Import Tests | `tests/test_import_packages.py` | 验证所有声明的包可以正常导入 |
+| Health Check Tests | `tests/test_healthcheck.sh` | 验证容器健康检查机制 |
+| Docker Build Tests | `tests/test_docker_build.sh` | 测试镜像构建流程 |
+| Security Scans | CI/CD | Trivy 容器安全扫描 |
+| Static Analysis | CI/CD | shellcheck, hadolint |
+
+## Running Tests Locally / 本地运行测试
+
+### Prerequisites / 前置条件
+
+```bash
+cd ~/build/atlas
+
+# Ensure image is built / 确保镜像已构建
+./build.sh
+
+# Or use tier 1 / 或使用 tier 1
+BUILD_TIER=1 ./build.sh
+```
+
+### Run All Tests / 运行所有测试
+
+```bash
+# Run complete test suite / 运行完整测试套件
+cd tests
+./run_all_tests.sh
+```
+
+### Individual Test Scripts / 单独运行测试脚本
+
+#### 1. Package Import Tests / 包导入测试
+
+验证所有声明的 Python 包可以成功导入：
+
+```bash
+cd tests
+
+# Test specific tier / 测试特定层级
+docker run --rm atlas:v0.6-base python test_import_packages.py
+docker run --rm atlas:v0.6-llm python test_import_packages.py
+
+# Test with GPU check / 带 GPU 检查测试
+docker run --gpus all --rm atlas:v0.6-base python test_import_packages.py
+```
+
+**检测内容**：
+- 核心包：numpy, pandas, torch, sklearn, matplotlib 等
+- LLM 包（tier 1+）：transformers, bitsandbytes, accelerate 等
+- 材料科学包：ase, pymatgen, spglib 等
+- GPU 可用性：torch.cuda.is_available()
+
+#### 2. Health Check Tests / 健康检查测试
+
+测试 Docker HEALTHCHECK 机制：
+
+```bash
+cd tests
+./test_healthcheck.sh
+```
+
+**测试场景**：
+- 容器启动后健康检查返回 0（CUDA 可用）
+- 无 GPU 时健康检查返回 1（CUDA 不可用）
+- 容器正常停止和清理
+
+#### 3. Docker Build Tests / 镜像构建测试
+
+验证不同层级的构建流程：
+
+```bash
+cd tests
+./test_docker_build.sh
+```
+
+**测试内容**：
+- Tier 0 基础构建
+- Tier 1 LLM 构建
+- 材料科学变体构建
+- 构建缓存效率
+
+### Unit Tests / 单元测试
+
+```bash
+# Run Python unit tests / 运行 Python 单元测试
+python -m pytest tests/
+
+# With coverage / 带覆盖率
+python -m pytest --cov=. tests/
+```
+
+## CI/CD Workflows / CI/CD 工作流
+
+### Workflow Strategy / 工作流策略
+
+ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
+
+```
+┌─────────────────┬──────────────────┬─────────────────┐
+│  PR/Push (Fast) │  Release (Tag)   │  Nightly        │
+├─────────────────┼──────────────────┼─────────────────┤
+│ ✅ shellcheck    │ ✅ Build tier 0   │ ✅ Build tier 0  │
+│ ✅ hadolint      │ ✅ Full tests     │ ✅ Build tier 1  │
+│ ✅ requirements  │ ✅ Security scan  │ ✅ Full tests    │
+│ ✅ syntax check  │ ✅ Push to GHCR   │ ✅ Security scan │
+│ ~1 minute       │ ~15 minutes      │ ✅ Push nightly  │
+│                 │                  │ ~30 minutes     │
+└─────────────────┴──────────────────┴─────────────────┘
+```
+
+### 1. CI Workflow / 持续集成工作流
+
+**File**: `.github/workflows/ci.yml`
+
+#### Lint Job / 语法检查任务
+
+在每次 PR/push 时运行，提供快速反馈：
+
+```yaml
+triggers:
+  - pull_request
+  - push to main
+
+checks:
+  - shellcheck: *.sh scripts/*.sh
+  - hadolint: Dockerfile
+  - validate: requirements*.txt
+  - syntax: Python unit tests
+```
+
+**运行时间**: ~1 分钟
+
+#### Release Job / 发布任务
+
+仅在打 tag 时触发（如 `v0.7.0`）：
+
+```yaml
+triggers:
+  - tags: v*
+
+steps:
+  1. Clean up disk space (~12GB freed)
+  2. Build tier 0 image
+  3. Run package import tests
+  4. Run health check tests
+  5. Security scan (Trivy)
+  6. Push to GHCR
+```
+
+**运行时间**: ~15 分钟
+
+### 2. Nightly Build Workflow / 定时构建工作流
+
+**File**: `.github/workflows/nightly-build.yml`
+
+每晚 02:00 UTC (北京时间 10:00) 自动运行完整构建和测试：
+
+```yaml
+schedule:
+  - cron: '0 2 * * *'
+
+matrix:
+  tier: [0, 1]  # Tier 2 excluded due to vLLM compatibility
+
+steps:
+  1. Clean up disk space
+  2. Build tier 0 and tier 1 (parallel)
+  3. Run package import tests
+  4. Run health check tests
+  5. Security scan (Trivy)
+  6. Push nightly-tier0 and nightly-tier1 to GHCR
+```
+
+**运行时间**: ~30 分钟
+
+**手动触发**：
+```bash
+# Via GitHub CLI / 通过 GitHub CLI
+gh workflow run nightly-build.yml
+
+# Via GitHub UI / 通过 GitHub UI
+# Actions → Nightly Build → Run workflow
+```
+
+### 3. Dependabot / 依赖更新
+
+**File**: `.github/dependabot.yml`
+
+自动检测依赖更新并创建 PR：
+
+- **GitHub Actions**: 每月检查一次
+- **Python packages**: 每周检查一次（requirements*.txt）
+
+**处理 Dependabot PR**：
+```bash
+# List Dependabot PRs / 查看 Dependabot PR
+gh pr list --author app/dependabot
+
+# Rebase if conflicts / 有冲突时 rebase
+gh pr comment <PR-number> --body "@dependabot rebase"
+
+# Auto-merge low-risk updates / 自动合并低风险更新
+gh pr review <PR-number> --approve
+gh pr merge <PR-number> --auto --squash
+```
+
+## Security Scanning / 安全扫描
+
+### Trivy Container Scanning / Trivy 容器扫描
+
+所有构建的镜像都会通过 Trivy 进行安全扫描：
+
+```bash
+# Manual scan / 手动扫描
+trivy image atlas:v0.6-base
+
+# Scan with specific severity / 按严重程度扫描
+trivy image --severity HIGH,CRITICAL atlas:v0.6-base
+
+# Output to SARIF for GitHub / 输出 SARIF 格式给 GitHub
+trivy image --format sarif --output trivy-results.sarif atlas:v0.6-base
+```
+
+### Vulnerability Management / 漏洞管理
+
+- **HIGH/CRITICAL**: 在下一个版本修复
+- **MEDIUM**: 定期审查和更新
+- **LOW**: 记录并监控
+
+查看安全报告：**Security → Code scanning alerts**
+
+## Health Check Mechanism / 健康检查机制
+
+### Docker HEALTHCHECK / Docker 健康检查
+
+镜像内置健康检查命令：
+
+```dockerfile
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD python -c "import sys; import torch; sys.exit(0 if torch.cuda.is_available() else 1)"
+```
+
+**Exit Codes / 退出码**：
+- `0`: CUDA available / CUDA 可用
+- `1`: CUDA unavailable / CUDA 不可用
+- `2`: torch import failed / torch 导入失败
+
+### Testing Health Check / 测试健康检查
+
+```bash
+# Start container with health check / 启动带健康检查的容器
+docker run -d --name test-health --gpus all atlas:v0.6-base sleep infinity
+
+# Wait for health check / 等待健康检查
+sleep 35
+
+# Check health status / 检查健康状态
+docker inspect test-health | jq '.[0].State.Health.Status'
+# Expected: "healthy"
+
+# View health check logs / 查看健康检查日志
+docker inspect test-health | jq '.[0].State.Health.Log'
+
+# Clean up / 清理
+docker stop test-health
+docker rm test-health
+```
+
+## Branch Protection / 分支保护
+
+Main 分支已配置分支保护规则：
+
+```json
+{
+  "required_checks": ["lint"],
+  "strict_mode": true,
+  "enforce_admins": false,
+  "force_push_allowed": false,
+  "deletion_allowed": false
+}
+```
+
+**要求**：
+- 所有 PR 必须通过 `lint` 检查
+- PR 必须基于最新的 main 分支（strict mode）
+- 禁止强制推送和删除 main 分支
+
+## Troubleshooting CI Issues / CI 故障排除
+
+### Issue: No space left on device / 磁盘空间不足
+
+CI 工作流已包含磁盘清理步骤：
+
+```bash
+# Free up ~12GB / 释放约 12GB
+rm -rf /usr/share/dotnet
+rm -rf /usr/local/lib/android
+rm -rf /opt/ghc
+sudo apt-get clean
+```
+
+如果仍然失败，考虑：
+- 减小镜像层数
+- 使用多阶段构建
+- 使用自托管 runner
+
+### Issue: Test timeouts / 测试超时
+
+```bash
+# Increase timeout in workflow / 增加工作流超时
+timeout-minutes: 60  # Default is 360
+```
+
+### Issue: Flaky tests / 不稳定测试
+
+```bash
+# Run tests multiple times / 多次运行测试
+for i in {1..5}; do
+  echo "Run $i"
+  ./tests/test_healthcheck.sh || exit 1
+done
+```
+
+### Issue: GitHub Actions cache / GitHub Actions 缓存
+
+```bash
+# Clear cache via gh CLI / 通过 gh CLI 清除缓存
+gh cache list
+gh cache delete <cache-id>
+```
+
+## Performance Metrics / 性能指标
+
+### CI Performance Targets / CI 性能目标
+
+| Metric / 指标 | Target / 目标 | Current / 当前 |
+|--------------|--------------|---------------|
+| Lint job | < 2 min | ~1 min ✅ |
+| Build tier 0 | < 20 min | ~15 min ✅ |
+| Build tier 1 | < 25 min | ~18 min ✅ |
+| Full tests | < 5 min | ~3 min ✅ |
+| Nightly total | < 40 min | ~30 min ✅ |
+
+### Test Coverage / 测试覆盖率
+
+当前测试覆盖：
+- ✅ 包导入验证（100+ packages）
+- ✅ 健康检查机制
+- ✅ 容器启动和停止
+- ✅ GPU 可用性检测
+- ✅ 安全漏洞扫描
+- 🚧 集成测试（计划中）
+- 🚧 性能基准测试（计划中）
+
+## Best Practices / 最佳实践
+
+### For Contributors / 贡献者
+
+1. **本地运行测试** - 提交 PR 前运行 `./tests/run_all_tests.sh`
+2. **遵循命名规范** - 测试文件命名为 `test_*.py` 或 `test_*.sh`
+3. **添加测试** - 新功能必须包含对应测试
+4. **更新文档** - CI 变更需同步更新此文档
+
+### For Maintainers / 维护者
+
+1. **监控 nightly builds** - 每天检查 nightly 构建状态
+2. **及时处理 Dependabot** - 每周审查依赖更新 PR
+3. **安全漏洞响应** - HIGH/CRITICAL 漏洞 48 小时内响应
+4. **性能监控** - CI 时间超过目标值需优化
+
+## See Also / 相关文档
+
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - 贡献指南（包括测试要求）
+- [SECURITY.md](../SECURITY.md) - 安全策略和漏洞报告流程
+- [tests/README.md](../tests/README.md) - 测试套件详细说明
+- [GitHub Actions Workflows](../.github/workflows/) - 工作流源文件
