@@ -80,6 +80,13 @@ docker run --gpus all -it --rm \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
 ```
 
+## Run Checks / 运行检查
+
+```bash
+# Run all linters and pre-commit checks
+make lint
+```
+
 ## 16GB Memory Optimization / 内存优化
 
 Built-in optimizations / 已内置优化:

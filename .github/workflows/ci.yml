@@ -31,6 +31,21 @@ jobs:
         uses: pre-commit/action@v4.3.0
         with:
           extra_args: --all-files --show-diff-on-failure
+
+      - name: Save pre-commit output (on failure) / 保存 pre-commit 输出（失败时）
+        if: failure()
+        run: |
+          # Ensure pre-commit CLI is available
+          python3 -m pip install --upgrade --quiet pip setuptools wheel || true
+          python3 -m pip install --quiet pre-commit || true
+          # Re-run to capture output for debugging
+          pre-commit run --all-files --show-diff-on-failure 2>&1 | tee precommit-output.txt || true
+      - name: Upload pre-commit artifact / 上传 pre-commit 输出（失败时）
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-commit-output
+          path: precommit-output.txt
       
       - name: Check Dockerfile / 检查 Dockerfile
         uses: hadolint/hadolint-action@v3.1.0

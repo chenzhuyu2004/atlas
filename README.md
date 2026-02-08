@@ -33,6 +33,12 @@ docker run --gpus all -p 8888:8888 atlas:v0.6-base \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
 ```
 
+# Run Checks / 运行检查
+
+```bash
+# Run all linters and pre-commit checks
+make lint
+```
 ## Build Tiers / 构建层级
 
 | BUILD_TIER | Content / 内容 | Size / 大小 |
