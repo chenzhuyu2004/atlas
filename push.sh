@@ -39,6 +39,8 @@ Options / 选项:
                             目标仓库 (默认: docker.io)
   -n, --namespace NAMESPACE Your Docker Hub username or org
                             你的 Docker Hub 用户名或组织
+  --dry-run                 Show actions without pushing
+                            仅显示操作，不执行推送
   -h, --help                Show this help / 显示帮助
 
 Examples / 示例:
@@ -56,10 +58,12 @@ EOF
 }
 
 # Parse args / 解析参数
+DRY_RUN=0
 while [[ $# -gt 0 ]]; do
     case $1 in
         -r|--registry) REGISTRY="$2"; shift 2 ;;
         -n|--namespace) NAMESPACE="$2"; shift 2 ;;
+        --dry-run) DRY_RUN=1; shift ;;
         -h|--help) usage ;;
         *) TAG_FILTER="$1"; shift ;;
     esac
@@ -98,14 +102,30 @@ for tag in "${TAGS[@]}"; do
     remote_image="${REGISTRY}/${NAMESPACE}/${IMAGE_NAME}:${tag}"
     
     print_info "Tagging: ${local_image} -> ${remote_image}"
-    docker tag "${local_image}" "${remote_image}"
+    if [ "$DRY_RUN" -eq 1 ]; then
+        print_info "DRY-RUN: docker tag ${local_image} ${remote_image}"
+    else
+        docker tag "${local_image}" "${remote_image}"
+    fi
     
     print_info "Pushing: ${remote_image}"
-    docker push "${remote_image}"
+    if [ "$DRY_RUN" -eq 1 ]; then
+        print_info "DRY-RUN: docker push ${remote_image}"
+    else
+        docker push "${remote_image}"
+    fi
     
-    print_info "✓ Pushed ${remote_image}"
+    if [ "$DRY_RUN" -eq 1 ]; then
+        print_info "✓ DRY-RUN complete for ${remote_image}"
+    else
+        print_info "✓ Pushed ${remote_image}"
+    fi
 done
 
 print_info "============================================"
-print_info "✓ All images pushed successfully!"
+if [ "$DRY_RUN" -eq 1 ]; then
+    print_info "✓ Dry run complete!"
+else
+    print_info "✓ All images pushed successfully!"
+fi
 print_info "============================================"

@@ -5,6 +5,8 @@
 # ==============================================================================
 # Note: Uses precompiled wheels to avoid source compilation
 # 注意: 使用预编译 wheel 避免源码编译
+# vLLM 0.15.1 currently expects PyTorch 2.9.1 + CUDA 12.8.
+# vLLM 0.15.1 当前期望 PyTorch 2.9.1 + CUDA 12.8。
 # ==============================================================================
 
 # ===== High-Performance Inference / 高性能推理 =====

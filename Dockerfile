@@ -12,8 +12,8 @@
 # ==============================================================================
 # Build Tiers / 构建层级 (BUILD_TIER):
 #   0 = base   Core Data Science stack / 核心数据科学栈 (~22GB)
-#   1 = llm    + LLM inference support / + LLM 推理支持 (~26GB)
-#   2 = full   + Full LLM acceleration / + 完整 LLM 加速 (~32GB)
+#   1 = llm    + LLM inference support / + LLM 推理支持 (~22GB)
+#   2 = full   + Full LLM acceleration / + 完整 LLM 加速 (~37GB)
 # 
 # Optional / 可选: ENABLE_MATERIALS=1 adds Materials Science / 添加材料科学
 # ==============================================================================
@@ -128,8 +128,20 @@ results = [(n, importlib.util.find_spec(m)) for m, n in mods]; \
 [print(f'{n}: installed / 已安装') if spec else print(f'{n}: not installed / 未安装') for n, spec in results]" || \
     echo "(Some optional modules not installed - OK for base tier)"
 
-# Health check (works with or without GPU) / 健康检查（支持 GPU 和 CPU 环境）
+# Health check: exit code indicates CUDA availability
+# 健康检查：用退出码区分 CUDA 状态
+#   0 = CUDA available / CUDA 可用
+#   1 = CUDA unavailable / CUDA 不可用
+#   2 = torch import failed / torch 导入失败
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=2 \
-    CMD python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA: {torch.cuda.is_available()}')" || exit 1
+    CMD python -c "import sys, importlib.util; \
+spec = importlib.util.find_spec('torch'); \
+if spec is None: \
+    print('Torch import failed: module not found'); \
+    sys.exit(2); \
+import torch; \
+ok = torch.cuda.is_available(); \
+print(f'PyTorch {torch.__version__}, CUDA: {ok}'); \
+sys.exit(0 if ok else 1)"
 
 CMD ["python"]

@@ -29,6 +29,11 @@
 | NumPy | 2.4.2 |
 | Pandas | 3.0.0 |
 
+## Scope / 适用范围
+
+- This image is GPU-first and expects NVIDIA runtime for normal use.
+- 该镜像以 GPU 为优先设计，正常使用需要 NVIDIA 运行时。
+
 ## Quick Start / 快速开始
 
 ```bash
@@ -49,6 +54,9 @@ BUILD_TIER=1 ./build.sh
 BUILD_TIER=2 ENABLE_MATERIALS=1 ./build.sh
 ```
 
+For detailed build options and troubleshooting, see `docs/BUILD.md`.
+更详细的构建选项与故障排除请见 `docs/BUILD.md`。
+
 ## Build Tiers / 构建层级
 
 | BUILD_TIER | Tag / 标签 | Content / 内容 | Size / 大小 | PyTorch | CUDA |
@@ -58,8 +66,9 @@ BUILD_TIER=2 ENABLE_MATERIALS=1 ./build.sh
 | 2 | v0.6-full | + vLLM + DeepSpeed | ~37GB | 2.9.1* | 12.8* |
 | ENABLE_MATERIALS=1 | v0.6-materials | + ase + pymatgen + phonopy + mace | ~23GB | 2.10.0 | 13.0 |
 
-> **Note / 注意**: v0.6-full uses PyTorch 2.9.1 + CUDA 12.8 due to vLLM 0.15.1 hard dependency.
-> v0.6-full 使用 PyTorch 2.9.1 + CUDA 12.8，这是 vLLM 0.15.1 的硬性依赖要求。
+> **Note / 注意**: v0.6-full is *intended* to use PyTorch 2.9.1 + CUDA 12.8 due to vLLM 0.15.1 hard dependency.
+> 当前 Dockerfile 统一基于 PyTorch 2.10.0 + CUDA 13.0，BUILD_TIER=2 可能因 vLLM 兼容性而失败。
+> 建议在 vLLM 更新前使用 BUILD_TIER=1，或等待后续重构。
 
 ## Included Packages / 包含组件
 
@@ -109,6 +118,28 @@ docker run --gpus all -it --rm \
     -w /workspace \
     atlas:v0.6-base \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+```
+
+## Healthcheck / 健康检查
+
+- Exit code `0` means CUDA is available.
+- Exit code `1` means CUDA is unavailable (GPU not visible).
+- Exit code `2` means `torch` failed to import.
+- 退出码 `0` 表示 CUDA 可用。
+- 退出码 `1` 表示 CUDA 不可用（GPU 不可见）。
+- 退出码 `2` 表示 `torch` 导入失败。
+
+## Tagging Images / 镜像打标
+
+```bash
+# Tag using default source (v$(cat VERSION)-base)
+./tag.sh tag 1.0.0
+
+# Tag from a specific tier
+./tag.sh tag 1.0.0 v0.6-llm
+
+# Make wrapper
+make tag TAG_VERSION=1.0.0 SOURCE=v0.6-llm
 ```
 
 ## License

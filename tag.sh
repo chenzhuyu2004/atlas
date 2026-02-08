@@ -51,19 +51,13 @@ EOF
 # Get script directory / 获取脚本目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Read VERSION file / 读取版本文件
-get_current_version() {
-    if [ -f "${SCRIPT_DIR}/VERSION" ]; then
-        cat "${SCRIPT_DIR}/VERSION" | tr -d '[:space:]'
-    else
-        echo "0.6"
-    fi
-}
+# Read VERSION file once / 读取 VERSION 文件（一次）
+CURRENT_VERSION="$(cat "${SCRIPT_DIR}/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "0.6")"
 
 # Tag image with semantic version / 用语义化版本标记镜像
 tag_image() {
     local version=$1
-    local source_tag=${2:-}  # Optional source tag / 可选的源标签
+    local source_tag=${2:-"v${CURRENT_VERSION}-base"}  # Optional source tag / 可选的源标签
     local image_name="atlas"
     
     if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -76,14 +70,7 @@ tag_image() {
     # Extract major.minor
     local major=$(echo $version | cut -d. -f1)
     local minor=$(echo $version | cut -d. -f2)
-    local patch=$(echo $version | cut -d. -f3)
     local major_minor="${major}.${minor}"
-    
-    # Determine source tag / 确定源标签
-    if [ -z "$source_tag" ]; then
-        local current_ver=$(get_current_version)
-        source_tag="v${current_ver}-base"
-    fi
     
     # Check if source image exists / 检查源镜像是否存在
     if ! docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^${image_name}:${source_tag}$"; then
@@ -131,8 +118,7 @@ inspect_image() {
     
     # Default to VERSION-base if no version specified / 默认使用 VERSION-base
     if [ -z "$image" ]; then
-        local current_ver=$(get_current_version)
-        image="atlas:v${current_ver}-base"
+        image="atlas:v${CURRENT_VERSION}-base"
     fi
     
     print_header "Image Details: $image"

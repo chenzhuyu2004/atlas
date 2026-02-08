@@ -118,9 +118,12 @@ build_image() {
     
     # 预估镜像大小
     print_step "预估镜像大小..."
-    local est_size="~8GB"
-    [[ "${BUILD_TIER}" -ge 1 ]] && est_size="~12GB"
-    [[ "${BUILD_TIER}" -ge 2 ]] && est_size="~18GB"
+    local est_size="~22GB"
+    case "${BUILD_TIER}" in
+        0) est_size="~22GB" ;;
+        1) est_size="~22GB" ;;
+        2) est_size="~37GB" ;;
+    esac
     [[ "${ENABLE_MATERIALS}" == "1" ]] && est_size="${est_size} + ~1GB"
     print_info "预估大小: ${est_size}"
     

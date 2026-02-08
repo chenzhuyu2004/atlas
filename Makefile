@@ -7,7 +7,7 @@
 VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
 IMAGE_BASE := atlas:v$(VERSION)-base
 
-.PHONY: help build base llm full materials clean prune run jupyter check push updates lint
+.PHONY: help build base llm full materials clean prune run jupyter check push updates lint tag
 
 # Default target / 默认目标
 help:
@@ -33,6 +33,7 @@ help:
 	@echo "  make clean      Remove build cache / 清除构建缓存"
 	@echo "  make prune      Remove all unused images / 清除所有未使用镜像"
 	@echo "  make list       List ATLAS images / 列出 ATLAS 镜像"
+	@echo "  make tag        Tag image (TAG_VERSION=1.0.0, SOURCE=v0.6-base) / 镜像打标"
 
 # Build targets / 构建目标
 build base:
@@ -96,3 +97,11 @@ push:
 
 lint:
 	@pre-commit run --all-files || echo "Install pre-commit: pip install pre-commit && pre-commit install"
+
+# Tag helper / 打标辅助
+tag:
+	@if [ -z "$(TAG_VERSION)" ]; then \
+		echo "TAG_VERSION is required. Example: make tag TAG_VERSION=1.0.0 SOURCE=v0.6-base"; \
+		exit 1; \
+	fi
+	@./tag.sh tag $(TAG_VERSION) $(SOURCE)

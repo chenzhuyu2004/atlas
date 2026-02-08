@@ -1,6 +1,24 @@
 # ATLAS Docker Image Changelog
 # ATLAS Docker 镜像更新日志
 
+## [0.6.1] - 2026-02-08
+
+### Fixes / 修复
+- HEALTHCHECK now distinguishes CUDA unavailable (exit 1) from import failure (exit 2)
+- 健康检查现在区分 CUDA 不可用 (exit 1) 与 torch 导入失败 (exit 2)
+- `tag.sh` simplified default source tag logic (uses `v$(VERSION)-base`)
+- `tag.sh` 简化默认源标签逻辑（使用 `v$(VERSION)-base`）
+- `make tag` now requires `TAG_VERSION` to avoid accidental tagging
+- `make tag` 现在要求 `TAG_VERSION`，避免误打标
+- `pre-check.sh` uses a `MIN_DOCKER` variable instead of hard-coded values
+- `pre-check.sh` 使用 `MIN_DOCKER` 变量替代硬编码
+
+### Docs / 文档
+- Added tagging examples and Makefile wrapper usage
+- 增加打标示例与 Makefile 包装用法
+- Materials stack version pinning noted in build guide
+- 在构建指南中说明材料栈版本锁定
+
 ## [0.6] - 2026-02-08 (Stable / 稳定版)
 
 ### Build Tiers Completed / 构建层级完成

@@ -11,6 +11,11 @@ NC='\033[0m'
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT_DIR"
 
+# Minimum Docker version / 最低 Docker 版本
+MIN_DOCKER="20.10"
+MIN_DOCKER_MAJOR=$(echo "$MIN_DOCKER" | cut -d. -f1)
+MIN_DOCKER_MINOR=$(echo "$MIN_DOCKER" | cut -d. -f2)
+
 echo "================================"
 echo "ATLAS Build Pre-Check / 构建前检查"
 echo "================================"
@@ -68,10 +73,10 @@ if command -v docker &> /dev/null; then
     DOCKER_VER_NUM=$(echo "$DOCKER_VERSION" | sed -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
     DOCKER_MAJOR=$(echo "$DOCKER_VER_NUM" | cut -d. -f1)
     DOCKER_MINOR=$(echo "$DOCKER_VER_NUM" | cut -d. -f2)
-    if [ "$DOCKER_MAJOR" -lt 20 ] || { [ "$DOCKER_MAJOR" -eq 20 ] && [ "$DOCKER_MINOR" -lt 10 ]; }; then
-        echo -e "${YELLOW}⚠${NC} Docker version < 20.10 may cause build issues"
+    if [ "$DOCKER_MAJOR" -lt "$MIN_DOCKER_MAJOR" ] || { [ "$DOCKER_MAJOR" -eq "$MIN_DOCKER_MAJOR" ] && [ "$DOCKER_MINOR" -lt "$MIN_DOCKER_MINOR" ]; }; then
+        echo -e "${YELLOW}⚠${NC} Docker version < ${MIN_DOCKER} may cause build issues"
     else
-        echo -e "${GREEN}✓${NC} Docker version OK (>= 20.10)"
+        echo -e "${GREEN}✓${NC} Docker version OK (>= ${MIN_DOCKER})"
     fi
 else
     echo -e "${RED}✗${NC} Docker not found"
