@@ -7,9 +7,8 @@
 VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
 IMAGE_BASE := atlas:v$(VERSION)-base
 
-.PHONY: help build base llm full materials clean prune run jupyter check push updates lint tag
+.PHONY: help build base llm full materials clean prune run jupyter check push updates lint tag format test typecheck sec lint-fast clean-all
 
-# Default target / 默认目标
 help:
 	@echo "ATLAS Build Commands / 构建命令"
 	@echo "================================"
@@ -30,10 +29,42 @@ help:
 	@echo "  make updates    Check dependency updates / 检查依赖更新"
 	@echo "  make push       Push images to registry / 推送镜像到仓库"
 	@echo "  make lint       Run pre-commit hooks / 运行代码检查"
+	@echo "  make lint-fast  Only run fast checks (no install) / 仅快速检查"
+	@echo "  make format     Format Python/Shell code / 格式化代码"
+	@echo "  make test       Run Python tests / 运行 Python 测试"
+	@echo "  make typecheck  Run mypy type checks / 类型检查"
+	@echo "  make sec        Run bandit security checks / 安全检查"
 	@echo "  make clean      Remove build cache / 清除构建缓存"
+	@echo "  make clean-all  Remove all containers/images/volumes / 全清理"
 	@echo "  make prune      Remove all unused images / 清除所有未使用镜像"
 	@echo "  make list       List ATLAS images / 列出 ATLAS 镜像"
 	@echo "  make tag        Tag image (TAG_VERSION=1.0.0, SOURCE=v0.6-base) / 镜像打标"
+# 快速代码格式化
+format:
+	@black . || true
+	@isort . || true
+	@shfmt -i 2 -ci -w scripts/*.sh || true
+
+# Python 测试
+test:
+	@pytest || echo "Install pytest: pip install pytest"
+
+# 类型检查
+typecheck:
+	@mypy . || echo "Install mypy: pip install mypy"
+
+# 安全检查
+sec:
+	@bandit -r . || echo "Install bandit: pip install bandit"
+
+# 仅快速lint（不自动安装）
+lint-fast:
+	@pre-commit run --all-files --show-diff-on-failure || true
+
+# 一键全清理
+clean-all:
+	@docker system prune -af --volumes
+	@echo "All containers/images/volumes removed / 所有容器、镜像、卷已清理"
 
 # Build targets / 构建目标
 build base:

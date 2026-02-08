@@ -1,5 +1,18 @@
 # ==============================================================================
 # ATLAS Docker Image v0.6 (Stable)
+#
+# 多阶段构建建议：如需极致精简镜像，可采用如下结构：
+# FROM pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel AS builder
+#   ...（安装依赖、编译等）...
+# FROM pytorch/pytorch:2.10.0-cuda13.0-cudnn9-runtime AS runtime
+#   COPY --from=builder /opt/conda /opt/conda
+#   ...（仅复制运行所需内容）...
+# 这样可大幅减少最终镜像体积，提升安全性。
+#
+# 安全加固建议：
+# - 安装后立即删除编译工具（如 build-essential、gfortran、cmake、ninja-build）
+# - 仅保留运行时必要的系统库
+# - 可用 trivy/clamav 等工具扫描镜像安全
 # ATLAS Docker 镜像 v0.6 (稳定版)
 # ==============================================================================
 # Optimized for: 13980HX + RTX 4060 Laptop (16GB RAM)

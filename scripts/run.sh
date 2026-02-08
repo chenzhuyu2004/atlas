@@ -4,7 +4,7 @@
 # ATLAS Docker 容器运行脚本
 # ==============================================================================
 
-set -e  # Exit on error / 出错时退出
+set -euo pipefail  # Exit on error, unset var, pipefail / 出错、未定义变量、管道失败时退出
 
 # Configuration / 配置
 IMAGE_NAME="${1:-atlas:v0.6-base}"

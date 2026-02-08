@@ -1,3 +1,13 @@
+### Q: pre-commit 检查/CI 检查失败怎么办？
+**A**: 常见排查方法：
+
+1. 本地运行 `pre-commit run --all-files`，查看详细报错。
+2. 检查 Python/Shell 代码格式（如 black、isort、shfmt）。
+3. 检查 shell 脚本头部和 set -euo pipefail 是否规范。
+4. 若 CI 失败，点击 GitHub Actions 日志，定位具体失败步骤。
+5. 若为依赖或网络问题，尝试清理缓存或更换镜像源。
+
+如无法解决，可将报错日志附在 Issue 中反馈。
 # FAQ / 常见问题
 
 Common questions and solutions for ATLAS Docker Image.

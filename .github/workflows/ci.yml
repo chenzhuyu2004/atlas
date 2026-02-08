@@ -26,6 +26,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Python for pre-commit
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install pre-commit and hooks
+        run: |
+          pip install pre-commit
+          pre-commit install-hooks
+
+      - name: Run pre-commit on all files
+        run: |
+          pre-commit run --all-files
       
       - name: Check shell scripts with shellcheck / 使用 shellcheck 检查脚本
         run: |

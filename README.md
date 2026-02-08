@@ -1,4 +1,27 @@
+
 # ATLAS Docker Image v0.6
+
+```mermaid
+flowchart TD
+    subgraph Build
+        A[build.sh / scripts/build.sh] --> B[pre-check.sh]
+        B --> C[Dockerfile 构建分层]
+        C --> D[requirements*.txt]
+    end
+    subgraph CI/CD
+        E[.github/workflows/ci.yml] --> F[pre-commit 检查]
+        F --> G[Shell/Python/Lint]
+        G --> H[Release 构建推送]
+        E --> I[单元测试/健康检查]
+        E --> J[安全扫描(Trivy)]
+    end
+    subgraph Usage
+        K[run.sh / scripts/run.sh] --> L[容器启动]
+        L --> M[JupyterLab/交互]
+    end
+    C --> E
+    H --> K
+```
 
 [![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

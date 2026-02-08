@@ -1,3 +1,29 @@
+## Python 虚拟环境与依赖锁定建议
+
+强烈建议在本地开发和测试时使用 Python 虚拟环境（如 venv 或 conda），以避免依赖冲突：
+
+```bash
+# venv 示例
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# conda 示例
+conda create -n atlas python=3.10
+conda activate atlas
+pip install -r requirements.txt
+```
+
+依赖锁定建议：
+- requirements.txt/llm/materials/accel 文件已锁定主要依赖版本，确保可复现性。
+- 如需进一步锁定所有依赖（含间接依赖），可用 pip-tools 生成 requirements.lock：
+
+```bash
+pip install pip-tools
+pip-compile requirements.txt --output-file requirements.lock
+```
+
+如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
 # ATLAS Build Guide / 构建指南
 
 ## Build Tiers / 构建层级
