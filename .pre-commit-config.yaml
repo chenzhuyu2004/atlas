@@ -1,0 +1,29 @@
+# pre-commit configuration / pre-commit 配置
+# Install: pip install pre-commit && pre-commit install
+# 安装: pip install pre-commit && pre-commit install
+
+repos:
+  # Shell script checks / Shell 脚本检查
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: ['--severity=warning']
+
+  # General file checks / 通用文件检查
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+
+  # Dockerfile lint / Dockerfile 检查
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        args: ['--failure-threshold', 'warning']

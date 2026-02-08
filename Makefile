@@ -7,7 +7,7 @@
 VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
 IMAGE_BASE := atlas:v$(VERSION)-base
 
-.PHONY: help build base llm full materials clean prune run jupyter check
+.PHONY: help build base llm full materials clean prune run jupyter check push updates lint
 
 # Default target / 默认目标
 help:
@@ -27,6 +27,9 @@ help:
 	@echo "Utilities / 工具"
 	@echo "================================"
 	@echo "  make check      Pre-build check / 构建前检查"
+	@echo "  make updates    Check dependency updates / 检查依赖更新"
+	@echo "  make push       Push images to registry / 推送镜像到仓库"
+	@echo "  make lint       Run pre-commit hooks / 运行代码检查"
 	@echo "  make clean      Remove build cache / 清除构建缓存"
 	@echo "  make prune      Remove all unused images / 清除所有未使用镜像"
 	@echo "  make list       List ATLAS images / 列出 ATLAS 镜像"
@@ -83,3 +86,13 @@ clean:
 prune:
 	@docker system prune -af
 	@echo "System pruned / 系统已清理"
+
+# New tools / 新工具
+updates:
+	@./check-updates.sh
+
+push:
+	@./push.sh
+
+lint:
+	@pre-commit run --all-files || echo "Install pre-commit: pip install pre-commit && pre-commit install"

@@ -1,0 +1,79 @@
+name: ATLAS CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+      - 'requirements*.txt'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly dependency check / 每周依赖检查
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: atlas
+
+jobs:
+  # Syntax check / 语法检查
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check shell scripts / 检查 shell 脚本
+        run: |
+          for script in *.sh; do
+            echo "Checking $script..."
+            bash -n "$script"
+          done
+          echo "All scripts OK"
+      
+      - name: Check Dockerfile / 检查 Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: warning
+
+  # Build test (base tier only) / 构建测试 (仅基础层)
+  build-test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build base image / 构建基础镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: ${{ env.IMAGE_NAME }}:test
+          build-args: |
+            BUILD_TIER=0
+            ENABLE_MATERIALS=0
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Check for dependency updates / 检查依赖更新
+  check-updates:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Check outdated packages / 检查过时包
+        run: |
+          pip install pip-tools
+          echo "=== Checking requirements.txt ===" 
+          pip-compile --dry-run requirements.txt 2>&1 | grep -E "^\s+#" | head -20 || echo "No updates"
