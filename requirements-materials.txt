@@ -35,7 +35,7 @@ mace-torch==0.3.8
 chgnet==0.4.1
 
 # ===== Databases / 数据库 =====
-jarvis-tools==2025.1.20
+jarvis-tools==2026.1.10
 
 # ===== Visualization / 可视化 =====
 nglview==3.1.2
