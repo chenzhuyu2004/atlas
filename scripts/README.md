@@ -51,7 +51,7 @@ BUILD_TIER=2 ./scripts/build.sh
 ./scripts/run.sh
 
 # Run specific tier / 运行特定层级
-IMAGE_TAG=v0.6-llm ./scripts/run.sh
+./scripts/run.sh atlas:v0.6-llm
 ```
 
 ### Tag & Push / 打标签和推送

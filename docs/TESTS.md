@@ -14,7 +14,7 @@ ATLAS 项目包含多层测试体系：
 | Health Check Tests | `tests/test_healthcheck.sh` | 验证容器健康检查机制 |
 | Docker Build Tests | `tests/test_docker_build.sh` | 测试镜像构建流程 |
 | Security Scans | CI/CD | Trivy 容器安全扫描 |
-| Static Analysis | CI/CD | shellcheck, hadolint |
+| Static Analysis | CI/CD | bash -n (syntax), hadolint |
 
 ## Running Tests Locally / 本地运行测试
 
