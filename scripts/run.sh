@@ -7,8 +7,13 @@ set -Eeuo pipefail
 IFS=$'\n\t'
 trap 'echo "[ERROR] ${0}:${LINENO} ${BASH_COMMAND}" >&2; exit 1' ERR
 
+# Paths / 路径
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+VERSION="$(tr -d '\n' < "${PROJECT_ROOT}/VERSION" 2> /dev/null || echo "0.6")"
+
 # Configuration / 配置
-IMAGE_NAME="${1:-atlas:v0.6-base}"
+IMAGE_NAME="${1:-atlas:v${VERSION}-base}"
 CONTAINER_NAME="${2:-atlas-$(date +%s)}"
 GPU_DEVICE="${3:-all}"
 WORK_DIR="$(pwd)"

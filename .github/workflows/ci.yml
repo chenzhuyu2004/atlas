@@ -26,6 +26,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect build-relevant changes / 检测是否需要构建
+        id: changes
+        run: |
+          set -e
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            base="origin/${{ github.base_ref }}"
+          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            base="${{ github.event.before }}"
+          else
+            base="HEAD~1"
+          fi
+
+          if git diff --name-only "$base" "${{ github.sha }}" | grep -E '^(Dockerfile|requirements.*\\.txt|scripts/|.*\\.sh)$' >/dev/null; then
+            echo "build_needed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "build_needed=false" >> "$GITHUB_OUTPUT"
+          fi
       
       - name: Run pre-commit hooks / 运行 pre-commit 钩子
         uses: pre-commit/action@v3
@@ -71,6 +92,15 @@ jobs:
             fi
           done
           echo "All requirements files validated"
+
+      - name: Smoke build (tier 0) / 轻量构建验证
+        if: steps.changes.outputs.build_needed == 'true'
+        run: |
+          docker build \
+            --build-arg BUILD_TIER=0 \
+            --build-arg ENABLE_MATERIALS=0 \
+            --progress=plain \
+            -t atlas:ci-smoke .
       
       - name: Run unit tests / 运行单元测试
         run: |
