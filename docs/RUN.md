@@ -27,16 +27,16 @@ cd ~/build/atlas
 
 ```bash
 # Basic run / 基础运行
-docker run --gpus all -it --rm atlas:v0.6-base
+docker run --gpus all -it --rm atlas:v$(cat VERSION)-base
 
 # With workspace mount / 挂载工作目录
 docker run --gpus all -it --rm \
     -v $(pwd):/workspace \
     -w /workspace \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 
 # Custom entrypoint / 自定义入口
-docker run --gpus all -it --rm atlas:v0.6-base bash
+docker run --gpus all -it --rm atlas:v$(cat VERSION)-base bash
 ```
 
 ### JupyterLab / 启动 JupyterLab
@@ -45,7 +45,7 @@ docker run --gpus all -it --rm atlas:v0.6-base bash
 # Basic JupyterLab / 基础启动
 docker run --gpus all -it --rm \
     -p 8888:8888 \
-    atlas:v0.6-base \
+    atlas:v$(cat VERSION)-base \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
 
 # With workspace and custom port / 自定义端口和工作目录
@@ -53,7 +53,7 @@ docker run --gpus all -it --rm \
     -p 8889:8888 \
     -v $(pwd):/workspace \
     -w /workspace \
-    atlas:v0.6-base \
+    atlas:v$(cat VERSION)-base \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
 ```
 
@@ -67,7 +67,7 @@ docker run -d --gpus all \
     --name atlas-jupyter \
     -p 8888:8888 \
     -v $(pwd):/workspace \
-    atlas:v0.6-base \
+    atlas:v$(cat VERSION)-base \
     jupyter lab --ip=0.0.0.0 --allow-root --no-browser
 
 # Check logs / 查看日志
@@ -89,15 +89,15 @@ ATLAS 镜像需要 NVIDIA Container Toolkit 支持：
 docker run --gpus all nvidia/cuda:13.0-base-ubuntu22.04 nvidia-smi
 
 # Specify GPU devices / 指定 GPU 设备
-docker run --gpus '"device=0"' atlas:v0.6-base  # 仅使用 GPU 0
-docker run --gpus 2 atlas:v0.6-base             # 使用前 2 个 GPU
-docker run --gpus all atlas:v0.6-base           # 使用所有 GPU
+docker run --gpus '"device=0"' atlas:v$(cat VERSION)-base  # 仅使用 GPU 0
+docker run --gpus 2 atlas:v$(cat VERSION)-base             # 使用前 2 个 GPU
+docker run --gpus all atlas:v$(cat VERSION)-base           # 使用所有 GPU
 ```
 
 ### Verify CUDA in Container / 验证容器内 CUDA
 
 ```bash
-docker run --gpus all atlas:v0.6-base python -c "
+docker run --gpus all atlas:v$(cat VERSION)-base python -c "
 import torch
 print(f'PyTorch: {torch.__version__}')
 print(f'CUDA available: {torch.cuda.is_available()}')
@@ -145,13 +145,13 @@ docker run --gpus all -it --rm \
     -v /data/models:/models \            # 读写模型目录
     -v $(pwd)/outputs:/outputs \         # 输出目录
     -w /workspace \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 
 # Named volume for persistence / 持久化命名卷
 docker volume create atlas-cache
 docker run --gpus all -it --rm \
     -v atlas-cache:/root/.cache \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 ```
 
 ### Environment Variables / 环境变量
@@ -161,13 +161,13 @@ docker run --gpus all -it --rm \
 docker run --gpus all -it --rm \
     -e HF_HOME=/workspace/.cache/huggingface \
     -v $(pwd):/workspace \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 
 # CUDA environment / CUDA 环境变量
 docker run --gpus all -it --rm \
     -e CUDA_VISIBLE_DEVICES=0 \
     -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512 \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 ```
 
 ### Docker Compose / 使用 Docker Compose
@@ -186,9 +186,9 @@ docker-compose up -d
 交互式容器启动脚本：
 
 ```bash
-./run.sh                      # 启动 v0.6-base (默认)
-./run.sh atlas:v0.6-llm       # 指定镜像标签
-./run.sh atlas:v0.6-llm myname all  # 完整参数：镜像、容器名、GPU
+./run.sh                      # 启动 v$(cat VERSION)-base (默认)
+./run.sh atlas:v$(cat VERSION)-llm       # 指定镜像标签
+./run.sh atlas:v$(cat VERSION)-llm myname all  # 完整参数：镜像、容器名、GPU
 ```
 
 ### tag.sh
@@ -200,10 +200,10 @@ docker-compose up -d
 ./tag.sh tag 1.0.0
 
 # Tag from specific tier / 从特定层级标记
-./tag.sh tag 1.0.0 v0.6-llm
+./tag.sh tag 1.0.0 v$(cat VERSION)-llm
 
 # Using Makefile / 使用 Makefile
-make tag TAG_VERSION=1.0.0 SOURCE=v0.6-llm
+make tag TAG_VERSION=1.0.0 SOURCE=v$(cat VERSION)-llm
 ```
 
 ### push.sh
@@ -212,10 +212,10 @@ make tag TAG_VERSION=1.0.0 SOURCE=v0.6-llm
 
 ```bash
 # Push to GHCR / 推送到 GitHub Container Registry
-./push.sh v0.6-base
+./push.sh v$(cat VERSION)-base
 
 # Push with custom registry / 使用自定义注册表
-REGISTRY=myregistry.io ./push.sh v0.6-base
+REGISTRY=myregistry.io ./push.sh v$(cat VERSION)-base
 ```
 
 ## Health Check / 健康检查
@@ -224,7 +224,7 @@ REGISTRY=myregistry.io ./push.sh v0.6-base
 
 ```bash
 # Check container health / 检查容器健康状态
-docker run -d --name atlas-test atlas:v0.6-base sleep infinity
+docker run -d --name atlas-test atlas:v$(cat VERSION)-base sleep infinity
 docker inspect atlas-test | jq '.[0].State.Health'
 
 # Manual health check / 手动健康检查
@@ -254,7 +254,7 @@ echo $?  # 0=OK, 1=CUDA unavailable, 2=import failed
 docker run --gpus all \
     --memory=8g \
     --cpus=4 \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 ```
 
 ### Restart Policies / 重启策略
@@ -264,7 +264,7 @@ docker run --gpus all \
 docker run -d --gpus all \
     --restart=unless-stopped \
     --name atlas-service \
-    atlas:v0.6-base \
+    atlas:v$(cat VERSION)-base \
     python my_service.py
 ```
 
@@ -276,7 +276,7 @@ docker run -d --gpus all \
     --log-driver=json-file \
     --log-opt max-size=10m \
     --log-opt max-file=3 \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 ```
 
 ## Performance Tips / 性能优化建议
@@ -302,7 +302,7 @@ docker run -d --gpus all \
 4. **Shared Memory** / 共享内存
    ```bash
    # Increase shared memory for DataLoader / 增加共享内存用于数据加载
-   docker run --gpus all --shm-size=8g atlas:v0.6-base
+   docker run --gpus all --shm-size=8g atlas:v$(cat VERSION)-base
    ```
 
 ## Troubleshooting / 故障排除
@@ -314,7 +314,7 @@ docker run -d --gpus all \
 docker logs <container-id>
 
 # Run with interactive shell / 使用交互式 shell 运行
-docker run --gpus all -it atlas:v0.6-base bash
+docker run --gpus all -it atlas:v$(cat VERSION)-base bash
 ```
 
 ### Permission Issues / 权限问题
@@ -324,17 +324,17 @@ docker run --gpus all -it atlas:v0.6-base bash
 docker run --gpus all -it --rm \
     --user $(id -u):$(id -g) \
     -v $(pwd):/workspace \
-    atlas:v0.6-base
+    atlas:v$(cat VERSION)-base
 ```
 
 ### Network Issues / 网络问题
 
 ```bash
 # Use host network / 使用 host 网络
-docker run --gpus all --network=host atlas:v0.6-base
+docker run --gpus all --network=host atlas:v$(cat VERSION)-base
 
 # Custom DNS / 自定义 DNS
-docker run --gpus all --dns=8.8.8.8 atlas:v0.6-base
+docker run --gpus all --dns=8.8.8.8 atlas:v$(cat VERSION)-base
 ```
 
 ## See Also / 相关文档

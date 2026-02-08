@@ -67,9 +67,11 @@ Notes / 说明:
 ```bash
 # Interactive / 交互式
 ./run.sh
+# Default image: atlas:v$(cat VERSION)-base
+# 默认镜像：atlas:v$(cat VERSION)-base
 
 # Specific image / 指定镜像
-./run.sh atlas:v0.6-base
+./run.sh atlas:v$(cat VERSION)-base
 
 # Mount + JupyterLab / 挂载 + JupyterLab
 docker run --gpus all -it --rm \

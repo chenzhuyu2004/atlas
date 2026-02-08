@@ -27,6 +27,8 @@ cd atlas
 
 # Run with GPU
 ./run.sh
+# Default image: atlas:v$(cat VERSION)-base
+# 默认镜像：atlas:v$(cat VERSION)-base
 
 # Start JupyterLab
 docker run --gpus all -p 8888:8888 atlas:v0.6-base \
