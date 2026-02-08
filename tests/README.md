@@ -30,7 +30,8 @@ cd tests
 ./test_docker_build.sh
 
 # Health check test / 健康检查测试
-./test_healthcheck.sh
+./test_healthcheck.sh           # Test without running container
+./test_healthcheck.sh <container-name>  # Test running container's HEALTHCHECK status
 
 # Package import test / 包导入测试
 python test_import_packages.py
@@ -50,12 +51,17 @@ Tests Docker image building for all tiers:
 
 ### 2. Health Check Tests / 健康检查测试
 
-Tests container health checks:
-测试容器健康检查：
+Tests Docker HEALTHCHECK functionality and basic operations:
+测试 Docker HEALTHCHECK 功能和基本操作：
 
 - Container starts successfully / 容器成功启动
+- Docker HEALTHCHECK status inspection / Docker HEALTHCHECK 状态检查
 - Health check returns correct exit codes / 健康检查返回正确退出码
 - CUDA availability detection / CUDA 可用性检测
+
+**Usage / 使用方法**:
+- Run without arguments: Tests health command directly / 不带参数运行：直接测试健康检查命令
+- Run with container name: Inspects running container's health status / 带容器名运行：检查运行中容器的健康状态
 
 ### 3. Package Import Tests / 包导入测试
 

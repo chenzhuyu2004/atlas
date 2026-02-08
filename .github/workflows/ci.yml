@@ -162,7 +162,7 @@ jobs:
           docker run -d --name atlas-healthcheck \
             ${{ env.IMAGE_NAME }}:test sleep 300
           cd tests
-          bash test_healthcheck.sh atlas-healthcheck
+          IMAGE_NAME=${{ env.IMAGE_NAME }}:test bash test_healthcheck.sh atlas-healthcheck
           docker rm -f atlas-healthcheck
       
       - name: Run Docker build tests / 运行 Docker 构建测试
