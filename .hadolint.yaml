@@ -1,0 +1,17 @@
+# Hadolint Configuration / Hadolint 配置
+# https://github.com/hadolint/hadolint
+
+# Ignore rules / 忽略规则
+ignored:
+  # DL3008: Pin versions in apt-get install
+  # 对于研究项目不实际，apt 版本随发行版更新频繁变化
+  - DL3008
+  
+  # DL3013: Pin versions in pip install
+  # 我们已通过 requirements.txt 固定版本，此处是安装 requirements 文件
+  - DL3013
+
+# Trusted registries / 可信镜像源
+trustedRegistries:
+  - docker.io
+  - nvcr.io

@@ -37,6 +37,8 @@ jobs:
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
+          # Uses .hadolint.yaml for configuration / 使用 .hadolint.yaml 配置
+          config: .hadolint.yaml
 
   # Build test (base tier only) / 构建测试 (仅基础层)
   build-test:
