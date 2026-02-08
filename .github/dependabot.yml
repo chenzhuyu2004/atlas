@@ -1,0 +1,103 @@
+# Dependabot Configuration / Dependabot 配置
+# Automatically checks for dependency updates
+# 自动检查依赖更新
+
+version: 2
+updates:
+  # Python dependencies / Python 依赖
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "00:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    reviewers:
+      - "chenzhuyu2004"
+    # Group updates for related packages
+    groups:
+      pytorch-ecosystem:
+        patterns:
+          - "torch*"
+        update-types:
+          - "minor"
+          - "patch"
+      data-science:
+        patterns:
+          - "numpy"
+          - "pandas"
+          - "scipy"
+          - "scikit-learn"
+          - "matplotlib"
+          - "seaborn"
+        update-types:
+          - "minor"
+          - "patch"
+      llm-stack:
+        patterns:
+          - "transformers"
+          - "accelerate"
+          - "datasets"
+          - "peft"
+          - "bitsandbytes"
+        update-types:
+          - "minor"
+          - "patch"
+      materials-science:
+        patterns:
+          - "ase"
+          - "pymatgen"
+          - "spglib"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions / GitHub Actions 工作流
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "00:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+    reviewers:
+      - "chenzhuyu2004"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Docker base image updates / Docker 基础镜像更新
+  # Note: Manual check required as pytorch/pytorch follows custom versioning
+  # 注意：需要手动检查，因为 pytorch/pytorch 使用自定义版本号
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "00:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "docker"
+    reviewers:
+      - "chenzhuyu2004"

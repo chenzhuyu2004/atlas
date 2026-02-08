@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # JupyterLab service / JupyterLab 服务
+  jupyter:
+    image: ${ATLAS_IMAGE:-atlas:v0.6-base}
+    container_name: atlas-jupyter
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    volumes:
+      - ./notebooks:/workspace/notebooks
+      - ./data:/workspace/data
+    working_dir: /workspace
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-atlas}
+    command: >
+      jupyter lab
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --allow-root
+      --NotebookApp.token=${JUPYTER_TOKEN:-atlas}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ${GPU_DEVICES:-all}
+              capabilities: [gpu]
+    restart: unless-stopped
+    networks:
+      - atlas-network
+
+  # Development environment / 开发环境
+  dev:
+    image: ${ATLAS_IMAGE:-atlas:v0.6-base}
+    container_name: atlas-dev
+    volumes:
+      - ${HOST_WORKSPACE:-./workspace}:/workspace
+      - ./data:/data
+    working_dir: /workspace
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ${GPU_DEVICES:-all}
+              capabilities: [gpu]
+    networks:
+      - atlas-network
+
+networks:
+  atlas-network:
+    driver: bridge
