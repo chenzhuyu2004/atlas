@@ -1,0 +1,19 @@
+# ==============================================================================
+# ATLAS - LLM Base Stack / LLM 基础栈
+# Required for: BUILD_TIER >= 1
+# 适用于: BUILD_TIER >= 1
+# ==============================================================================
+
+# ===== Hugging Face Ecosystem / Hugging Face 生态 =====
+transformers==5.1.0
+accelerate==1.12.0
+datasets==4.5.0
+peft==0.18.1
+huggingface_hub==1.4.1
+
+# ===== Tokenizers / 分词器 =====
+sentencepiece==0.2.1
+tiktoken==0.12.0
+
+# ===== Quantization / 量化推理 =====
+bitsandbytes==0.49.1

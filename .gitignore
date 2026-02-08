@@ -1,0 +1,47 @@
+# ==============================================================================
+# ATLAS .gitignore
+# ==============================================================================
+
+# Environment / 环境
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+*.bak
+
+# Data and models (too large for git)
+data/
+datasets/
+models/
+outputs/
+checkpoints/
+wandb/
+mlruns/
+tensorboard/
+
+# Backup
+backup/

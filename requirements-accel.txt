@@ -1,0 +1,18 @@
+# ==============================================================================
+# ATLAS - LLM Acceleration Stack / LLM 加速栈
+# Required for: BUILD_TIER >= 2
+# 适用于: BUILD_TIER >= 2
+# ==============================================================================
+# Note: Uses precompiled wheels to avoid source compilation
+# 注意: 使用预编译 wheel 避免源码编译
+# ==============================================================================
+
+# ===== High-Performance Inference / 高性能推理 =====
+# vLLM provides precompiled CUDA wheels
+# vLLM 提供预编译 CUDA wheel
+vllm==0.15.1
+
+# ===== Distributed Training / 分布式训练 =====
+# DeepSpeed Python-only mode (no CUDA compile)
+# DeepSpeed 仅 Python 模式 (无需 CUDA 编译)
+deepspeed==0.18.5

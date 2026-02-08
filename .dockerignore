@@ -1,0 +1,29 @@
+# Build context hygiene
+.git
+.gitignore
+.idea
+.vscode
+.env
+.env.*
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Docs and logs
+*.log
+*.tmp
+
+# Local data/artifacts
+data/
+datasets/
+models/
+outputs/
+checkpoints/
+wandb/
+mlruns/
+tensorboard/

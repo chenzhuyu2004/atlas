@@ -1,0 +1,47 @@
+# ==============================================================================
+# ATLAS - Materials Science Stack / 材料科学栈
+# Required for: ENABLE_MATERIALS=1
+# 适用于: ENABLE_MATERIALS=1
+# ==============================================================================
+
+# ===== Core / 核心 =====
+# Atomic Simulation Environment / 原子模拟环境
+ase>=3.22.0
+
+# Materials Analysis / 材料分析
+pymatgen>=2024.6.0
+
+# Symmetry Analysis / 对称性分析
+spglib>=2.5.0
+
+# Periodic Table / 元素周期表
+mendeleev>=1.0.0
+
+# Materials Project API / 材料项目 API
+mp-api>=0.41.0
+
+# ===== Phonons & Thermodynamics / 声子与热力学 =====
+phonopy>=2.20.0
+
+# ===== Feature Engineering / 特征工程 =====
+# Materials descriptors for ML / ML材料描述符
+matminer>=0.9.0
+dscribe>=2.1.0
+
+# ===== ML Interatomic Potentials / 机器学习原子势 =====
+# MACE: Multi-ACE equivariant model
+mace-torch>=0.3.0
+# CHGNet: Universal neural network potential
+chgnet>=0.4.0
+
+# ===== Databases / 数据库 =====
+jarvis-tools>=2024.0.0
+
+# ===== Visualization / 可视化 =====
+nglview>=3.0.0
+
+# ===== Transition State & Activation Energy / 过渡态与活化能 =====
+# Saddle point optimization / 鞍点优化
+sella>=2.3.0
+# Diffusion analysis (NEB, migration barriers) / 扩散分析 (NEB, 迁移能垒)
+pymatgen-analysis-diffusion>=2024.0.0
