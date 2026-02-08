@@ -30,7 +30,7 @@ dscribe==2.1.1
 
 # ===== ML Interatomic Potentials / 机器学习原子势 =====
 # MACE: Multi-ACE equivariant model
-mace-torch==0.3.8
+mace-torch==0.3.14
 # CHGNet: Universal neural network potential
 chgnet==0.4.1
 
