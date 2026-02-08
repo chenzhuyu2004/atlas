@@ -122,8 +122,12 @@ echo ""
 print_test "Test 4: Health check exit codes"
 if command -v nvidia-smi &> /dev/null && nvidia-smi &> /dev/null; then
   print_info "Testing health check exit codes with GPU"
+  
+  # Temporarily disable exit on error to capture exit code / 临时禁用错误退出以捕获退出码
+  set +e
   docker run --gpus all --rm "${IMAGE_NAME}" python -c "import sys, torch; sys.exit(0 if torch.cuda.is_available() else 1)"
   EXIT_CODE=$?
+  set -e
   
   if [ $EXIT_CODE -eq 0 ]; then
     print_info "✓ Health check returns exit code 0 (CUDA available)"

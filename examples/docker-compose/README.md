@@ -80,3 +80,15 @@ Change `JUPYTER_PORT` in `.env`
 
 Ensure NVIDIA Docker runtime is installed and configured.
 确保已安装和配置 NVIDIA Docker 运行时。
+
+**Configuration / 配置方式**:
+- The compose file uses both `runtime: nvidia` and `deploy.resources` for maximum compatibility
+- 配置文件同时使用 `runtime: nvidia` 和 `deploy.resources` 以获得最大兼容性
+- `runtime: nvidia` works with standalone docker-compose / `runtime: nvidia` 适用于独立 docker-compose
+- `deploy.resources` works with Docker Swarm / `deploy.resources` 适用于 Docker Swarm
+
+**Verification / 验证**:
+```bash
+# Check GPU is accessible / 检查 GPU 是否可访问
+docker-compose run --rm dev nvidia-smi
+```
