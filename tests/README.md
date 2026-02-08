@@ -68,12 +68,14 @@ Tests that all required packages can be imported:
 
 ## CI Integration / CI 集成
 
-These tests run automatically in GitHub Actions:
-这些测试在 GitHub Actions 中自动运行：
+Tests run automatically in GitHub Actions:
+测试在 GitHub Actions 中自动运行：
 
-- On every push to main
-- On every pull request
-- Weekly via scheduled jobs
+- **Build tests**: On every push/PR / 每次 push/PR
+- **Package import tests**: On every push/PR / 每次 push/PR
+- **Health check tests**: On every push/PR / 每次 push/PR
+- **Security scans**: On every push/PR / 每次 push/PR
+- **Dependency checks**: Weekly / 每周
 
 See `.github/workflows/ci.yml` for details.
 详见 `.github/workflows/ci.yml`。

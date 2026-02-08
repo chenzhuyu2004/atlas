@@ -30,8 +30,8 @@ Send a detailed report to the repository owner via GitHub Security Advisories:
 2. Click "Report a vulnerability" / 点击 "Report a vulnerability"
 3. Provide details about the vulnerability / 提供漏洞详情
 
-Alternatively, you can email: **[Your email if you want to provide one]**
-或者，您可以发送邮件至：**[如果想提供可以填写邮箱]**
+Alternatively, you can open a confidential issue for security inquiries.
+或者，您可以为安全询问开启一个保密 issue。
 
 ### 3. What to Include / 应包含的内容
 

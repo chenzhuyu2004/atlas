@@ -21,6 +21,13 @@ services:
       --no-browser
       --allow-root
       --NotebookApp.token=${JUPYTER_TOKEN:-atlas}
+    # GPU configuration (Docker Compose v2.3+) / GPU 配置
+    # Note: 'deploy' syntax is for Swarm. For standalone docker-compose,
+    # GPU access works but configuration may be ignored.
+    # 注意：'deploy' 语法用于 Swarm。在独立 docker-compose 中，
+    # GPU 访问有效但配置可能被忽略。
+    # Alternative: Use 'runtime: nvidia' for older docker-compose versions
+    # 替代方案：对于旧版 docker-compose，使用 'runtime: nvidia'
     deploy:
       resources:
         reservations:
@@ -43,6 +50,7 @@ services:
     command: /bin/bash
     stdin_open: true
     tty: true
+    # GPU configuration / GPU 配置
     deploy:
       resources:
         reservations:

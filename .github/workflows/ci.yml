@@ -136,6 +136,48 @@ jobs:
             ${{ env.IMAGE_NAME }}:test \
             python /tests/test_import_packages.py
 
+  # Full test suite / 完整测试套件
+  full-tests:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build test image / 构建测试镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: ${{ env.IMAGE_NAME }}:test
+          build-args: |
+            BUILD_TIER=0
+            ENABLE_MATERIALS=0
+          cache-from: type=gha
+      
+      - name: Run health check tests / 运行健康检查测试
+        run: |
+          docker run -d --name atlas-healthcheck \
+            ${{ env.IMAGE_NAME }}:test sleep 300
+          cd tests
+          bash test_healthcheck.sh atlas-healthcheck
+          docker rm -f atlas-healthcheck
+      
+      - name: Run Docker build tests / 运行 Docker 构建测试
+        run: |
+          cd tests
+          bash test_docker_build.sh
+      
+      - name: Display test summary / 显示测试摘要
+        if: always()
+        run: |
+          echo "=== Test Summary / 测试摘要 ==="
+          echo "Health checks: Completed"
+          echo "Build tests: Completed"
+          echo "Package imports: See package-tests job"
+
   # Check for dependency updates / 检查依赖更新
   check-updates:
     runs-on: ubuntu-latest
@@ -157,7 +199,7 @@ jobs:
   # Release build and push / 发布构建和推送
   release:
     runs-on: ubuntu-latest
-    needs: [lint, build-test, security-scan, package-tests]
+    needs: [lint, build-test, security-scan, package-tests, full-tests]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read

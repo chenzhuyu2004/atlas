@@ -57,7 +57,7 @@ def main():
         ('matplotlib', 'import matplotlib.pyplot'),
         ('seaborn', None),
         ('IPython', None),
-        ('jupyter', None),
+        ('jupyterlab', None),
         ('PIL', 'from PIL import Image'),
         ('cv2', 'import cv2'),
         ('pydantic', None),

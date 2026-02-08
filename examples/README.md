@@ -8,11 +8,12 @@ Practical examples for using ATLAS Docker images.
 ```
 examples/
 ├── README.md                    # This file / 本文件
-├── jupyter-notebook/            # Jupyter notebook examples / Jupyter notebook 示例
 ├── docker-compose/              # Docker Compose examples / Docker Compose 示例
-├── training-demo/               # Model training examples / 模型训练示例
-└── materials-science/           # Materials science examples / 材料科学示例
+└── training-demo/               # Model training examples / 模型训练示例
 ```
+
+**Note**: Additional examples (jupyter-notebook, materials-science) are planned for future releases.
+**注意**：更多示例（jupyter-notebook、materials-science）计划在未来版本中添加。
 
 ## Quick Start / 快速开始
 
@@ -59,8 +60,8 @@ Then open: http://localhost:8888
 
 ### Data Science / 数据科学
 
-See [`jupyter-notebook/`](jupyter-notebook/) for:
-查看 [`jupyter-notebook/`](jupyter-notebook/)：
+Use JupyterLab (see Docker Compose section) for:
+使用 JupyterLab（见 Docker Compose 部分）：
 
 - Data analysis with pandas / 使用 pandas 进行数据分析
 - Visualization with matplotlib / 使用 matplotlib 可视化
@@ -89,8 +90,8 @@ Requires `BUILD_TIER>=1`:
 Requires `ENABLE_MATERIALS=1`:
 需要 `ENABLE_MATERIALS=1`：
 
-See [`materials-science/`](materials-science/) for:
-查看 [`materials-science/`](materials-science/)：
+Examples (planned for future release):
+示例（计划在未来版本中添加）：
 
 - Structure optimization / 结构优化
 - Property calculation / 性质计算
