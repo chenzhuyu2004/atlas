@@ -53,7 +53,12 @@ echo ""
 print_test "Test 2: Docker HEALTHCHECK status"
 if [ -n "${CONTAINER_NAME}" ]; then
   # Check if container exists and is running / 检查容器是否存在且运行中
-  if docker ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+  # Temporarily disable exit on error for container check / 临时禁用错误退出以检查容器
+  set +e
+  CONTAINER_EXISTS=$(docker ps --format "{{.Names}}" | grep "^${CONTAINER_NAME}$")
+  set -e
+  
+  if [ -n "${CONTAINER_EXISTS}" ]; then
     # Wait for healthcheck to initialize / 等待健康检查初始化
     sleep 5
     HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "${CONTAINER_NAME}" 2>/dev/null || echo "none")
