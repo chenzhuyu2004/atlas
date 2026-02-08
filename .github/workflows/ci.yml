@@ -9,6 +9,7 @@ on:
       - '.github/workflows/**'
       - 'tests/**'
       - '*.sh'
+      - 'scripts/**'
     tags:
       - 'v*'
   pull_request:
@@ -28,9 +29,19 @@ jobs:
       
       - name: Check shell scripts / 检查 shell 脚本
         run: |
+          # Check root wrappers / 检查根目录 wrapper
           for script in *.sh; do
-            echo "Checking $script..."
-            bash -n "$script"
+            if [ -f "$script" ]; then
+              echo "Checking $script..."
+              bash -n "$script"
+            fi
+          done
+          # Check actual scripts / 检查实际脚本
+          for script in scripts/*.sh; do
+            if [ -f "$script" ]; then
+              echo "Checking $script..."
+              bash -n "$script"
+            fi
           done
           echo "All scripts OK"
       

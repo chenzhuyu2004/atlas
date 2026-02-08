@@ -287,7 +287,7 @@ docker rm test-health
 
 ## Branch Protection / 分支保护
 
-Main 分支已配置分支保护规则（但允许 admin bypass）：
+Main 分支配置了分支保护规则（enforce_admins=false 允许管理员绕过）：
 
 ```json
 {
@@ -298,6 +298,9 @@ Main 分支已配置分支保护规则（但允许 admin bypass）：
   "deletion_allowed": false
 }
 ```
+
+> **Note**: 由于 `enforce_admins=false`，管理员可以在紧急情况下绕过检查直接推送。
+> 这在个人项目中很有用，但团队协作时建议设为 `true`。
 
 **要求**：
 - 所有 PR 必须通过 `lint` 检查

@@ -54,10 +54,10 @@ check_file() {
 }
 
 # Check all files / 检查所有文件
-check_file "${SCRIPT_DIR}/requirements.txt" "Core Data Science"
-check_file "${SCRIPT_DIR}/requirements-llm.txt" "LLM Stack"
-check_file "${SCRIPT_DIR}/requirements-accel.txt" "LLM Acceleration"
-check_file "${SCRIPT_DIR}/requirements-materials.txt" "Materials Science"
+check_file "${PROJECT_ROOT}/requirements.txt" "Core Data Science"
+check_file "${PROJECT_ROOT}/requirements-llm.txt" "LLM Stack"
+check_file "${PROJECT_ROOT}/requirements-accel.txt" "LLM Acceleration"
+check_file "${PROJECT_ROOT}/requirements-materials.txt" "Materials Science"
 
 echo -e "${BLUE}=== Check Complete ===${NC}"
 echo ""
