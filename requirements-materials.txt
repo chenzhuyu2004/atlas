@@ -32,7 +32,7 @@ dscribe==2.1.1
 # MACE: Multi-ACE equivariant model
 mace-torch==0.3.8
 # CHGNet: Universal neural network potential
-chgnet==0.4.1
+chgnet==0.4.2
 
 # ===== Databases / 数据库 =====
 jarvis-tools==2025.1.20
