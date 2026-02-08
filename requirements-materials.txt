@@ -44,4 +44,4 @@ nglview==3.1.2
 # Saddle point optimization / 鞍点优化
 sella==2.3.4
 # Diffusion analysis (NEB, migration barriers) / 扩散分析 (NEB, 迁移能垒)
-pymatgen-analysis-diffusion==2024.12.4
+pymatgen-analysis-diffusion==2025.11.15
