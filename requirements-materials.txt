@@ -21,7 +21,7 @@ mendeleev==1.2.0
 mp-api==0.45.2
 
 # ===== Phonons & Thermodynamics / 声子与热力学 =====
-phonopy==2.32.0
+phonopy==2.47.1
 
 # ===== Feature Engineering / 特征工程 =====
 # Materials descriptors for ML / ML材料描述符
