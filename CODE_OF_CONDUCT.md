@@ -81,10 +81,10 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement via:
-https://github.com/chenzhuyu2004/atlas/security/advisories/new
+<https://github.com/chenzhuyu2004/atlas/security/advisories/new>
 
 可以向负责执行的社区领导者报告滥用、骚扰或其他不可接受行为的实例，
-联系方式：https://github.com/chenzhuyu2004/atlas/security/advisories/new。
+联系方式：<https://github.com/chenzhuyu2004/atlas/security/advisories/new>。
 
 All complaints will be reviewed and investigated promptly and fairly.
 

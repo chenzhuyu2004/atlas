@@ -39,6 +39,10 @@ Choose your path:
 - **Builder/Maintainer**: [docker/atlas/docs/BUILD.md](docker/atlas/docs/BUILD.md), [docker/atlas/docs/TESTS.md](docker/atlas/docs/TESTS.md), [docs/RELEASE.md](docs/RELEASE.md), [SECURITY.md](SECURITY.md)
 - **Contributor**: [CONTRIBUTING.md](CONTRIBUTING.md), [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SUPPORT.md](SUPPORT.md)
 
+Role quick starts: [docs/ROLE_QUICKSTARTS.md](docs/ROLE_QUICKSTARTS.md)
+Common workflows: [docs/WORKFLOWS.md](docs/WORKFLOWS.md)
+Glossary: [docs/GLOSSARY.md](docs/GLOSSARY.md)
+
 Core guides:
 - [docker/atlas/README.md](docker/atlas/README.md) - Image overview and quick start
 - [docker/atlas/docs/BUILD.md](docker/atlas/docs/BUILD.md) - Build guide
@@ -55,6 +59,9 @@ Other references:
 - [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Documentation structure and maintenance
 - [docs/WORKSPACE.md](docs/WORKSPACE.md) - Local workspace usage
 - [docs/RELEASE.md](docs/RELEASE.md) - Release workflow and CI triggers
+- [docs/ROLE_QUICKSTARTS.md](docs/ROLE_QUICKSTARTS.md) - Runnable commands per role
+- [docs/WORKFLOWS.md](docs/WORKFLOWS.md) - Common workflows
+- [docs/GLOSSARY.md](docs/GLOSSARY.md) - Glossary of terms
 
 ## Repository Layout
 
