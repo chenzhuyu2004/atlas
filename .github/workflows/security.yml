@@ -1,8 +1,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+---
 name: Security Scan
 # Security scanning for dependencies and code / 依赖和代码安全扫描
 
-on:
+'on':
   schedule:
     - cron: '0 0 * * 0'  # Weekly on Sunday / 每周日运行
   workflow_dispatch:  # Manual trigger / 手动触发

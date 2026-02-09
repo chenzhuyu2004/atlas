@@ -175,6 +175,20 @@ jobs:
           cache-to: type=gha,mode=max,scope=release
           platforms: linux/amd64
 
+      - name: Install cosign / 安装 cosign
+        if: ${{ secrets.COSIGN_PRIVATE_KEY != '' }}
+        uses: sigstore/cosign-installer@v3.5.0
+
+      - name: Sign image / 镜像签名
+        if: ${{ secrets.COSIGN_PRIVATE_KEY != '' }}
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          COSIGN_YES: "true"
+        run: |
+          cosign sign --key env://COSIGN_PRIVATE_KEY \
+            ${{ env.REGISTRY }}/${{ github.repository }}@${{ steps.docker_build.outputs.digest }}
+
       - name: Output release summary / 输出发布摘要
         run: |
           echo "## 🚀 Release Summary / 发布摘要" >> $GITHUB_STEP_SUMMARY

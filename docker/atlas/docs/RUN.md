@@ -49,7 +49,7 @@ docker run --gpus all -it --rm atlas:v0.6-base bash
 docker run --gpus all -it --rm \
     -p 8888:8888 \
     atlas:v0.6-base \
-    jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    jupyter lab --ip=0.0.0.0 --no-browser
 
 # With workspace and custom port / 自定义端口和工作目录
 docker run --gpus all -it --rm \
@@ -57,7 +57,7 @@ docker run --gpus all -it --rm \
     -v $(pwd):/workspace \
     -w /workspace \
     atlas:v0.6-base \
-    jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    jupyter lab --ip=0.0.0.0 --no-browser
 ```
 
 访问 `http://localhost:8888` 并使用终端输出的 token 登录。
@@ -71,7 +71,7 @@ docker run -d --gpus all \
     -p 8888:8888 \
     -v $(pwd):/workspace \
     atlas:v0.6-base \
-    jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    jupyter lab --ip=0.0.0.0 --no-browser
 
 # Check logs / 查看日志
 docker logs atlas-jupyter
@@ -153,7 +153,7 @@ docker run --gpus all -it --rm \
 # Named volume for persistence / 持久化命名卷
 docker volume create atlas-cache
 docker run --gpus all -it --rm \
-    -v atlas-cache:/root/.cache \
+    -v atlas-cache:/home/atlas/.cache \
     atlas:v0.6-base
 ```
 
@@ -170,6 +170,15 @@ docker run --gpus all -it --rm \
 docker run --gpus all -it --rm \
     -e CUDA_VISIBLE_DEVICES=0 \
     -e PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512 \
+    atlas:v0.6-base
+
+# Healthcheck behavior / 健康检查行为
+docker run --gpus all -it --rm \
+    -e ATLAS_HEALTHCHECK_ENABLED=0 \
+    atlas:v0.6-base
+
+docker run --gpus all -it --rm \
+    -e ATLAS_HEALTHCHECK_REQUIRE_CUDA=0 \
     atlas:v0.6-base
 ```
 

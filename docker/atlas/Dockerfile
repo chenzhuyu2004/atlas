@@ -67,6 +67,9 @@ RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
 FROM ${BASE_IMAGE}
 
 ARG VERSION=0.6
+ARG USERNAME=atlas
+ARG USER_UID=1000
+ARG USER_GID=1000
 
 LABEL org.opencontainers.image.title="ATLAS ML/DS" \
       org.opencontainers.image.version="${VERSION}" \
@@ -87,7 +90,9 @@ ENV PYTHONUNBUFFERED=1 \
     CUDA_HOME=/usr/local/cuda \
     TORCH_CUDA_ARCH_LIST="8.9" \
     MAX_JOBS=2 \
-    MAKEFLAGS="-j2"
+    MAKEFLAGS="-j2" \
+    ATLAS_HEALTHCHECK_ENABLED=1 \
+    ATLAS_HEALTHCHECK_REQUIRE_CUDA=1
 
 # Build arguments / 构建参数
 ARG BUILD_TIER=0
@@ -176,13 +181,44 @@ results = [(n, importlib.util.find_spec(m)) for m, n in mods]; \
 [print(f'{n}: installed / 已安装') if spec else print(f'{n}: not installed / 未安装') for n, spec in results]" || \
     echo "(Some optional modules not installed - OK for base tier)"
 
+# ==============================================================================
+# Security hardening / 安全加固
+# Remove build toolchain to reduce attack surface after installs
+# ==============================================================================
+RUN apt-get purge -y build-essential gfortran cmake ninja-build && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# ==============================================================================
+# Non-root runtime user / 非 root 运行用户
+# ==============================================================================
+RUN if ! getent group "${USERNAME}" >/dev/null; then \
+      groupadd --gid "${USER_GID}" "${USERNAME}"; \
+    fi && \
+    if ! getent passwd "${USERNAME}" >/dev/null; then \
+      useradd --uid "${USER_UID}" --gid "${USER_GID}" --create-home --shell /bin/bash "${USERNAME}"; \
+    fi && \
+    if getent group video >/dev/null; then \
+      usermod -aG video "${USERNAME}"; \
+    fi && \
+    mkdir -p /workspace /app && \
+    chown -R "${USERNAME}:${USER_GID}" /workspace /app
+
+ENV HOME=/home/${USERNAME}
+USER ${USERNAME}
+
 # Health check: exit code indicates CUDA availability
 # 健康检查：用退出码区分 CUDA 状态
 #   0 = CUDA available / CUDA 可用
 #   1 = CUDA unavailable / CUDA 不可用
 #   2 = torch import failed / torch 导入失败
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=2 \
-    CMD python -c "import sys, importlib.util; \
+    CMD python -c "import os, sys, importlib.util; \
+enabled = os.getenv('ATLAS_HEALTHCHECK_ENABLED','1').lower() not in ('0','false','no','off'); \
+if not enabled: \
+    print('Healthcheck disabled'); \
+    sys.exit(0); \
+require_cuda = os.getenv('ATLAS_HEALTHCHECK_REQUIRE_CUDA','1').lower() not in ('0','false','no','off'); \
 spec = importlib.util.find_spec('torch'); \
 if spec is None: \
     print('Torch import failed: module not found'); \
@@ -190,6 +226,6 @@ if spec is None: \
 import torch; \
 ok = torch.cuda.is_available(); \
 print(f'PyTorch {torch.__version__}, CUDA: {ok}'); \
-sys.exit(0 if ok else 1)"
+sys.exit(0 if (ok or not require_cuda) else 1)"
 
 CMD ["python"]

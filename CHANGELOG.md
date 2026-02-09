@@ -35,6 +35,10 @@ Before creating a new release, ensure all items are checked:
   - [ ] docker/atlas/README.md - version badges / 版本徽章
   - [ ] docker/atlas/docs/BUILD.md - build instructions / 构建说明
   - [ ] docker/atlas/docs/RUN.md - runtime examples / 运行示例
+  - [ ] Update doc version tags / 更新文档版本标签
+    ```bash
+    make -C docker/atlas docs-ver OLD_VERSION=0.6 NEW_VERSION=0.7
+    ```
 
 ### Release / 发布
 - [ ] Create and push git tag / 创建并推送 git 标签

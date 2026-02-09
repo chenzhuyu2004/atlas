@@ -96,6 +96,14 @@ jobs:
           sarif_file: 'trivy-results-tier${{ matrix.tier }}.sarif'
         continue-on-error: true
 
+      - name: Archive Trivy results / 存档扫描结果
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-results-tier${{ matrix.tier }}
+          path: 'trivy-results-tier${{ matrix.tier }}.sarif'
+          if-no-files-found: warn
+
       - name: Tag and push nightly image / 标记并推送夜间构建
         run: |
           docker tag ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test \

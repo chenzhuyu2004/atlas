@@ -59,8 +59,22 @@ else
   ((TOTAL_FAILED++))
 fi
 
-# Test 3: Package import tests / 包导入测试
-print_header "3. Package Import Tests / 包导入测试"
+# Test 3: End-to-end tests / 端到端测试
+print_header "3. End-to-End Tests / 端到端测试"
+if [ "${SKIP_E2E_TESTS:-0}" = "1" ]; then
+  print_info "Skipping end-to-end tests (SKIP_E2E_TESTS=1)"
+else
+  if ./test_e2e.sh; then
+    print_info "✓ End-to-end tests passed"
+    ((TOTAL_PASSED++))
+  else
+    print_error "✗ End-to-end tests failed"
+    ((TOTAL_FAILED++))
+  fi
+fi
+
+# Test 4: Package import tests / 包导入测试
+print_header "4. Package Import Tests / 包导入测试"
 IMAGE_NAME="${IMAGE_NAME:-${DEFAULT_IMAGE}}"
 if docker run --rm "${IMAGE_NAME}" python /dev/stdin < test_import_packages.py; then
   print_info "✓ Package import tests passed"

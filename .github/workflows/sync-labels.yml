@@ -1,8 +1,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+---
 name: Sync Labels
 # Sync GitHub labels from configuration file / 从配置文件同步 GitHub 标签
 
-on:
+'on':
   push:
     branches:
       - main

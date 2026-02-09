@@ -9,22 +9,18 @@ MD013:
   code_blocks: false
   tables: false
   headings: true
-  headers: true
   strict: false
-  stern: false
 
 # MD033/no-inline-html - Inline HTML
 MD033:
   allowed_elements:
-    - br
     - sub
     - sup
     - kbd
-    - img
     - details
     - summary
 
-# MD041/first-line-heading - First line in file should be a top level heading
+# MD041 - First line in file should be a top level heading
 MD041: false
 
 # MD046/code-block-style - Code block style
@@ -36,8 +32,7 @@ MD007:
   indent: 2
 
 # MD024/no-duplicate-heading - Multiple headings with the same content
-MD024:
-  allow_different_nesting: true
+MD024: true
 
 # MD036/no-emphasis-as-heading - Emphasis used instead of a heading
 MD036: false

@@ -14,7 +14,9 @@ This directory contains the main operational scripts for ATLAS Docker image.
 | `push.sh` | Push image to registry / 推送镜像到注册表 | `./push.sh v0.6-base` |
 | `pre-check.sh` | Pre-build checks / 预构建检查 | Called by `build.sh` |
 | `check-updates.sh` | Check package updates / 检查包更新 | `./check-updates.sh` |
+| `generate-hashes.sh` | Generate hashed lockfiles / 生成带哈希锁定文件 | `./generate-hashes.sh` |
 | `update-doc-version.sh` | Update doc version tags / 更新文档版本标签 | `./update-doc-version.sh 0.6 0.7` |
+| `collect-metrics.sh` | Collect local metrics / 采集本地指标 | `./collect-metrics.sh <container>` |
 
 ## Backward Compatibility / 向后兼容
 
@@ -74,6 +76,9 @@ BUILD_TIER=2 ./scripts/build.sh
 # Check for package updates / 检查包更新
 ./scripts/check-updates.sh
 
+# Generate hashed lockfiles / 生成带哈希锁定文件
+./scripts/generate-hashes.sh
+
 # Manual pre-check / 手动预检查
 ./scripts/pre-check.sh
 
@@ -82,6 +87,9 @@ BUILD_TIER=2 ./scripts/build.sh
 
 # Dry run / 仅预览（不修改）
 ./scripts/update-doc-version.sh --dry-run 0.6 0.7
+
+# Collect local metrics / 采集本地指标
+./scripts/collect-metrics.sh <container-name>
 ```
 
 ## Environment Variables / 环境变量
@@ -93,6 +101,8 @@ Scripts respect the following environment variables:
 - `ENABLE_MATERIALS`: Enable materials science packages (0 or 1) / 启用材料科学包
 - `REGISTRY`: Container registry for push/pull / 容器注册表
 - `MAX_JOBS`: Build parallelism (default: 2) / 构建并发数
+- `CHECK_UPDATES_JOBS`: Parallel jobs for update checks (default: 8) / 更新检查并发数
+- `IMAGE_NAME`: Image name for metrics collection / 指标收集的镜像名
 
 > **Note**: `run.sh` uses positional parameters instead of `IMAGE_TAG` environment variable. Use `./run.sh <image:tag>` to specify image.
 > **注意**：`run.sh` 使用位置参数而非 `IMAGE_TAG` 环境变量。使用 `./run.sh <镜像:标签>` 指定镜像。

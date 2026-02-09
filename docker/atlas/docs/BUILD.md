@@ -27,6 +27,16 @@ pip install pip-tools
 pip-compile requirements.txt --output-file requirements.lock
 ```
 
+如需生成带 SHA256 哈希的锁定文件（更严格的可复现性）：
+
+```bash
+# Generate hashed lockfiles for all requirements*.txt
+./scripts/generate-hashes.sh
+
+# Output directory (default): docker/atlas/requirements-locks/
+ls requirements-locks/
+```
+
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
 # ATLAS Build Guide / 构建指南
 
@@ -109,7 +119,7 @@ docker run --gpus all -it --rm \
     -v $(pwd):/workspace \
     -w /workspace \
     atlas:v0.6-base \
-    jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    jupyter lab --ip=0.0.0.0 --no-browser
 ```
 
 ## 16GB Memory Optimization / 内存优化

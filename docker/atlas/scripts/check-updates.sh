@@ -34,13 +34,61 @@ check_file() {
     echo -e "${GREEN}=== $name ===${NC}"
 
     # Extract package names and versions / 提取包名和版本
-    grep -E "^[a-zA-Z].*==" "$file" | while read -r line; do
-        pkg=$(echo "$line" | cut -d'=' -f1 | tr -d ' ')
-        current=$(echo "$line" | grep -oP '==\K[0-9.]+')
+    mapfile -t req_lines < <(grep -E "^[a-zA-Z0-9].*==" "$file" || true)
+    if [[ ${#req_lines[@]} -eq 0 ]]; then
+        echo -e "  ${YELLOW}(no pinned packages)${NC}"
+        echo ""
+        return
+    fi
 
-        # Get latest version from PyPI / 从 PyPI 获取最新版本
-        latest=$(curl -s "https://pypi.org/pypi/${pkg}/json" 2>/dev/null | \
-                 python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('info',{}).get('version','?'))" 2>/dev/null || echo "?")
+    # Fetch latest versions in parallel (Python threads) / 并发获取最新版本
+    declare -A latest_versions
+    while IFS=$'\t' read -r pkg latest; do
+        latest_versions["$pkg"]="$latest"
+    done < <(printf '%s\n' "${req_lines[@]}" | python3 - <<'PY'
+import os
+import sys
+import json
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+jobs = int(os.environ.get("CHECK_UPDATES_JOBS", "8"))
+
+def parse_pkg(line: str) -> str | None:
+    line = line.split("#", 1)[0].strip()
+    if "==" not in line:
+        return None
+    return line.split("==", 1)[0].strip()
+
+pkgs = []
+for raw in sys.stdin:
+    pkg = parse_pkg(raw)
+    if pkg:
+        pkgs.append(pkg)
+
+def fetch_latest(pkg: str) -> tuple[str, str]:
+    url = f"https://pypi.org/pypi/{pkg}/json"
+    try:
+        with urllib.request.urlopen(url, timeout=6) as resp:
+            data = json.load(resp)
+            return pkg, data.get("info", {}).get("version", "?")
+    except Exception:
+        return pkg, "?"
+
+with ThreadPoolExecutor(max_workers=jobs) as ex:
+    futures = {ex.submit(fetch_latest, p): p for p in pkgs}
+    for fut in as_completed(futures):
+        pkg, latest = fut.result()
+        print(f"{pkg}\\t{latest}")
+PY
+    )
+
+    for line in "${req_lines[@]}"; do
+        line="${line%%#*}"
+        line="$(echo "$line" | tr -d '[:space:]')"
+        pkg="${line%%==*}"
+        current="${line##*==}"
+        latest="${latest_versions[$pkg]:-?}"
 
         if [[ "$latest" == "?" ]]; then
             echo -e "  ${pkg}: ${current} -> ${YELLOW}(cannot check)${NC}"

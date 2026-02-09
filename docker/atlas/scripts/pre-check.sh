@@ -47,7 +47,26 @@ done
 
 echo
 echo "检查脚本权限..."
-for script in build.sh run.sh tag.sh; do
+SCRIPT_FILES=(
+    "build.sh"
+    "run.sh"
+    "tag.sh"
+    "push.sh"
+    "pre-check.sh"
+    "check-updates.sh"
+)
+
+if [ -d "scripts" ]; then
+    while IFS= read -r -d '' script; do
+        SCRIPT_FILES+=("${script}")
+    done < <(find scripts -type f -name "*.sh" -print0 | LC_ALL=C sort -z)
+fi
+
+for script in "${SCRIPT_FILES[@]}"; do
+    if [ ! -e "$script" ]; then
+        echo -e "${YELLOW}⚠${NC} $script (missing)"
+        continue
+    fi
     if [ -x "$script" ]; then
         echo -e "${GREEN}✓${NC} $script (executable)"
     else

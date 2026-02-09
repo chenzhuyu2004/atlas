@@ -7,7 +7,7 @@
 VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
 IMAGE_BASE := atlas:v$(VERSION)-base
 
-.PHONY: help build base llm full materials clean prune run jupyter check push updates lint tag format test typecheck sec lint-fast clean-all
+.PHONY: help build base llm full materials clean prune run jupyter check push updates hashes metrics lint tag format test typecheck sec lint-fast clean-all
 
 help:
 	@echo "ATLAS Build Commands / 构建命令"
@@ -27,6 +27,8 @@ help:
 	@echo "================================"
 	@echo "  make check      Pre-build check / 构建前检查"
 	@echo "  make updates    Check dependency updates / 检查依赖更新"
+	@echo "  make hashes     Generate hashed lockfiles / 生成带哈希锁定文件"
+	@echo "  make metrics    Collect local metrics / 采集本地指标"
 	@echo "  make push       Push images to registry / 推送镜像到仓库"
 	@echo "  make lint       Run pre-commit hooks / 运行代码检查"
 	@echo "  make lint-fast  Only run fast checks (no install) / 仅快速检查"
@@ -110,7 +112,7 @@ jupyter:
 		-v $$(pwd):/workspace \
 		-w /workspace \
 		$(IMAGE_BASE) \
-		jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+		jupyter lab --ip=0.0.0.0 --no-browser
 
 # Utility targets / 工具目标
 check:
@@ -130,6 +132,12 @@ prune:
 # New tools / 新工具
 updates:
 	@./check-updates.sh
+
+hashes:
+	@./scripts/generate-hashes.sh
+
+metrics:
+	@./scripts/collect-metrics.sh $(CONTAINER)
 
 push:
 	@./push.sh

@@ -19,6 +19,12 @@
 - 🔬 **Materials Science Support**: 可选的材料科学工具包集成
 - 📊 **Production Ready**: 轻量级 CI/CD（PR/Push 做 lint + smoke build，Release 仅构建推送，测试在本地/nightly）
 - 💻 **Memory Optimized**: 针对 16GB RAM 笔记本优化的构建参数
+- 🔒 **Non-root Runtime**: 默认非 root 运行，降低容器内权限风险
+
+## Supported Platforms / 支持平台
+
+- **linux/amd64 only** (CUDA base images are amd64-only at the moment)
+- 当前仅支持 **linux/amd64**（CUDA 基础镜像暂不提供 arm64）
 
 ## Quick Start / 快速开始
 
@@ -33,7 +39,7 @@ cd atlas/docker/atlas
 
 # Start JupyterLab
 docker run --gpus all -p 8888:8888 atlas:v0.6-base \
-    jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+    jupyter lab --ip=0.0.0.0 --no-browser
 ```
 
 ## Build Tiers / 构建层级
@@ -83,6 +89,7 @@ ENABLE_MATERIALS=1 ./build.sh
 - Run `./pre-check.sh` and local tests (see `docs/TESTS.md`)
 - Tag release: `git tag -a vX.Y.Z -m \"Release vX.Y.Z\" && git push origin vX.Y.Z`
 - Use `./tag.sh` to create local image tags if needed
+- Optional: set `COSIGN_PRIVATE_KEY` in GitHub Secrets to sign images on release
 
 ## Contributing / 贡献
 

@@ -9,6 +9,7 @@ ATLAS Docker 镜像的自动化测试。
 tests/
 ├── README.md                    # This file / 本文件
 ├── test_docker_build.sh         # Build tests / 构建测试
+├── test_e2e.sh                  # End-to-end tests / 端到端测试
 ├── test_healthcheck.sh          # Health check tests / 健康检查测试
 ├── test_import_packages.py      # Package import tests / 包导入测试
 └── run_all_tests.sh             # Run all tests / 运行所有测试
@@ -32,6 +33,9 @@ cd tests
 # Health check test / 健康检查测试
 ./test_healthcheck.sh           # Test without running container
 ./test_healthcheck.sh <container-name>  # Test running container's HEALTHCHECK status
+
+# End-to-end test / 端到端测试
+./test_e2e.sh
 
 # Package import test / 包导入测试
 python test_import_packages.py
@@ -68,7 +72,16 @@ Tests Docker HEALTHCHECK functionality and basic operations:
 - Run without arguments: Tests health command directly / 不带参数运行：直接测试健康检查命令
 - Run with container name: Inspects running container's health status / 带容器名运行：检查运行中容器的健康状态
 
-### 3. Package Import Tests / 包导入测试
+### 3. End-to-End Tests / 端到端测试
+
+Validates container runtime and volume read/write:
+验证容器运行与挂载读写：
+
+- Non-root runtime user / 非 root 用户运行
+- Volume write in /workspace / 挂载目录可写
+- JupyterLab import / JupyterLab 可导入
+
+### 4. Package Import Tests / 包导入测试
 
 Tests that all required packages can be imported:
 测试所有必需包可以导入：

@@ -15,6 +15,7 @@ ATLAS 项目包含多层测试体系：
 | Package Import Tests | `tests/test_import_packages.py` | 验证所有声明的包可以正常导入 |
 | Health Check Tests | `tests/test_healthcheck.sh` | 验证容器健康检查机制 |
 | Docker Build Tests | `tests/test_docker_build.sh` | 测试镜像构建流程 |
+| End-to-End Tests | `tests/test_e2e.sh` | 端到端运行与挂载验证 |
 | Security Scans | CI/CD | Trivy 容器安全扫描 |
 | Static Analysis | CI/CD | bash -n (syntax), hadolint |
 
@@ -84,7 +85,21 @@ cd tests
 - 无 GPU 时健康检查返回 1（CUDA 不可用）
 - 容器正常停止和清理
 
-#### 3. Docker Build Tests / 镜像构建测试
+#### 3. End-to-End Tests / 端到端测试
+
+验证容器启动与挂载读写是否正常：
+
+```bash
+cd tests
+./test_e2e.sh
+```
+
+**测试内容**：
+- 容器可启动并执行 Python 命令
+- 工作目录挂载可读写
+- JupyterLab 包可导入
+
+#### 4. Docker Build Tests / 镜像构建测试
 
 验证不同层级的构建流程：
 
@@ -272,7 +287,12 @@ trivy image --format sarif --output trivy-results.sarif atlas:v0.6-base
 
 ```dockerfile
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=2 \
-  CMD python -c "import sys, importlib.util; \
+  CMD python -c "import os, sys, importlib.util; \
+enabled = os.getenv('ATLAS_HEALTHCHECK_ENABLED','1').lower() not in ('0','false','no','off'); \
+if not enabled: \
+    print('Healthcheck disabled'); \
+    sys.exit(0); \
+require_cuda = os.getenv('ATLAS_HEALTHCHECK_REQUIRE_CUDA','1').lower() not in ('0','false','no','off'); \
 spec = importlib.util.find_spec('torch'); \
 if spec is None: \
     print('Torch import failed: module not found'); \
@@ -280,13 +300,17 @@ if spec is None: \
 import torch; \
 ok = torch.cuda.is_available(); \
 print(f'PyTorch {torch.__version__}, CUDA: {ok}'); \
-sys.exit(0 if ok else 1)"
+sys.exit(0 if (ok or not require_cuda) else 1)"
 ```
 
 **Exit Codes / 退出码**：
 - `0`: CUDA available / CUDA 可用
-- `1`: CUDA unavailable / CUDA 不可用
+- `1`: CUDA unavailable (when required) / CUDA 不可用（且要求 CUDA）
 - `2`: torch import failed / torch 导入失败
+
+**Environment Overrides / 环境变量覆盖**：
+- `ATLAS_HEALTHCHECK_ENABLED=0`: disable health check / 禁用健康检查
+- `ATLAS_HEALTHCHECK_REQUIRE_CUDA=0`: allow CPU-only / 允许 CPU-only
 
 ### Testing Health Check / 测试健康检查
 

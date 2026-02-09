@@ -1,8 +1,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+---
 name: Stale
 # Mark stale issues and pull requests / 标记过期的 issues 和 PRs
 
-on:
+'on':
   schedule:
     - cron: '0 0 * * *'  # Daily at midnight UTC
   workflow_dispatch:

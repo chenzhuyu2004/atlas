@@ -19,7 +19,6 @@ services:
       --ip=0.0.0.0
       --port=8888
       --no-browser
-      --allow-root
       --NotebookApp.token=${JUPYTER_TOKEN:-atlas}
     # GPU configuration (Docker Compose v2.3+) / GPU 配置
     # Note: 'deploy' syntax is for Swarm. For standalone docker-compose,

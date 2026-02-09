@@ -161,7 +161,7 @@ docker logs <container-name>
 docker run --gpus all -p 8888:8888 \
   -e JUPYTER_TOKEN=mytoken \
   atlas:v0.6-base \
-  jupyter lab --ip=0.0.0.0 --allow-root --no-browser
+  jupyter lab --ip=0.0.0.0 --no-browser
 
 # Then access / 然后访问: http://localhost:8888/?token=mytoken
 ```

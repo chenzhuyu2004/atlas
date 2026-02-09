@@ -45,3 +45,6 @@ tensorboard/
 
 # Backup
 backup/
+
+# Generated lockfiles
+docker/atlas/requirements-locks/
