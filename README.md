@@ -1,6 +1,14 @@
 # ATLAS Monorepo
 
 [![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
+[![Nightly Build](https://github.com/chenzhuyu2004/atlas/actions/workflows/nightly-build.yml/badge.svg)](https://github.com/chenzhuyu2004/atlas/actions/workflows/nightly-build.yml)
+[![Security](https://github.com/chenzhuyu2004/atlas/actions/workflows/security.yml/badge.svg)](https://github.com/chenzhuyu2004/atlas/actions/workflows/security.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue.svg)](https://github.com/chenzhuyu2004/atlas/pkgs/container/atlas)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch 2.10.0](https://img.shields.io/badge/pytorch-2.10.0-ee4c2c.svg)](https://pytorch.org/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 This repository contains the ATLAS Docker image build system and a separate project workspace.
 
@@ -43,6 +51,15 @@ Other references:
 - `CHANGELOG.md` - Release history and checklist
 - `CONTRIBUTING.md` - Contribution guidelines
 - `SECURITY.md` - Vulnerability disclosure policy
+- `CODE_OF_CONDUCT.md` - Community guidelines
+- `SUPPORT.md` - How to get help
+
+## Community
+
+- 💬 [Discussions](https://github.com/chenzhuyu2004/atlas/discussions) - Ask questions, share ideas
+- 🐛 [Issues](https://github.com/chenzhuyu2004/atlas/issues) - Report bugs, request features
+- 📖 [Wiki](https://github.com/chenzhuyu2004/atlas/wiki) - Community guides and tips
+- 🔒 [Security](https://github.com/chenzhuyu2004/atlas/security) - Report vulnerabilities
 
 ## Release & Upgrade
 

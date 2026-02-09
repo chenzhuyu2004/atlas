@@ -1,0 +1,58 @@
+# Auto label PRs based on changed files
+# 根据更改的文件自动标记 PR
+
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docker/atlas/docs/**/*'
+
+dockerfile:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Dockerfile*'
+      - '**/*.dockerfile'
+      - 'docker/atlas/Dockerfile'
+
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/requirements*.txt'
+      - 'docker/atlas/requirements*.txt'
+
+ci-cd:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**'
+      - '.github/**/*.yml'
+      - '.github/**/*.yaml'
+
+scripts:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.sh'
+      - 'docker/atlas/scripts/**'
+
+tests:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'docker/atlas/tests/**'
+      - '**/*test*.py'
+      - '**/*_test.py'
+
+examples:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'examples/**'
+
+github:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**'
+      - '!.github/workflows/**'
+
+makefile:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Makefile'
+      - '**/*.mk'

@@ -1,0 +1,95 @@
+# Release Drafter Configuration
+# 自动生成发布说明配置
+
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+exclude-labels:
+  - 'skip-changelog'
+  - 'duplicate'
+  - 'invalid'
+  - 'wontfix'
+
+categories:
+  - title: '🚀 Features / 新功能'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes / Bug 修复'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '📝 Documentation / 文档'
+    labels:
+      - 'documentation'
+      - 'docs'
+  - title: '🔧 Maintenance / 维护'
+    labels:
+      - 'chore'
+      - 'refactor'
+  - title: '⬆️ Dependencies / 依赖更新'
+    labels:
+      - 'dependencies'
+  - title: '🔒 Security / 安全'
+    labels:
+      - 'security'
+  - title: '⚡ Performance / 性能优化'
+    labels:
+      - 'performance'
+  - title: '🧪 Tests / 测试'
+    labels:
+      - 'tests'
+  - title: '⚙️ CI/CD'
+    labels:
+      - 'ci-cd'
+      - 'github-actions'
+
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'dependencies'
+      - 'chore'
+  default: patch
+
+template: |
+  ## What's Changed / 更新内容
+
+  $CHANGES
+
+  ## New Contributors / 新贡献者
+
+  $CONTRIBUTORS
+
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
+
+  ---
+
+  ## Docker Images / Docker 镜像
+
+  ```bash
+  # Pull from GitHub Container Registry / 从 GHCR 拉取
+  docker pull ghcr.io/$OWNER/$REPOSITORY:v$RESOLVED_VERSION-base
+  docker pull ghcr.io/$OWNER/$REPOSITORY:v$RESOLVED_VERSION-llm
+  docker pull ghcr.io/$OWNER/$REPOSITORY:v$RESOLVED_VERSION-full
+  ```
+
+  ## Installation / 安装
+
+  See [BUILD.md](docker/atlas/docs/BUILD.md) for detailed instructions.
+  详细说明请参阅 [BUILD.md](docker/atlas/docs/BUILD.md)。

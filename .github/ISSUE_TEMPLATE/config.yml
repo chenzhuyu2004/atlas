@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/chenzhuyu2004/atlas/discussions
+    about: Ask questions and discuss ideas / 提问和讨论想法
+  - name: 📚 Documentation
+    url: https://github.com/chenzhuyu2004/atlas/blob/main/docker/atlas/docs/README.md
+    about: Read the documentation first / 先阅读文档
+  - name: 💡 General Help & Q&A
+    url: https://github.com/chenzhuyu2004/atlas/discussions/categories/q-a
+    about: Get help from the community / 从社区获取帮助
+  - name: 🔒 Security Issues
+    url: https://github.com/chenzhuyu2004/atlas/security/advisories/new
+    about: Report security vulnerabilities privately / 私密报告安全漏洞

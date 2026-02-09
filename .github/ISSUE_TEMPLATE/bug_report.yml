@@ -1,0 +1,125 @@
+name: 🐛 Bug Report / Bug 报告
+description: Report a bug or issue / 报告 bug 或问题
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        感谢您花时间填写此 bug 报告！
+
+        Please search existing issues before creating a new one.
+        在创建新 issue 之前，请先搜索现有的 issues。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug / 描述问题
+      description: A clear and concise description of what the bug is.
+      placeholder: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce / 复现步骤
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Build command: `make build-base`
+        2. Run command: `make run IMAGE=atlas:v0.6-base`
+        3. Execute: `python -c "import torch; print(torch.cuda.is_available())"`
+        4. Error occurs: `...`
+      value: |
+        1. Build command: `...`
+        2. Run command: `...`
+        3. Error message: `...`
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior / 预期行为
+      description: What you expected to happen
+      placeholder: What should have happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System / 操作系统
+      description: What OS are you using?
+      options:
+        - Ubuntu 24.04
+        - Ubuntu 22.04
+        - Ubuntu 20.04
+        - WSL2 (Ubuntu)
+        - WSL2 (Debian)
+        - Debian 12
+        - Debian 11
+        - Other Linux
+    validations:
+      required: true
+
+  - type: input
+    id: docker-version
+    attributes:
+      label: Docker Version / Docker 版本
+      description: Output of `docker --version`
+      placeholder: "e.g., Docker version 29.1.5, build 96a769e"
+    validations:
+      required: true
+
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU / 显卡
+      description: Your GPU model (if applicable)
+      placeholder: "e.g., RTX 4060 Laptop, RTX 3090, None"
+
+  - type: input
+    id: driver-version
+    attributes:
+      label: NVIDIA Driver Version / 驱动版本
+      description: Output of `nvidia-smi` (if applicable)
+      placeholder: "e.g., 591.86, 535.129.03"
+
+  - type: input
+    id: image-tag
+    attributes:
+      label: Image Tag / 镜像标签
+      description: Which image version are you using?
+      placeholder: "e.g., v0.6-base, v0.6-llm, v0.6-full"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs / 相关日志
+      description: Please copy and paste any relevant log output
+      placeholder: Paste logs here...
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context / 其他信息
+      description: Any other context about the problem
+      placeholder: Add any other context, screenshots, or information here
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist / 检查清单
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues / 我已搜索过现有的 issues
+          required: true
+        - label: I have read the documentation / 我已阅读过文档
+          required: true
+        - label: I am using the latest version / 我正在使用最新版本
+          required: false

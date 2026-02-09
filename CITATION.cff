@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "ATLAS: ML/DS Docker Image Build System"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Chen"
+    given-names: "Zhuyu"
+    email: "chenzhuyu2004@users.noreply.github.com"
+    affiliation: "ATLAS Project"
+repository-code: "https://github.com/chenzhuyu2004/atlas"
+url: "https://github.com/chenzhuyu2004/atlas"
+abstract: >
+  ATLAS is a Docker-based machine learning and data science
+  environment optimized for NVIDIA RTX 4060 Laptop GPU with
+  16GB RAM. It provides a tiered build system supporting core
+  data science (base), LLM inference (llm), and LLM acceleration
+  (full) configurations, with optional materials science support.
+keywords:
+  - docker
+  - machine-learning
+  - data-science
+  - pytorch
+  - cuda
+  - llm
+  - deep-learning
+  - gpu
+  - nvidia
+license: MIT
+version: "0.6"
+date-released: "2026-02-09"

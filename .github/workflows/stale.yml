@@ -1,0 +1,68 @@
+# Mark stale issues and pull requests
+# 标记过期的 issues 和 PRs
+
+name: Stale
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark stale issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issues configuration / Issues 配置
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had
+            recent activity. It will be closed in 14 days if no further activity occurs.
+            Thank you for your contributions.
+
+            此 issue 因长时间无活动而被自动标记为过期。
+            如果没有进一步的活动，它将在 14 天后关闭。感谢您的贡献。
+          stale-issue-label: 'stale'
+          close-issue-message: |
+            This issue was closed because it has been inactive for 14 days since being
+            marked as stale. Please feel free to reopen if you believe this is still relevant.
+
+            此 issue 因被标记为过期后 14 天内无活动而被关闭。
+            如果您认为此问题仍然相关，请随时重新打开。
+
+          # PRs configuration / PRs 配置
+          days-before-pr-stale: 45
+          days-before-pr-close: 14
+          stale-pr-message: |
+            This PR has been automatically marked as stale because it has not had
+            recent activity. It will be closed in 14 days if no further activity occurs.
+
+            此 PR 因长时间无活动而被自动标记为过期。
+            如果没有进一步的活动，它将在 14 天后关闭。
+          stale-pr-label: 'stale'
+          close-pr-message: |
+            This PR was closed because it has been inactive for 14 days since being
+            marked as stale. Please feel free to reopen if you plan to continue working on it.
+
+            此 PR 因被标记为过期后 14 天内无活动而被关闭。
+            如果您计划继续处理它，请随时重新打开。
+
+          # Exempt labels / 豁免标签
+          exempt-issue-labels: 'pinned,security,roadmap,help-wanted'
+          exempt-pr-labels: 'pinned,work-in-progress,wip'
+
+          # Only issues / 仅 issues
+          exempt-all-issue-assignees: false
+          exempt-all-pr-assignees: false
+
+          # Operations per run / 每次运行的操作数
+          operations-per-run: 100

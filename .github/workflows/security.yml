@@ -1,0 +1,149 @@
+# Security scanning for dependencies and code
+# 依赖和代码安全扫描
+
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday / 每周日运行
+  workflow_dispatch:  # Manual trigger / 手动触发
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docker/atlas/requirements*.txt'
+      - '.github/workflows/security.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  python-security:
+    name: Python Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Run pip-audit on requirements.txt
+        run: |
+          echo "Scanning requirements.txt..."
+          pip-audit -r docker/atlas/requirements.txt || true
+
+      - name: Run pip-audit on requirements-llm.txt
+        run: |
+          echo "Scanning requirements-llm.txt..."
+          pip-audit -r docker/atlas/requirements-llm.txt || true
+
+      - name: Run pip-audit on requirements-accel.txt
+        run: |
+          echo "Scanning requirements-accel.txt..."
+          pip-audit -r docker/atlas/requirements-accel.txt || true
+
+      - name: Run pip-audit on requirements-materials.txt
+        run: |
+          echo "Scanning requirements-materials.txt..."
+          pip-audit -r docker/atlas/requirements-materials.txt || true
+
+  bandit:
+    name: Bandit Security Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Bandit
+        run: pip install bandit[toml]
+
+      - name: Run Bandit
+        run: |
+          # Scan Python files if any exist
+          if find . -name "*.py" -not -path "./.git/*" | grep -q .; then
+            bandit -r . -ll --exclude ./.git,./venv,./examples --format json -o bandit-report.json || true
+            bandit -r . -ll --exclude ./.git,./venv,./examples --format screen
+          else
+            echo "No Python files found to scan"
+          fi
+
+      - name: Upload Bandit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-security-report
+          path: bandit-report.json
+          if-no-files-found: ignore

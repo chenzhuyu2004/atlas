@@ -1,0 +1,69 @@
+# Welcome first-time contributors
+# 欢迎首次贡献者
+
+name: Greetings
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet first-time contributors
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            👋 Hello @${{ github.actor }}! Thanks for opening your first issue in ATLAS!
+
+            We appreciate your contribution and will review this as soon as possible.
+            Please make sure you've provided all the necessary information described in the issue template.
+
+            ---
+
+            👋 你好 @${{ github.actor }}！感谢您在 ATLAS 提交第一个 issue！
+
+            我们感谢您的贡献，并将尽快审查此问题。
+            请确保您已提供 issue 模板中描述的所有必要信息。
+
+            ## Need Help? / 需要帮助？
+
+            - 📚 [Documentation](https://github.com/chenzhuyu2004/atlas/blob/main/docker/atlas/docs/README.md)
+            - 💬 [Discussions](https://github.com/chenzhuyu2004/atlas/discussions)
+            - ❓ [FAQ](https://github.com/chenzhuyu2004/atlas/blob/main/docker/atlas/docs/FAQ.md)
+
+          pr-message: |
+            🎉 Awesome! Thanks for your first Pull Request in ATLAS!
+
+            We're excited to review your contribution. Please ensure:
+            - ✅ All tests pass
+            - ✅ Code follows our style guidelines
+            - ✅ PR description clearly explains your changes
+            - ✅ You've linked any related issues
+
+            A maintainer will review your PR soon. Thank you for contributing! 🙌
+
+            ---
+
+            🎉 太棒了！感谢您在 ATLAS 提交第一个 Pull Request！
+
+            我们很高兴审查您的贡献。请确保：
+            - ✅ 所有测试通过
+            - ✅ 代码遵循我们的样式指南
+            - ✅ PR 描述清楚地解释了您的更改
+            - ✅ 您已关联任何相关的 issues
+
+            维护者将很快审查您的 PR。感谢您的贡献！🙌
+
+            ## Resources / 资源
+
+            - 📖 [Contributing Guide](https://github.com/chenzhuyu2004/atlas/blob/main/CONTRIBUTING.md)
+            - 📝 [Code of Conduct](https://github.com/chenzhuyu2004/atlas/blob/main/CODE_OF_CONDUCT.md)

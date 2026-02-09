@@ -1,0 +1,95 @@
+name: ✨ Feature Request / 功能请求
+description: Suggest a new feature or improvement / 建议新功能或改进
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature!
+        感谢您建议新功能！
+
+        Please search existing issues and discussions before creating a new request.
+        在创建新请求之前，请先搜索现有的 issues 和 discussions。
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem? / 这个功能请求是否与某个问题相关？
+      description: A clear and concise description of what the problem is
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like / 描述你想要的解决方案
+      description: A clear and concise description of what you want to happen
+      placeholder: I would like to see...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered / 描述你考虑过的替代方案
+      description: Any alternative solutions or features you've considered
+      placeholder: I have also considered...
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category / 功能类别
+      description: Which category does this feature belong to?
+      options:
+        - Docker Image Build / Docker 镜像构建
+        - Dependencies / 依赖包管理
+        - Documentation / 文档
+        - CI/CD / 持续集成
+        - Scripts / 脚本工具
+        - Examples / 示例
+        - Other / 其他
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority / 优先级
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have / 低 - 可有可无
+        - Medium - Would be helpful / 中 - 会有帮助
+        - High - Really need this / 高 - 非常需要
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case / 使用场景
+      description: Describe how you would use this feature
+      placeholder: |
+        When working on..., I need to...
+        This would help me by...
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context / 其他信息
+      description: Any other context, screenshots, or examples
+      placeholder: Add any other context here...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist / 检查清单
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues and discussions / 我已搜索过现有的 issues 和 discussions
+          required: true
+        - label: This feature aligns with the project goals / 此功能符合项目目标
+          required: true
+        - label: I am willing to help implement this feature / 我愿意帮助实现此功能
+          required: false

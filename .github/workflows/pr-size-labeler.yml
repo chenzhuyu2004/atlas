@@ -1,0 +1,39 @@
+# Automatically label PRs based on size
+# 根据 PR 大小自动添加标签
+
+name: PR Size Labeling
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  size-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Label PR by size
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: 'size/XS'
+          xs_max_size: '10'
+          s_label: 'size/S'
+          s_max_size: '100'
+          m_label: 'size/M'
+          m_max_size: '500'
+          l_label: 'size/L'
+          l_max_size: '1000'
+          xl_label: 'size/XL'
+          message_if_xl: >
+            ⚠️ This PR is very large (>1000 lines changed).
+            Consider breaking it into smaller, more focused PRs for easier review.
+
+            ⚠️ 此 PR 非常大（更改超过 1000 行）。
+            考虑将其拆分为更小、更集中的 PR 以便于审查。
