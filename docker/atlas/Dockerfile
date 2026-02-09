@@ -44,7 +44,7 @@ FROM ${SMOKE_BASE_IMAGE} AS smoke
 
 WORKDIR /app
 COPY requirements*.txt ./
-RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel packaging && \
     printf '%s\n' \
       "from pathlib import Path" \
       "from packaging.requirements import Requirement" \

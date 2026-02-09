@@ -76,19 +76,23 @@ jobs:
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: atlas:smoke
-          format: 'table'
-          output: trivy-pr.txt
+          format: 'json'
+          output: trivy-pr.json
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
           exit-code: '0'
-        continue-on-error: true
+
+      - name: Fail on high severity findings (PR) / 高危即阻断
+        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        run: |
+          python .github/scripts/trivy_gate.py --report trivy-pr.json --fail-on HIGH,CRITICAL
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
-        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        if: always() && matrix.python-version == '3.10' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-pr-report
-          path: trivy-pr.txt
+          path: trivy-pr.json
           if-no-files-found: warn
 
       - name: Validate requirements files / 验证 requirements 文件
