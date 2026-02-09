@@ -53,13 +53,13 @@ main() {
     print_info "Container / 容器: ${CONTAINER_NAME}"
     print_info "GPU: ${GPU_DEVICE}"
     print_info "Workspace / 工作目录: ${WORK_DIR}"
-    
+
     # Check Docker / 检查 Docker
     if ! command -v docker &> /dev/null; then
         print_error "Docker not installed / Docker 未安装"
         exit 1
     fi
-    
+
     # Check image / 检查镜像
     if ! docker image inspect "${IMAGE_NAME}" &> /dev/null; then
         print_error "Image not found / 镜像不存在: ${IMAGE_NAME}"
@@ -67,7 +67,7 @@ main() {
         docker images --filter "reference=atlas*" --format "  {{.Repository}}:{{.Tag}}" || true
         exit 1
     fi
-    
+
     # GPU configuration / GPU 配置
     if [[ ! "$GPU_DEVICE" =~ ^(all|[0-9]+(,[0-9]+)*)$ ]]; then
         print_warn "Invalid GPU format, using 'all' / GPU 格式无效，使用 'all'"
@@ -79,10 +79,10 @@ main() {
     else
         GPU_ARG="--gpus device=${GPU_DEVICE}"
     fi
-    
+
     # Run container / 运行容器
     print_info "Starting container... / 启动容器..."
-    
+
     docker run -it \
         --name "${CONTAINER_NAME}" \
         "${GPU_ARG}" \

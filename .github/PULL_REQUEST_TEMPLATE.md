@@ -26,9 +26,9 @@ Please check the relevant option(s):
 Please describe the changes made in this PR:
 请描述此 PR 中所做的更改：
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing / 测试
 

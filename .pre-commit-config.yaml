@@ -11,8 +11,8 @@ repos:
         args: ['--severity=warning']
 
   # Shell script formatter
-  - repo: https://github.com/mvdan/sh
-    rev: v3.7.0
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.12.0-2
     hooks:
       - id: shfmt
         args: ["-i", "2", "-ci"]

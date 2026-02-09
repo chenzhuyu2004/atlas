@@ -60,13 +60,13 @@ if [ -n "${CONTAINER_NAME}" ]; then
   GREP_EXIT=$?
   set -e
   print_info "Container check exit code: $GREP_EXIT"
-  
+
   if [ -n "${CONTAINER_EXISTS}" ]; then
     # Wait for healthcheck to initialize / 等待健康检查初始化
     sleep 5
     HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "${CONTAINER_NAME}" 2>/dev/null || echo "none")
     print_info "Container health status: ${HEALTH_STATUS}"
-    
+
     if [ "${HEALTH_STATUS}" = "healthy" ] || [ "${HEALTH_STATUS}" = "starting" ]; then
       print_info "✓ HEALTHCHECK is functional (status: ${HEALTH_STATUS})"
       ((TEST_PASSED++))
@@ -130,13 +130,13 @@ echo ""
 print_test "Test 4: Health check exit codes"
 if command -v nvidia-smi &> /dev/null && nvidia-smi &> /dev/null; then
   print_info "Testing health check exit codes with GPU"
-  
+
   # Temporarily disable exit on error to capture exit code / 临时禁用错误退出以捕获退出码
   set +e
   docker run --gpus all --rm "${IMAGE_NAME}" python -c "import sys, torch; sys.exit(0 if torch.cuda.is_available() else 1)"
   EXIT_CODE=$?
   set -e
-  
+
   if [ $EXIT_CODE -eq 0 ]; then
     print_info "✓ Health check returns exit code 0 (CUDA available)"
     ((TEST_PASSED++))

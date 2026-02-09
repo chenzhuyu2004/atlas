@@ -206,8 +206,8 @@ This project (MIT License) is compatible with and properly acknowledges all incl
 - ✅ **LGPL-2.1** (ASE): Dynamic linking, no distribution restrictions for containers
 - ✅ **GPL-3.0** (hadolint): Build-time only, not distributed in image
 
-**宽松许可证**（MIT、BSD、Apache-2.0、PSF）：完全兼容  
-**LGPL-2.1**（ASE）：动态链接，容器分发无限制  
+**宽松许可证**（MIT、BSD、Apache-2.0、PSF）：完全兼容
+**LGPL-2.1**（ASE）：动态链接，容器分发无限制
 **GPL-3.0**（hadolint）：仅构建时使用，不包含在镜像中
 
 ---
@@ -222,11 +222,11 @@ This notice file should be updated when:
 2. Changing base images / 更改基础镜像
 3. Updating to versions with license changes / 更新到许可证变更的版本
 
-Last updated: 2026-02-09  
+Last updated: 2026-02-09
 最后更新：2026-02-09
 
 > **维护提示**: 本文件中的版本信息来自 Dockerfile 中声明的 base image (`pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel`) 和 requirements*.txt。当基础镜像或依赖包更新时，需同步更新此文件以保持一致。
-> 
+>
 > **Maintenance note**: Version information is based on the base image declared in Dockerfile and packages in requirements*.txt. When updating the base image or dependencies, this file must be synchronized to maintain accuracy.
 
 ---

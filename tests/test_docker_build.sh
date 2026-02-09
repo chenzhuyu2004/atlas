@@ -31,9 +31,9 @@ run_test() {
   local test_name="$1"
   local build_tier="$2"
   local enable_materials="$3"
-  
+
   print_test "Testing: ${test_name}"
-  
+
   if BUILD_TIER="${build_tier}" ENABLE_MATERIALS="${enable_materials}" NO_CACHE=0 ./build.sh; then
     print_info "✓ ${test_name} passed"
     ((TEST_PASSED++))

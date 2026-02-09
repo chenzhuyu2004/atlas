@@ -40,12 +40,12 @@ jobs:
       - name: Run pre-commit on all files
         run: |
           pre-commit run --all-files
-      
+
       - name: Check shell scripts with shellcheck / 使用 shellcheck 检查脚本
         run: |
           # Install shellcheck / 安装 shellcheck
           sudo apt-get update && sudo apt-get install -y shellcheck
-          
+
           # Check root wrappers / 检查根目录 wrapper
           for script in *.sh; do
             if [ -f "$script" ]; then
@@ -55,7 +55,7 @@ jobs:
               bash -n "$script"
             fi
           done
-          
+
           # Check actual scripts / 检查实际脚本
           for script in scripts/*.sh; do
             if [ -f "$script" ]; then
@@ -65,9 +65,9 @@ jobs:
               bash -n "$script"
             fi
           done
-          
+
           echo "✅ All scripts passed checks"
-      
+
       - name: Check Dockerfile / 检查 Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
@@ -78,7 +78,7 @@ jobs:
       - name: Smoke build Dockerfile / 轻量构建校验
         run: |
           docker build --target smoke -t atlas:smoke .
-      
+
       - name: Validate requirements files / 验证 requirements 文件
         run: |
           set -e
@@ -96,7 +96,7 @@ jobs:
             fi
           done
           echo "All requirements files validated"
-      
+
       - name: Run unit tests / 运行单元测试
         run: |
           # 测试脚本逻辑（不需要 Docker 镜像）
@@ -129,7 +129,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Free up disk space / 释放磁盘空间
         run: |
           echo "Before cleanup:"
@@ -141,17 +141,17 @@ jobs:
           sudo docker image prune --all --force
           echo "After cleanup:"
           df -h
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Log in to GitHub Container Registry / 登录 GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Extract metadata / 提取元数据
         id: meta
         uses: docker/metadata-action@v5
@@ -161,7 +161,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-      
+
       - name: Build and push base image / 构建和推送基础镜像
         id: docker_build
         uses: docker/build-push-action@v5
@@ -176,7 +176,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
-      
+
       - name: Output release summary / 输出发布摘要
         run: |
           echo "## 🚀 Release Summary / 发布摘要" >> $GITHUB_STEP_SUMMARY

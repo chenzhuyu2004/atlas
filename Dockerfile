@@ -17,7 +17,7 @@
 # ==============================================================================
 # Optimized for: 13980HX + RTX 4060 Laptop (16GB RAM)
 # 针对硬件优化: 13980HX + RTX 4060 笔记本 (16GB 内存)
-# 
+#
 # Components / 组件:
 #   - PyTorch 2.10.0 + CUDA 13.0 + cuDNN 9
 #   - NumPy 2.x ecosystem / NumPy 2.x 生态
@@ -27,7 +27,7 @@
 #   0 = base   Core Data Science stack / 核心数据科学栈 (~22GB)
 #   1 = llm    + LLM inference support / + LLM 推理支持 (~22GB)
 #   2 = full   + Full LLM acceleration / + 完整 LLM 加速 (~37GB)
-# 
+#
 # Optional / 可选: ENABLE_MATERIALS=1 adds Materials Science / 添加材料科学
 # ==============================================================================
 

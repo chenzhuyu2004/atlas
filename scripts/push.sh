@@ -102,21 +102,21 @@ fi
 for tag in "${TAGS[@]}"; do
     local_image="atlas:${tag}"
     remote_image="${REGISTRY}/${NAMESPACE}/${IMAGE_NAME}:${tag}"
-    
+
     print_info "Tagging: ${local_image} -> ${remote_image}"
     if [ "$DRY_RUN" -eq 1 ]; then
         print_info "DRY-RUN: docker tag ${local_image} ${remote_image}"
     else
         docker tag "${local_image}" "${remote_image}"
     fi
-    
+
     print_info "Pushing: ${remote_image}"
     if [ "$DRY_RUN" -eq 1 ]; then
         print_info "DRY-RUN: docker push ${remote_image}"
     else
         docker push "${remote_image}"
     fi
-    
+
     if [ "$DRY_RUN" -eq 1 ]; then
         print_info "✓ DRY-RUN complete for ${remote_image}"
     else

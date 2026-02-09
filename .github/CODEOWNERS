@@ -1,5 +1,5 @@
 # CODEOWNERS for ATLAS Docker Image
-# 
+#
 # This file defines code ownership and review responsibility.
 # When a PR touches files in these paths, the specified owners
 # will be automatically requested for review.

@@ -99,7 +99,7 @@ build_image() {
     tag=$(generate_tag)
     local cache_opt=""
     [[ "${NO_CACHE:-0}" == "1" ]] && cache_opt="--no-cache"
-    
+
     print_info "============================================"
     print_info "ATLAS Build"
     print_info "============================================"
@@ -107,19 +107,19 @@ build_image() {
     print_info "层级: BUILD_TIER=${BUILD_TIER}"
     print_info "材料科学: ENABLE_MATERIALS=${ENABLE_MATERIALS}"
     print_info "============================================"
-    
+
     # 检查Docker
     if ! command -v docker &> /dev/null; then
         print_error "Docker未安装"
         exit 1
     fi
-    
+
     # 检查Dockerfile
     if [[ ! -f "${DOCKERFILE}" ]]; then
         print_error "Dockerfile不存在: ${DOCKERFILE}"
         exit 1
     fi
-    
+
     # 预估镜像大小
     print_step "预估镜像大小..."
     local est_size="~22GB"
@@ -130,7 +130,7 @@ build_image() {
     esac
     [[ "${ENABLE_MATERIALS}" == "1" ]] && est_size="${est_size} + ~1GB"
     print_info "预估大小: ${est_size}"
-    
+
     # 检查磁盘空间
     local avail_space
     avail_space=$(df -BG "${PROJECT_ROOT}" | awk 'NR==2 {print $4}' | tr -d 'G')
@@ -140,7 +140,7 @@ build_image() {
         echo
         [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
     fi
-    
+
     # 检查内存 (16GB优化)
     local total_mem
     total_mem=$(free -g | awk '/^Mem:/{print $2}')
@@ -150,11 +150,11 @@ build_image() {
             print_warn "BUILD_TIER=2 在16GB内存下可能较慢，建议先尝试 BUILD_TIER=1"
         fi
     fi
-    
+
     # 构建
     print_step "开始构建..."
     export DOCKER_BUILDKIT=1
-    
+
     if docker build \
         --file "${DOCKERFILE}" \
         --tag "${IMAGE_NAME}:${tag}" \
@@ -167,7 +167,7 @@ build_image() {
         print_info "✓ 构建成功!"
         print_info "============================================"
         docker images "${IMAGE_NAME}" --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
-        
+
         echo ""
         print_info "运行命令:"
         echo "  docker run --gpus all -it --rm ${IMAGE_NAME}:${tag}"

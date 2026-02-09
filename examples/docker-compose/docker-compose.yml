@@ -28,10 +28,10 @@ services:
     # GPU 访问有效但配置可能被忽略。
     # Alternative: Use 'runtime: nvidia' for older docker-compose versions
     # 替代方案：对于旧版 docker-compose，使用 'runtime: nvidia'
-    
+
     # Recommended: Use runtime for better compatibility / 推荐：使用 runtime 以获得更好的兼容性
     runtime: nvidia
-    
+
     # Swarm mode GPU config (optional) / Swarm 模式 GPU 配置（可选）
     deploy:
       resources:
@@ -55,10 +55,10 @@ services:
     command: /bin/bash
     stdin_open: true
     tty: true
-    
+
     # GPU configuration / GPU 配置
     runtime: nvidia
-    
+
     deploy:
       resources:
         reservations:

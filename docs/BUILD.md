@@ -166,7 +166,7 @@ build/atlas/
 
 > **Note**: Root directory scripts are wrappers for backward compatibility.
 > Actual implementations are in `scripts/` directory.
-> 
+>
 > **注意**: 根目录的脚本是向后兼容的 wrapper，实际实现在 `scripts/` 目录中。
 
 ## Troubleshooting / 故障排除
