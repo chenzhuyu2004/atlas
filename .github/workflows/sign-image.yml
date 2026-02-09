@@ -1,0 +1,64 @@
+name: Sign Release Image
+
+on:
+  workflow_run:
+    workflows: ["ATLAS CI/CD"]
+    types:
+      - completed
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  sign:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+    steps:
+      - name: Download release digest / 下载镜像摘要
+        uses: actions/download-artifact@v4
+        with:
+          name: release-image-digest
+          path: ./artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read digest / 读取摘要
+        id: digest
+        run: |
+          digest="$(cat ./artifacts/image-digest.txt)"
+          echo "digest=${digest}" >> "$GITHUB_OUTPUT"
+
+      - name: Check cosign secrets / 检查签名密钥
+        id: cosign
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        run: |
+          if [ -n "${COSIGN_PRIVATE_KEY}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install cosign / 安装 cosign
+        if: steps.cosign.outputs.enabled == 'true'
+        uses: sigstore/cosign-installer@v3.5.0
+
+      - name: Sign image / 镜像签名
+        if: steps.cosign.outputs.enabled == 'true'
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          COSIGN_YES: "true"
+        run: |
+          cosign sign --key env://COSIGN_PRIVATE_KEY \
+            ${{ env.REGISTRY }}/${{ github.repository }}@${{ steps.digest.outputs.digest }}
+
+      - name: Skip signing (missing key) / 跳过签名（未设置密钥）
+        if: steps.cosign.outputs.enabled != 'true'
+        run: echo "COSIGN_PRIVATE_KEY not set; skipping signing."

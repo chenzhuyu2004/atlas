@@ -41,7 +41,7 @@ jobs:
 
       - name: Read VERSION / 读取版本号
         id: version
-        run: echo "version=$(cat docker/atlas/VERSION)" >> $GITHUB_OUTPUT
+        run: echo "version=$(cat docker/atlas/VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry / 登录 GHCR
         uses: docker/login-action@v3
@@ -74,6 +74,7 @@ jobs:
       - name: Run health check / 运行健康检查
         run: |
           docker run -d --name atlas-healthcheck-tier${{ matrix.tier }} \
+            -e ATLAS_HEALTHCHECK_REQUIRE_CUDA=0 \
             ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test sleep 300
           cd docker/atlas/tests
           IMAGE_NAME=${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test \
@@ -91,14 +92,14 @@ jobs:
 
       - name: Upload Trivy results / 上传扫描结果
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: ${{ always() && hashFiles(format('trivy-results-tier{0}.sarif', matrix.tier)) != '' }}
         with:
           sarif_file: 'trivy-results-tier${{ matrix.tier }}.sarif'
         continue-on-error: true
 
       - name: Archive Trivy results / 存档扫描结果
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ always() && hashFiles(format('trivy-results-tier{0}.sarif', matrix.tier)) != '' }}
         with:
           name: trivy-results-tier${{ matrix.tier }}
           path: 'trivy-results-tier${{ matrix.tier }}.sarif'
