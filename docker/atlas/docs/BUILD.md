@@ -1,3 +1,5 @@
+> **Note**: Run the commands in this guide from `docker/atlas/`.
+
 ## Python 虚拟环境与依赖锁定建议
 
 强烈建议在本地开发和测试时使用 Python 虚拟环境（如 venv 或 conda），以避免依赖冲突：
@@ -41,7 +43,7 @@ Materials Science / 材料科学: `ENABLE_MATERIALS=1` adds ~1GB / 追加 ~1GB
 ## Build Commands / 构建命令
 
 ```bash
-cd ~/build/atlas
+cd /path/to/atlas/docker/atlas
 
 # Note: build.sh reads environment variables from the shell only.
 # .env is NOT loaded automatically.
@@ -131,7 +133,7 @@ If you update materials packages, keep versions pinned and rebuild the image.
 ## File Structure / 文件结构
 
 ```
-build/atlas/
+atlas/docker/atlas/
 ├── Dockerfile              # Build file / 构建文件
 ├── VERSION                 # Version number / 版本号
 │

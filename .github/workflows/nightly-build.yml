@@ -41,7 +41,7 @@ jobs:
 
       - name: Read VERSION / 读取版本号
         id: version
-        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+        run: echo "version=$(cat docker/atlas/VERSION)" >> $GITHUB_OUTPUT
 
       - name: Log in to GitHub Container Registry / 登录 GHCR
         uses: docker/login-action@v3
@@ -53,7 +53,8 @@ jobs:
       - name: Build image / 构建镜像
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: docker/atlas
+          file: docker/atlas/Dockerfile
           load: true
           tags: ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test
           build-args: |
@@ -66,7 +67,7 @@ jobs:
       - name: Test package imports / 测试包导入
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}/tests:/tests \
+            -v ${{ github.workspace }}/docker/atlas/tests:/tests \
             ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test \
             python /tests/test_import_packages.py
 
@@ -74,7 +75,7 @@ jobs:
         run: |
           docker run -d --name atlas-healthcheck-tier${{ matrix.tier }} \
             ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test sleep 300
-          cd tests
+          cd docker/atlas/tests
           IMAGE_NAME=${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test \
             bash test_healthcheck.sh atlas-healthcheck-tier${{ matrix.tier }}
           docker rm -f atlas-healthcheck-tier${{ matrix.tier }}

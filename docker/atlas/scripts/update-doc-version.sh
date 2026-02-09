@@ -9,6 +9,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(cd "${PROJECT_ROOT}/.." && pwd)"
 
 OLD_VERSION="${1:-}"
 NEW_VERSION="${2:-$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "")}"
@@ -39,6 +40,8 @@ mapfile -t files < <(
         "${PROJECT_ROOT}/scripts/README.md" \
         "${PROJECT_ROOT}/SECURITY.md" \
         "${PROJECT_ROOT}/.env.example" \
+        "${REPO_ROOT}/CHANGELOG.md" \
+        "${REPO_ROOT}/SECURITY.md" \
         --glob '*.md' \
         --glob '*.yml' \
         --glob '*.yaml' \

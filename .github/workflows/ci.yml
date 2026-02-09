@@ -4,16 +4,23 @@ on:
   push:
     branches: [main]
     paths:
-      - 'Dockerfile'
-      - 'requirements*.txt'
+      - 'docker/atlas/**'
       - '.github/workflows/**'
-      - 'tests/**'
+      - '.pre-commit-config.yaml'
+      - '.hadolint.yaml'
+      - 'mypy.ini'
       - '*.sh'
-      - 'scripts/**'
     tags:
       - 'v*'
   pull_request:
     branches: [main]
+    paths:
+      - 'docker/atlas/**'
+      - '.github/workflows/**'
+      - '.pre-commit-config.yaml'
+      - '.hadolint.yaml'
+      - 'mypy.ini'
+      - '*.sh'
   workflow_dispatch:
 
 env:
@@ -48,7 +55,8 @@ jobs:
         if: matrix.python-version == '3.10'
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: docker/atlas
+          file: docker/atlas/Dockerfile
           load: true
           tags: atlas:smoke
           target: smoke
@@ -56,6 +64,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=smoke
 
       - name: Validate requirements files / 验证 requirements 文件
+        working-directory: docker/atlas
         run: |
           set -e
           for req in requirements*.txt; do
@@ -74,6 +83,7 @@ jobs:
           echo "All requirements files validated"
 
       - name: Run unit tests / 运行单元测试
+        working-directory: docker/atlas
         run: |
           # 测试脚本逻辑（不需要 Docker 镜像）
           cd tests
@@ -123,7 +133,7 @@ jobs:
 
       - name: Read VERSION / 读取版本号
         id: version
-        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+        run: echo "version=$(cat docker/atlas/VERSION)" >> $GITHUB_OUTPUT
 
       - name: Log in to GitHub Container Registry / 登录 GitHub Container Registry
         uses: docker/login-action@v3
@@ -146,7 +156,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: docker/atlas
+          file: docker/atlas/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -164,7 +175,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Version Information / 版本信息" >> $GITHUB_STEP_SUMMARY
           echo "- **Git Tag**: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: \`$(cat VERSION)\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: \`$(cat docker/atlas/VERSION)\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Build Time**: \`$(date -u +'%Y-%m-%d %H:%M:%S UTC')\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

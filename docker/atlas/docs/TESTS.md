@@ -1,5 +1,7 @@
 # Testing & CI/CD / 测试与持续集成
 
+> **Note**: Run commands from `docker/atlas/`.
+
 Complete guide for ATLAS testing infrastructure and CI/CD workflows.
 
 ATLAS 测试基础设施和 CI/CD 工作流的完整说明。
@@ -21,7 +23,7 @@ ATLAS 项目包含多层测试体系：
 ### Prerequisites / 前置条件
 
 ```bash
-cd ~/build/atlas
+cd /path/to/atlas/docker/atlas
 
 # Ensure image is built / 确保镜像已构建
 ./build.sh
