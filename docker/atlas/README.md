@@ -81,7 +81,7 @@ ENABLE_MATERIALS=1 ./build.sh
 - 📖 [构建指南 (Build Guide)](docs/BUILD.md) - 详细构建选项、故障排除、层级说明
 - 🚀 [运行指南 (Run Guide)](docs/RUN.md) - 容器运行、GPU 配置、JupyterLab 使用
 - 🧪 [测试与 CI (Tests & CI)](docs/TESTS.md) - 测试套件使用、CI 策略、健康检查
-- 💡 [示例项目 (Examples)](../examples/README.md) - Docker Compose 配置、训练示例
+- 💡 [示例项目 (Examples)](../../examples/README.md) - Docker Compose 配置、训练示例
 - ❓ [常见问题 (FAQ)](docs/FAQ.md) - 常见问题与解决方案
 - 🧭 [架构概览 (Architecture)](docs/ARCHITECTURE.md) - 构建与运行结构
 - 🧩 [接口与配置 (API)](docs/API.md) - 脚本与环境变量
@@ -96,10 +96,10 @@ ENABLE_MATERIALS=1 ./build.sh
 
 ## Contributing / 贡献
 
-欢迎提交 Issue 和 Pull Request！请阅读 [CONTRIBUTING.md](../CONTRIBUTING.md) 了解贡献指南。
+欢迎提交 Issue 和 Pull Request！请阅读 [CONTRIBUTING.md](../../CONTRIBUTING.md) 了解贡献指南。
 
-安全漏洞请参考 [SECURITY.md](../SECURITY.md) 进行负责任的披露。
+安全漏洞请参考 [SECURITY.md](../../SECURITY.md) 进行负责任的披露。
 
 ## License
 
-MIT - See [LICENSE](../LICENSE) for details
+MIT - See [LICENSE](../../LICENSE) for details

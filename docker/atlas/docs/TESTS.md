@@ -444,7 +444,7 @@ gh cache delete <cache-id>
 
 ## See Also / 相关文档
 
-- [CONTRIBUTING.md](../../CONTRIBUTING.md) - 贡献指南（包括测试要求）
-- [SECURITY.md](../../SECURITY.md) - 安全策略和漏洞报告流程
+- [CONTRIBUTING.md](../../../CONTRIBUTING.md) - 贡献指南（包括测试要求）
+- [SECURITY.md](../../../SECURITY.md) - 安全策略和漏洞报告流程
 - [tests/README.md](../tests/README.md) - 测试套件详细说明
-- [GitHub Actions Workflows](../../.github/workflows/) - 工作流源文件
+- [GitHub Actions Workflows](../../../.github/workflows/) - 工作流源文件

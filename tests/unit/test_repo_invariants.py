@@ -24,5 +24,7 @@ def test_requirements_not_empty() -> None:
 
 
 def test_docs_index_exists() -> None:
-    docs_index = ROOT / "docker" / "atlas" / "docs" / "README.md"
-    assert docs_index.exists(), "docs/README.md is missing"
+    repo_docs_index = ROOT / "docs" / "README.md"
+    image_docs_index = ROOT / "docker" / "atlas" / "docs" / "README.md"
+    assert repo_docs_index.exists(), "docs/README.md is missing"
+    assert image_docs_index.exists(), "docker/atlas/docs/README.md is missing"
