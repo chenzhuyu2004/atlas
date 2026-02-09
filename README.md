@@ -23,6 +23,10 @@ This repository contains the ATLAS Docker image build system and a separate proj
 
 ## Quick Start (Docker Image)
 
+1. Move into the image directory.
+2. Build the base image.
+3. Run the container.
+
 ```bash
 cd docker/atlas
 ./build.sh

@@ -45,6 +45,22 @@ ls requirements-locks/
 
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
 
+## Requirements Files / 依赖文件说明
+
+Each requirements file has a specific scope. Use the matching file for your build tier.
+每个 requirements 文件都有明确适用范围，请按构建层级选择使用。
+
+| File / 文件 | Used By / 使用场景 | Notes / 说明 |
+| --- | --- | --- |
+| `requirements.txt` | Tier 0/base builds | Core packages installed in all images |
+| `requirements-llm.txt` | Tier 1 builds | LLM foundation packages |
+| `requirements-accel.txt` | Tier 2 builds | Acceleration packages (CUDA/LLM accel) |
+| `requirements-materials.txt` | `ENABLE_MATERIALS=1` builds | Materials science stack |
+| `requirements-dev.txt` | Local dev/lint/test | Not installed in Docker images |
+
+CI validates all `requirements*.txt` files for syntax, but image builds install only the files required for the selected tier.
+CI 会检查所有 `requirements*.txt` 的语法，但镜像只会按层级安装所需文件。
+
 ## Build Tiers / 构建层级
 
 | BUILD_TIER | Tag / 标签 | Content / 内容 | Size / 大小 | Time / 时间 |
