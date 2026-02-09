@@ -1,5 +1,8 @@
 # Contributing to ATLAS / 为 ATLAS 做贡献
 
+Docs index: [docs/README.md](docs/README.md)
+
+
 Welcome! We're excited that you're interested in contributing to ATLAS.
 欢迎！我们很高兴您有兴趣为 ATLAS 做贡献。
 

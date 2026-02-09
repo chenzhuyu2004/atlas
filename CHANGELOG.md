@@ -1,4 +1,7 @@
 # ATLAS Docker Image Changelog
+
+Docs index: [docs/README.md](docs/README.md)
+
 # ATLAS Docker 镜像更新日志
 
 ## Release Checklist / 发布检查清单

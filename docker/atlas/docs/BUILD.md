@@ -1,4 +1,10 @@
+# ATLAS Build Guide / 构建指南
+
+Image docs index: [docker/atlas/docs/README.md](README.md)
+Repo docs index: [docs/README.md](../../../docs/README.md)
+
 > **Note**: Run the commands in this guide from `docker/atlas/`.
+> **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
 
 ## Python 虚拟环境与依赖锁定建议
 
@@ -38,9 +44,6 @@ ls requirements-locks/
 ```
 
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
-# ATLAS Build Guide / 构建指南
-
-> **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
 
 ## Build Tiers / 构建层级
 
