@@ -1,5 +1,9 @@
 # Testing & CI/CD / 测试与持续集成
 
+Image docs index: [docker/atlas/docs/README.md](README.md)
+Repo docs index: [docs/README.md](../../../docs/README.md)
+
+
 > **Note**: Run commands from `docker/atlas/`.
 
 Complete guide for ATLAS testing infrastructure and CI/CD workflows.

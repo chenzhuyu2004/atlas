@@ -1,5 +1,8 @@
 # Security Policy / 安全策略
 
+Docs index: [docs/README.md](docs/README.md)
+
+
 ## Supported Versions / 支持的版本
 
 We currently provide security updates for the following versions:

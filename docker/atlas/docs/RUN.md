@@ -1,5 +1,9 @@
 # Runtime Guide / 运行指南
 
+Image docs index: [docker/atlas/docs/README.md](README.md)
+Repo docs index: [docs/README.md](../../../docs/README.md)
+
+
 Complete guide for running ATLAS Docker containers.
 
 ATLAS Docker 容器的完整运行说明。

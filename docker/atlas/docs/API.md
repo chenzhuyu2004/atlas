@@ -1,5 +1,9 @@
 # Interfaces & Configuration / 接口与配置
 
+Image docs index: [docker/atlas/docs/README.md](README.md)
+Repo docs index: [docs/README.md](../../../docs/README.md)
+
+
 This document lists user-facing interfaces: scripts, environment variables, and container defaults.
 本文档列出用户可见的接口：脚本、环境变量与容器默认行为。
 

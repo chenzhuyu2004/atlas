@@ -1,5 +1,9 @@
 # FAQ / 常见问题
 
+Image docs index: [docker/atlas/docs/README.md](README.md)
+Repo docs index: [docs/README.md](../../../docs/README.md)
+
+
 > **Note**: Run commands from `docker/atlas/`.
 > **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
 

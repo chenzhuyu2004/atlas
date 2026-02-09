@@ -1,5 +1,8 @@
 # Support / 支持
 
+Docs index: [docs/README.md](docs/README.md)
+
+
 Thank you for using ATLAS! This document explains how to get help and support.
 
 感谢您使用 ATLAS！本文档说明如何获取帮助和支持。
