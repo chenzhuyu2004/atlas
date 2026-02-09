@@ -2,8 +2,6 @@
 # Install: pip install pre-commit && pre-commit install
 # 安装: pip install pre-commit && pre-commit install
 
-exclude: ^projects/
-
 repos:
   # Shell script checks / Shell 脚本检查
   - repo: https://github.com/shellcheck-py/shellcheck-py

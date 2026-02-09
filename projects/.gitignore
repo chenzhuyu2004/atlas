@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+
+# Node
+node_modules/
+
+# Data / artifacts
+*.log
+*.tmp
+*.bak
+data/
+datasets/
+models/
+outputs/
+checkpoints/
+wandb/
+mlruns/
+tensorboard/
+
+# OS
+.DS_Store
