@@ -3,6 +3,14 @@
 Complete documentation for the ATLAS Docker Image project.
 ATLAS Docker 镜像项目的完整文档。
 
+## Start Here / 从这里开始
+
+Suggested reading order:
+1. RUN.md (runtime basics)
+2. BUILD.md (build options)
+3. TESTS.md (tests and CI)
+4. FAQ.md (troubleshooting)
+
 ## Table of Contents / 目录
 
 ### [BUILD.md](BUILD.md) - 构建指南

@@ -6,6 +6,9 @@
 .env
 .env.local
 .env.*.local
+.claude.json
+.claude.json.backup
+.claude.json.backup.*
 
 # Python
 __pycache__/
