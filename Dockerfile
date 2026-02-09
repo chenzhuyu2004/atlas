@@ -38,6 +38,7 @@ ARG BASE_IMAGE=pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
 # Smoke Stage / 轻量校验阶段（CI 用）
 # - 只做 requirements 语法验证，不安装大依赖，不拉取巨型基础镜像
 # ==============================================================================
+# hadolint ignore=DL3006
 FROM ${SMOKE_BASE_IMAGE} AS smoke
 
 WORKDIR /app
@@ -61,6 +62,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
 # ==============================================================================
 # Full Build Stage / 完整构建阶段
 # ==============================================================================
+# hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
 LABEL org.opencontainers.image.title="ATLAS ML/DS" \
