@@ -45,6 +45,6 @@ Runtime:
 
 ## Related Docs / 相关文档
 
-- `docs/BUILD.md`
-- `docs/RUN.md`
-- `docs/TESTS.md`
+- [docs/BUILD.md](BUILD.md)
+- [docs/RUN.md](RUN.md)
+- [docs/TESTS.md](TESTS.md)
