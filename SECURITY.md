@@ -120,6 +120,9 @@ pip install pip-audit
 pip-audit -r docker/atlas/requirements.txt
 ```
 
+PRs that build the smoke image will fail if Trivy reports CRITICAL/HIGH issues.
+PR 构建 smoke 镜像时，如 Trivy 检出 CRITICAL/HIGH 漏洞将直接阻断合并。
+
 ## CVE Tracking / CVE 追踪
 
 We track CVEs and dependency alerts via:
