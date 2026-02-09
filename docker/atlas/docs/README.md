@@ -3,10 +3,10 @@
 Complete documentation for the ATLAS Docker Image project.
 ATLAS Docker 镜像项目的完整文档。
 
-Scope: This index covers image-specific docs under `docker/atlas/`.
-范围：本索引仅涵盖 `docker/atlas/` 下的镜像文档。
-Repo-level docs live in `docs/README.md`.
-仓库级文档入口位于 `docs/README.md`。
+Scope: This index covers image-specific docs under [docker/atlas/](..).
+范围：本索引仅涵盖 [docker/atlas/](..) 下的镜像文档。
+Repo-level docs live in [docs/README.md](../../../docs/README.md).
+仓库级文档入口位于 [docs/README.md](../../../docs/README.md)。
 
 ## Start Here / 从这里开始
 

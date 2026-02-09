@@ -147,6 +147,6 @@ When adding new tests:
 
 ## Related Docs / 相关文档
 
-- `../docs/TESTS.md` - Tests and CI overview / 测试与 CI 总览
-- `../docs/ARCHITECTURE.md` - Build + CI architecture / 构建与 CI 架构
-- `../../../docs/README.md` - Repository docs index / 仓库文档索引
+- [../docs/TESTS.md](../docs/TESTS.md) - Tests and CI overview / 测试与 CI 总览
+- [../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) - Build + CI architecture / 构建与 CI 架构
+- [../../../docs/README.md](../../../docs/README.md) - Repository docs index / 仓库文档索引

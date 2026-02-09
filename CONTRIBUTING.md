@@ -304,17 +304,17 @@ pandas==3.0.0
 - Keep README.md up-to-date / 保持 README.md 最新
 
 Documentation scope / 文档范围：
-- `docs/README.md` is the repository documentation index / 仓库文档索引
-- `docs/STYLE_GUIDE.md` defines doc structure and quality rules / 文档结构与质量规范
-- `docker/atlas/docs/` contains image-specific guides / 镜像专用指南
-- `examples/README.md` contains usage examples / 使用示例
+- [docs/README.md](docs/README.md) is the repository documentation index / 仓库文档索引
+- [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) defines doc structure and quality rules / 文档结构与质量规范
+- [docker/atlas/docs/README.md](docker/atlas/docs/README.md) contains image-specific guides / 镜像专用指南
+- [examples/README.md](examples/README.md) contains usage examples / 使用示例
 
 Documentation update triggers / 文档更新触发点：
-- Dockerfile, build args, requirements changes → update `docker/atlas/docs/BUILD.md`
-- Runtime, GPU flags, healthcheck changes → update `docker/atlas/docs/RUN.md`
-- CI workflows, tests, release steps → update `docker/atlas/docs/TESTS.md` or `CHANGELOG.md`
-- Script flags, usage, or defaults → update `docker/atlas/docs/API.md` and `docker/atlas/scripts/README.md`
-- New examples → update `examples/README.md`
+- Dockerfile, build args, requirements changes → update [docker/atlas/docs/BUILD.md](docker/atlas/docs/BUILD.md)
+- Runtime, GPU flags, healthcheck changes → update [docker/atlas/docs/RUN.md](docker/atlas/docs/RUN.md)
+- CI workflows, tests, release steps → update [docker/atlas/docs/TESTS.md](docker/atlas/docs/TESTS.md) or [CHANGELOG.md](CHANGELOG.md)
+- Script flags, usage, or defaults → update [docker/atlas/docs/API.md](docker/atlas/docs/API.md) and [docker/atlas/scripts/README.md](docker/atlas/scripts/README.md)
+- New examples → update [examples/README.md](examples/README.md)
 
 If documentation does not need updates, state the reason in the PR description.
 如果无需更新文档，请在 PR 描述中说明原因。

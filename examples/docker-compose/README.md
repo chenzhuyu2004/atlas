@@ -97,6 +97,6 @@ docker-compose run --rm dev nvidia-smi
 
 ## Related Docs / 相关文档
 
-- `../README.md` - Examples overview / 示例总览
-- `../../docs/README.md` - Repository docs index / 仓库文档索引
-- `../../docker/atlas/docs/RUN.md` - Runtime guide / 运行指南
+- [../README.md](../README.md) - Examples overview / 示例总览
+- [../../docs/README.md](../../docs/README.md) - Repository docs index / 仓库文档索引
+- [../../docker/atlas/docs/RUN.md](../../docker/atlas/docs/RUN.md) - Runtime guide / 运行指南

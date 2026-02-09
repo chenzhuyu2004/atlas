@@ -11,11 +11,11 @@ This guide explains the release workflow and CI triggers.
 
 ## Release Steps / 发布步骤
 
-1. Update `docker/atlas/VERSION` and `CHANGELOG.md`.
+1. Update [docker/atlas/VERSION](../docker/atlas/VERSION) and [CHANGELOG.md](../CHANGELOG.md).
 2. Run pre-check and local tests.
 3. Create and push a tag: `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`.
 4. Verify the release job and image push in GitHub Actions.
-5. Create a GitHub Release using the latest changelog entry.
+5. Create a GitHub Release using the latest [CHANGELOG.md](../CHANGELOG.md) entry.
 
 ## CI Triggers / CI 触发规则
 
@@ -26,11 +26,11 @@ This guide explains the release workflow and CI triggers.
 ## Notes / 注意事项
 
 - Release jobs do not run full test suites by default.
-- Keep `CHANGELOG.md` and versioned docs consistent.
+- Keep [CHANGELOG.md](../CHANGELOG.md) and versioned docs consistent.
 - If you change build args or scripts, update related docs.
 
 ## Related Docs / 相关文档
 
-- `CHANGELOG.md` - Release checklist and history / 发布检查清单与历史
-- `docker/atlas/docs/TESTS.md` - Tests and CI overview / 测试与 CI 总览
-- `docs/STYLE_GUIDE.md` - Documentation rules / 文档规范
+- [CHANGELOG.md](../CHANGELOG.md) - Release checklist and history / 发布检查清单与历史
+- [docker/atlas/docs/TESTS.md](../docker/atlas/docs/TESTS.md) - Tests and CI overview / 测试与 CI 总览
+- [docs/STYLE_GUIDE.md](STYLE_GUIDE.md) - Documentation rules / 文档规范
