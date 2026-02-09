@@ -71,7 +71,9 @@ EOF
 }
 
 # 解析参数
-[[ "$1" == "-h" || "$1" == "--help" ]] && usage
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+    usage
+fi
 
 # 读取版本号
 VERSION=$(tr -d '\n' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")

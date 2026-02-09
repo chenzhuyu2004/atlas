@@ -113,10 +113,11 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 │ ✅ shellcheck    │ ✅ Build tier 0   │ ✅ Build tier 0  │
 │ ✅ bash -n       │ ✅ Push to GHCR   │ ✅ Build tier 1  │
 │ ✅ hadolint      │ ~10 minutes      │ ✅ Full tests    │
-│ ✅ requirements  │ (构建+推送)      │ ✅ Security scan │
+│ ✅ smoke build   │                  │ ✅ Security scan │
+│ ✅ requirements  │ (构建+推送)      │                 │
 │ ✅ syntax check  │                  │ ✅ Push nightly  │
 │ ~2 minutes      │                  │ ~30 minutes     │
-│ (仅 lint)       │                  │                 │
+│ (lint + smoke)  │                  │                 │
 └─────────────────┴──────────────────┴─────────────────┘
 ```
 
@@ -131,7 +132,7 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 
 #### Lint Job / 语法检查任务
 
-在每次 PR/push 时运行，提供快速反馈（**不构建镜像**）：
+在每次 PR/push 时运行，提供快速反馈（**不构建大镜像**，只做轻量 smoke build）：
 
 ```yaml
 triggers:
@@ -141,12 +142,13 @@ triggers:
 checks:
   - bash -n: *.sh (shell script syntax)
   - hadolint: Dockerfile
+  - smoke build: docker build --target smoke
   - validate: requirements*.txt
   - syntax: Python unit tests
 ```
 
 **运行时间**: ~1 分钟
-**范围**: 仅静态检查，不进行 Docker 构建、包测试或安全扫描
+**范围**: 静态检查 + 轻量 smoke build，不进行大镜像构建、包测试或安全扫描
 
 #### Release Job / 发布任务
 

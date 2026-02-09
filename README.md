@@ -37,7 +37,7 @@ flowchart TD
 - 🚀 **GPU-First Design**: PyTorch 2.10.0 + CUDA 13.0 + cuDNN 9
 - 🧪 **Tiered Build System**: 从核心数据科学到完整 LLM 支持的可选构建层级
 - 🔬 **Materials Science Support**: 可选的材料科学工具包集成
-- 📊 **Production Ready**: 轻量级 CI/CD（PR/Push 做 lint 含 shellcheck，Release 仅构建推送，测试在本地/nightly）
+- 📊 **Production Ready**: 轻量级 CI/CD（PR/Push 做 lint + smoke build，Release 仅构建推送，测试在本地/nightly）
 - 💻 **Memory Optimized**: 针对 16GB RAM 笔记本优化的构建参数
 
 ## Quick Start / 快速开始

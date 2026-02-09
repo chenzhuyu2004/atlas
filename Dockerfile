@@ -31,7 +31,43 @@
 # Optional / 可选: ENABLE_MATERIALS=1 adds Materials Science / 添加材料科学
 # ==============================================================================
 
-FROM pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
+ARG SMOKE_BASE_IMAGE=python:3.10-slim
+ARG BASE_IMAGE=pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
+
+# ==============================================================================
+# Smoke Stage / 轻量校验阶段（CI 用）
+# - 只做 requirements 语法验证，不安装大依赖，不拉取巨型基础镜像
+# ==============================================================================
+FROM ${SMOKE_BASE_IMAGE} AS smoke
+
+WORKDIR /app
+COPY requirements*.txt ./
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
+    python - <<'PY'
+from pathlib import Path
+from packaging.requirements import Requirement
+
+files = sorted(Path('.').glob('requirements*.txt'))
+if not files:
+    raise SystemExit("No requirements files found")
+
+for f in files:
+    lines = [
+        ln.strip()
+        for ln in f.read_text().splitlines()
+        if ln.strip() and not ln.strip().startswith('#')
+    ]
+    for ln in lines:
+        Requirement(ln)
+    print(f"{f}: {len(lines)} requirements")
+
+print("Requirements syntax OK")
+PY
+
+# ==============================================================================
+# Full Build Stage / 完整构建阶段
+# ==============================================================================
+FROM ${BASE_IMAGE}
 
 LABEL org.opencontainers.image.title="ATLAS ML/DS" \
       org.opencontainers.image.version="0.6" \

@@ -74,6 +74,10 @@ jobs:
           dockerfile: Dockerfile
           failure-threshold: warning
           config: .hadolint.yaml
+
+      - name: Smoke build Dockerfile / 轻量构建校验
+        run: |
+          docker build --target smoke -t atlas:smoke .
       
       - name: Validate requirements files / 验证 requirements 文件
         run: |
