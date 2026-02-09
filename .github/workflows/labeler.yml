@@ -1,4 +1,4 @@
----
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 name: Labeler
 # Auto-label PRs based on file changes / 根据文件更改自动为 PR 添加标签
 

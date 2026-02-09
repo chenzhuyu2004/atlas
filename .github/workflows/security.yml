@@ -1,4 +1,4 @@
----
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 name: Security Scan
 # Security scanning for dependencies and code / 依赖和代码安全扫描
 

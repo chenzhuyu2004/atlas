@@ -1,4 +1,4 @@
----
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 name: Commit Message Check
 # Validate commit messages follow conventional commits format / 验证提交消息遵循约定式提交格式
 

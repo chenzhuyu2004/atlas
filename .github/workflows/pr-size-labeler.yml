@@ -1,4 +1,4 @@
----
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 name: PR Size Labeling
 # Automatically label PRs based on size / 根据 PR 大小自动添加标签
 
