@@ -85,6 +85,35 @@ BUILD_TIER=2 ENABLE_MATERIALS=1 ./build.sh
 NO_CACHE=1 ./build.sh
 ```
 
+## Secure Extension Guide / 安全扩展指南
+
+When you derive your own image from ATLAS, follow these security practices:
+当你基于 ATLAS 扩展镜像时，建议遵循以下安全实践：
+
+- **Run as non-root**: add a dedicated user and switch with `USER`.
+  **非 root 运行**：创建专用用户并使用 `USER` 切换。
+- **Pin base image**: prefer a fixed tag or digest to avoid unexpected upgrades.
+  **固定基础镜像**：优先使用固定版本或 digest，避免隐式升级。
+- **Avoid secrets in layers**: do not bake tokens/keys into Dockerfile.
+  **避免密钥写入镜像层**：不要在 Dockerfile 中写入 token/密钥。
+- **Minimize packages**: install only what you need, and clean caches.
+  **最小化依赖**：只安装必要软件，并清理缓存。
+- **Drop Linux capabilities** at runtime when possible.
+  **运行时尽量减少能力**（capabilities）。
+
+Example:
+
+```dockerfile
+FROM ghcr.io/chenzhuyu2004/atlas:v0.6-base
+
+RUN useradd -m -u 1000 atlas && \
+    mkdir -p /workspace && \
+    chown -R atlas:atlas /workspace
+
+USER atlas
+WORKDIR /workspace
+```
+
 ## Tagging Images / 镜像打标
 
 ```bash

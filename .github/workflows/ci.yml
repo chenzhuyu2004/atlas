@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.12']
+        python-version: ['3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
 
@@ -71,6 +71,26 @@ jobs:
           cache-from: type=gha,scope=smoke
           cache-to: type=gha,mode=max,scope=smoke
 
+      - name: Trivy scan (PR) / Trivy 扫描（PR）
+        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: atlas:smoke
+          format: 'table'
+          output: trivy-pr.txt
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
+        continue-on-error: true
+
+      - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
+        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-pr-report
+          path: trivy-pr.txt
+          if-no-files-found: warn
+
       - name: Validate requirements files / 验证 requirements 文件
         working-directory: docker/atlas
         run: |
@@ -89,6 +109,11 @@ jobs:
             fi
           done
           echo "All requirements files validated"
+
+      - name: Install test dependencies / 安装测试依赖
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest==8.2.2 pytest-cov==5.0.0
 
       - name: Run unit tests / 运行单元测试
         working-directory: docker/atlas
@@ -112,6 +137,10 @@ jobs:
             done
           fi
           echo "All tests passed syntax check"
+
+      - name: Run pytest (host) / 运行 pytest（宿主机）
+        run: |
+          pytest -q tests/unit
 
   # Release build and push / 发布构建和推送（仅在 tag 时）
   release:

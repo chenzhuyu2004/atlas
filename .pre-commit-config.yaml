@@ -59,3 +59,14 @@ repos:
     hooks:
       - id: hadolint-docker
         args: ['--config', '.hadolint.yaml', '--failure-threshold', 'warning']
+
+  # Pytest (host-only lightweight tests)
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (unit)
+        entry: pytest -q tests/unit
+        language: python
+        additional_dependencies: [pytest==8.2.2]
+        pass_filenames: false
+        always_run: true

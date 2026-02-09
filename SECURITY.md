@@ -120,6 +120,18 @@ pip install pip-audit
 pip-audit -r docker/atlas/requirements.txt
 ```
 
+## CVE Tracking / CVE 追踪
+
+We track CVEs and dependency alerts via:
+我们通过以下方式追踪 CVE 和依赖告警：
+
+- GitHub Security tab (Dependabot alerts) / GitHub 安全中心（Dependabot 告警）
+- Weekly security workflow (`.github/workflows/security.yml`) / 每周安全扫描工作流
+- Nightly Trivy image scans (`nightly-build.yml`) / 夜间 Trivy 镜像扫描
+
+If you see a CVE alert, please open a tracking issue or security advisory.
+如发现 CVE 告警，请提交跟踪 issue 或安全通告。
+
 ## Known Issues / 已知问题
 
 ### CVEs in Base Image / 基础镜像中的 CVE
