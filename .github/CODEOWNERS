@@ -11,28 +11,29 @@
 * @chenzhuyu2004
 
 # Documentation / 文档
-/docs/ @chenzhuyu2004
 /README.md @chenzhuyu2004
 /CONTRIBUTING.md @chenzhuyu2004
 /CHANGELOG.md @chenzhuyu2004
+/docker/atlas/README.md @chenzhuyu2004
+/docker/atlas/docs/ @chenzhuyu2004
 
 # Core build files / 核心构建文件
-/Dockerfile @chenzhuyu2004
-/requirements*.txt @chenzhuyu2004
-/Makefile @chenzhuyu2004
+/docker/atlas/Dockerfile @chenzhuyu2004
+/docker/atlas/requirements*.txt @chenzhuyu2004
+/docker/atlas/Makefile @chenzhuyu2004
 
 # Scripts / 脚本
-/scripts/ @chenzhuyu2004
+/docker/atlas/scripts/ @chenzhuyu2004
 
 # CI/CD workflows / CI/CD 工作流
 /.github/workflows/ @chenzhuyu2004
 /.github/dependabot.yml @chenzhuyu2004
 
 # Testing infrastructure / 测试基础设施
-/tests/ @chenzhuyu2004
+/docker/atlas/tests/ @chenzhuyu2004
 
 # Examples / 示例
-/examples/ @chenzhuyu2004
+/docker/atlas/examples/ @chenzhuyu2004
 
 # Security policy / 安全策略
 /SECURITY.md @chenzhuyu2004
@@ -42,4 +43,7 @@
 /.hadolint.yaml @chenzhuyu2004
 /.pre-commit-config.yaml @chenzhuyu2004
 /.gitignore @chenzhuyu2004
-/.dockerignore @chenzhuyu2004
+/docker/atlas/.dockerignore @chenzhuyu2004
+
+# Development projects / 开发目录
+/projects/ @chenzhuyu2004
