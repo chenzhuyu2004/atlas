@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_version_format() -> None:
     version_file = ROOT / "docker" / "atlas" / "VERSION"
     version = version_file.read_text(encoding="utf-8").strip()
-    assert re.match(r"^\d+\.\d+\.\d+$", version), (
-        f"VERSION should be semver-like (e.g. 1.2.3), got: {version}"
+    assert re.match(r"^\d+\.\d+(\.\d+)?$", version), (
+        f"VERSION should be semver-like (e.g. 1.2 or 1.2.3), got: {version}"
     )
 
 

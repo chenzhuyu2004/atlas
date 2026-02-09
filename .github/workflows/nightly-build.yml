@@ -68,8 +68,11 @@ jobs:
         run: |
           image="${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test"
           size_bytes=$(docker image inspect "$image" --format '{{.Size}}')
-          size_mb=$(python - <<PY
-size = int("$size_bytes")
+          export SIZE_BYTES="$size_bytes"
+          size_mb=$(python - <<'PY'
+import os
+
+size = int(os.environ["SIZE_BYTES"])
 print(round(size / (1024 * 1024), 2))
 PY
           )
