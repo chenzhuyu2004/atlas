@@ -43,26 +43,20 @@ FROM ${SMOKE_BASE_IMAGE} AS smoke
 WORKDIR /app
 COPY requirements*.txt ./
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
-    python - <<'PY'
-from pathlib import Path
-from packaging.requirements import Requirement
-
-files = sorted(Path('.').glob('requirements*.txt'))
-if not files:
-    raise SystemExit("No requirements files found")
-
-for f in files:
-    lines = [
-        ln.strip()
-        for ln in f.read_text().splitlines()
-        if ln.strip() and not ln.strip().startswith('#')
-    ]
-    for ln in lines:
-        Requirement(ln)
-    print(f"{f}: {len(lines)} requirements")
-
-print("Requirements syntax OK")
-PY
+    printf '%s\n' \
+      "from pathlib import Path" \
+      "from packaging.requirements import Requirement" \
+      "files = sorted(Path('.').glob('requirements*.txt'))" \
+      "if not files:" \
+      "    raise SystemExit('No requirements files found')" \
+      "for f in files:" \
+      "    lines = [ln.strip() for ln in f.read_text().splitlines() if ln.strip() and not ln.strip().startswith('#')]" \
+      "    for ln in lines:" \
+      "        Requirement(ln)" \
+      "    print(f'{f}: {len(lines)} requirements')" \
+      "print('Requirements syntax OK')" \
+    > /tmp/validate_requirements.py && \
+    python /tmp/validate_requirements.py
 
 # ==============================================================================
 # Full Build Stage / 完整构建阶段
