@@ -39,6 +39,7 @@ help:
 	@echo "  make prune      Remove all unused images / 清除所有未使用镜像"
 	@echo "  make list       List ATLAS images / 列出 ATLAS 镜像"
 	@echo "  make tag        Tag image (TAG_VERSION=1.0.0, SOURCE=v0.6-base) / 镜像打标"
+	@echo "  make docs-ver   Update doc version tags / 更新文档版本标签"
 # 快速代码格式化
 format:
 	@black . || true
@@ -136,3 +137,11 @@ tag:
 		exit 1; \
 	fi
 	@./tag.sh tag $(TAG_VERSION) $(SOURCE)
+
+# Update documentation version tags / 更新文档版本标签
+docs-ver:
+	@if [ -z "$(OLD_VERSION)" ]; then \
+		echo "OLD_VERSION is required. Example: make docs-ver OLD_VERSION=0.6"; \
+		exit 1; \
+	fi
+	@./scripts/update-doc-version.sh $(OLD_VERSION) $(NEW_VERSION)

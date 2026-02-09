@@ -14,6 +14,7 @@ This directory contains the main operational scripts for ATLAS Docker image.
 | `push.sh` | Push image to registry / 推送镜像到注册表 | `./push.sh v0.6-base` |
 | `pre-check.sh` | Pre-build checks / 预构建检查 | Called by `build.sh` |
 | `check-updates.sh` | Check package updates / 检查包更新 | `./check-updates.sh` |
+| `update-doc-version.sh` | Update doc version tags / 更新文档版本标签 | `./update-doc-version.sh 0.6 0.7` |
 
 ## Backward Compatibility / 向后兼容
 
@@ -75,6 +76,9 @@ BUILD_TIER=2 ./scripts/build.sh
 
 # Manual pre-check / 手动预检查
 ./scripts/pre-check.sh
+
+# Update documentation version tags / 更新文档版本标签
+./scripts/update-doc-version.sh 0.6 0.7
 ```
 
 ## Environment Variables / 环境变量
