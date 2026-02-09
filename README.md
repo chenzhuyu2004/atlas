@@ -92,7 +92,7 @@ atlas/
 
 ## Release & Upgrade
 
-- Update `docker/atlas/VERSION` and `CHANGELOG.md`
-- Run `./pre-check.sh` and local tests (see `docker/atlas/docs/TESTS.md`)
+- Update [docker/atlas/VERSION](docker/atlas/VERSION) and [CHANGELOG.md](CHANGELOG.md)
+- Run `./pre-check.sh` and local tests (see [docker/atlas/docs/TESTS.md](docker/atlas/docs/TESTS.md))
 - Tag and push release: `git tag -a vX.Y.Z -m "Release vX.Y.Z" && git push origin vX.Y.Z`
-- Use `docker/atlas/tag.sh` to create local image tags when needed
+- Use [docker/atlas/tag.sh](docker/atlas/tag.sh) to create local image tags when needed

@@ -88,10 +88,10 @@ ENABLE_MATERIALS=1 ./build.sh
 
 ## Release & Upgrade / 发布与升级
 
-- Update `VERSION` and `CHANGELOG.md` before release
-- Run `./pre-check.sh` and local tests (see `docs/TESTS.md`)
+- Update [VERSION](VERSION) and [CHANGELOG.md](../../CHANGELOG.md) before release
+- Run `./pre-check.sh` and local tests (see [docs/TESTS.md](docs/TESTS.md))
 - Tag release: `git tag -a vX.Y.Z -m \"Release vX.Y.Z\" && git push origin vX.Y.Z`
-- Use `./tag.sh` to create local image tags if needed
+- Use [tag.sh](tag.sh) to create local image tags if needed
 - Optional: set `COSIGN_PRIVATE_KEY` in GitHub Secrets to sign images on release
 
 ## Contributing / 贡献
