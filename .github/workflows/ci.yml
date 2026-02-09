@@ -80,8 +80,7 @@ jobs:
           output: trivy-pr.txt
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          exit-code: '0'
-        continue-on-error: true
+          exit-code: '1'
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
         if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
