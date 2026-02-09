@@ -18,6 +18,7 @@ Choose the path that matches your goal:
 | Document / 文档 | Audience / 面向对象 | Scope / 说明 |
 | --- | --- | --- |
 | `README.md` | All users | Monorepo overview and entry links |
+| `docs/STYLE_GUIDE.md` | Maintainers | Documentation structure and style |
 | `docker/atlas/README.md` | Image users | Docker image features and quick start |
 | `docker/atlas/docs/README.md` | Image users | Full image documentation index |
 | `docker/atlas/docs/BUILD.md` | Builders | Build tiers, args, and troubleshooting |
@@ -61,6 +62,9 @@ Update docs when you change behavior, interfaces, or workflows.
 - CI workflows, tests, or release steps → `docker/atlas/docs/TESTS.md` or `CHANGELOG.md`
 - Script flags or usage changes → `docker/atlas/docs/API.md` and `docker/atlas/scripts/README.md`
 - New examples → `examples/README.md`
+
+**Style guide / 文档规范**
+- Follow `docs/STYLE_GUIDE.md` for structure and maintenance rules.
 
 **Versioned docs / 版本化文档**
 - Update `docker/atlas/VERSION` and `CHANGELOG.md` before release.

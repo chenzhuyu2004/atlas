@@ -47,6 +47,7 @@ Other references:
 - `SECURITY.md` - Vulnerability disclosure policy
 - `CODE_OF_CONDUCT.md` - Community guidelines
 - `SUPPORT.md` - How to get help
+- `docs/STYLE_GUIDE.md` - Documentation structure and maintenance
 
 ## Repository Layout
 
