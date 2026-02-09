@@ -37,6 +37,16 @@ Every guide should follow this minimum structure:
 - Use consistent terminology (e.g. “build tier”, “smoke build”, “release job”).
 - Avoid duplicated content; link instead.
 
+## Script & Makefile Commenting / 脚本与 Makefile 注释规范
+
+Keep script comments consistent across the repo:
+保持脚本注释风格一致：
+
+- Start with a short header (purpose + scope) at the top of the file.
+- Include a usage line and list key arguments or environment variables.
+- Keep comments bilingual when the file already mixes English/Chinese.
+- Prefer `# Section Title / 分节标题` style for blocks.
+
 ## Example Template / 示例模板
 
 ```md

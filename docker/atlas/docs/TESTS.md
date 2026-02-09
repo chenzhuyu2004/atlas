@@ -44,6 +44,21 @@ For local linting and unit tests, install dev dependencies:
 pip install -r requirements-dev.txt
 ```
 
+### Minimal Local Validation / 最小本地验证
+
+Run a fast sanity check before the full suite:
+在运行完整测试前先执行快速验证：
+
+```bash
+cd /path/to/atlas/docker/atlas
+./build.sh
+
+cd tests
+docker run --rm -v "$(pwd)":/workspace -w /workspace atlas:v0.6-base \
+  python test_import_packages.py
+./test_healthcheck.sh
+```
+
 ### Run All Tests / 运行所有测试
 
 ```bash
@@ -62,11 +77,14 @@ cd tests
 cd tests
 
 # Test specific tier / 测试特定层级
-docker run --rm atlas:v0.6-base python test_import_packages.py
-docker run --rm atlas:v0.6-llm python test_import_packages.py
+docker run --rm -v "$(pwd)":/workspace -w /workspace \
+  atlas:v0.6-base python test_import_packages.py
+docker run --rm -v "$(pwd)":/workspace -w /workspace \
+  atlas:v0.6-llm python test_import_packages.py
 
 # Test with GPU check / 带 GPU 检查测试
-docker run --gpus all --rm atlas:v0.6-base python test_import_packages.py
+docker run --gpus all --rm -v "$(pwd)":/workspace -w /workspace \
+  atlas:v0.6-base python test_import_packages.py
 ```
 
 **检测内容**：
