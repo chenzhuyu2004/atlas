@@ -66,6 +66,8 @@ RUN python -m pip install --no-cache-dir --upgrade pip setuptools packaging && \
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
+ARG VERSION=0.6
+
 LABEL org.opencontainers.image.title="ATLAS ML/DS" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.description="ML/DS Docker image optimized for RTX 4060 Laptop"
