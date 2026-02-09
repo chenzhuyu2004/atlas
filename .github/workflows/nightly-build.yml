@@ -64,6 +64,15 @@ jobs:
           cache-from: type=gha,scope=tier${{ matrix.tier }}
           cache-to: type=gha,mode=max,scope=tier${{ matrix.tier }}
 
+      - name: Record image size / 记录镜像大小
+        run: |
+          image="${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test"
+          size_bytes=$(docker image inspect "$image" --format '{{.Size}}')
+          size_mb=$(python -c "print(round(int('$size_bytes') / (1024 * 1024), 2))")
+          echo "$image size: ${size_mb} MB" | tee "image-size-tier${{ matrix.tier }}.txt"
+          echo "### Image size (tier ${{ matrix.tier }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "- ${size_mb} MB" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Test package imports / 测试包导入
         run: |
           docker run --rm \
@@ -103,6 +112,14 @@ jobs:
         with:
           name: trivy-results-tier${{ matrix.tier }}
           path: 'trivy-results-tier${{ matrix.tier }}.sarif'
+          if-no-files-found: warn
+
+      - name: Archive image size / 存档镜像大小
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-size-tier${{ matrix.tier }}
+          path: image-size-tier${{ matrix.tier }}.txt
           if-no-files-found: warn
 
       - name: Tag and push nightly image / 标记并推送夜间构建
