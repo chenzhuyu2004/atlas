@@ -45,7 +45,7 @@ check_file() {
     declare -A latest_versions
     while IFS=$'\t' read -r pkg latest; do
         latest_versions["$pkg"]="$latest"
-    done < <(printf '%s\n' "${req_lines[@]}" | python3 - <<'PY'
+    done < <(python3 - "$file" <<'PY'
 import os
 import sys
 import json
@@ -53,6 +53,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 jobs = int(os.environ.get("CHECK_UPDATES_JOBS", "8"))
+path = sys.argv[1]
 
 def parse_pkg(line: str) -> str | None:
     line = line.split("#", 1)[0].strip()
@@ -61,10 +62,16 @@ def parse_pkg(line: str) -> str | None:
     return line.split("==", 1)[0].strip()
 
 pkgs = []
-for raw in sys.stdin:
-    pkg = parse_pkg(raw)
-    if pkg:
-        pkgs.append(pkg)
+try:
+    with open(path, "r", encoding="utf-8") as fh:
+        for raw in fh:
+            pkg = parse_pkg(raw)
+            if pkg:
+                pkgs.append(pkg)
+except FileNotFoundError:
+    sys.exit(0)
+
+pkgs = list(dict.fromkeys(pkgs))
 
 def fetch_latest(pkg: str) -> tuple[str, str]:
     url = f"https://pypi.org/pypi/{pkg}/json"
