@@ -123,3 +123,4 @@ Scripts respect the following environment variables:
 - [docs/BUILD.md](../docs/BUILD.md) - Detailed build documentation / 详细构建文档
 - [docs/RUN.md](../docs/RUN.md) - Runtime guide / 运行指南
 - [Makefile](../Makefile) - Make targets wrapping these scripts / Make 目标包装这些脚本
+- [../../../docs/README.md](../../../docs/README.md) - Repository docs index / 仓库文档索引

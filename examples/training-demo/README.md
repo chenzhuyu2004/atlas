@@ -63,3 +63,9 @@ Edit `train_cifar10.py` to modify:
 
 - Training time: ~5-10 min on GPU / GPU 上约 5-10 分钟
 - Test accuracy: ~70% after 10 epochs / 10 轮后准确率约 70%
+
+## Related Docs / 相关文档
+
+- `../README.md` - Examples overview / 示例总览
+- `../../docs/README.md` - Repository docs index / 仓库文档索引
+- `../../docker/atlas/docs/RUN.md` - Runtime guide / 运行指南

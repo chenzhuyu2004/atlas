@@ -144,3 +144,9 @@ When adding new tests:
 - GPU tests require NVIDIA runtime / GPU 测试需要 NVIDIA 运行时
 - BUILD_TIER=2 tests may fail due to vLLM compatibility / BUILD_TIER=2 测试可能因 vLLM 兼容性失败
 - Tests may take 10-30 minutes depending on tier / 测试可能需要 10-30 分钟，取决于层级
+
+## Related Docs / 相关文档
+
+- `../docs/TESTS.md` - Tests and CI overview / 测试与 CI 总览
+- `../docs/ARCHITECTURE.md` - Build + CI architecture / 构建与 CI 架构
+- `../../../docs/README.md` - Repository docs index / 仓库文档索引

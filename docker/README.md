@@ -11,3 +11,5 @@ This directory contains Docker image definitions for the ATLAS project.
 
 - Run build scripts from `docker/atlas/`.
 - 在 `docker/atlas/` 目录下运行构建脚本。
+- Image docs index: `docker/atlas/docs/README.md`.
+- 镜像文档索引：`docker/atlas/docs/README.md`。
