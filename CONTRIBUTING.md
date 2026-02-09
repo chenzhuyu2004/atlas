@@ -155,6 +155,9 @@ pre-commit run --all-files
 
 ### Pull Request Process / Pull Request 流程
 
+This repository protects `main`. Direct pushes are blocked and changes must go through a PR.
+本仓库对 `main` 启用了保护，禁止直接 push，所有更改必须通过 PR 合并。
+
 1. **Update documentation** / **更新文档**
    - Update README.md if you changed features / 如果更改了功能，请更新 README.md
    - Update CHANGELOG.md / 更新 CHANGELOG.md
@@ -198,6 +201,28 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 5. **Address review comments** / **处理审查意见**
    - Be responsive to feedback / 及时响应反馈
    - Make requested changes / 进行请求的更改
+
+### Main Branch Workflow / 主分支推送流程
+
+Minimal flow (owner PRs are auto-approved after CI starts):
+最简流程（仓库 owner 的 PR 会在 CI 运行后自动审批）：
+
+```bash
+git checkout -b feature/short-title
+git commit -am "feat: describe change"
+git push -u origin feature/short-title
+gh pr create --base main --head feature/short-title
+# wait for required checks to pass
+gh pr merge <PR_NUMBER> --merge
+```
+
+Notes:
+- Auto-approve only applies to PRs created by the repository owner from the same repo.
+- Non-owner PRs still require a human review.
+
+注意：
+- 自动审批仅对“同仓库 + 仓库 owner 发起的 PR”生效。
+- 非 owner 的 PR 仍需人工 review。
    - Update PR description if scope changes / 如果范围变化，更新 PR 描述
 
 ### PR Requirements / PR 要求
