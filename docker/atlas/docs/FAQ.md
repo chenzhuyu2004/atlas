@@ -1,13 +1,3 @@
-### Q: pre-commit 检查/CI 检查失败怎么办？
-**A**: 常见排查方法：
-
-1. 本地运行 `pre-commit run --all-files`，查看详细报错。
-2. 检查 Python/Shell 代码格式（如 black、isort、shfmt）。
-3. 检查 shell 脚本头部和 set -euo pipefail 是否规范。
-4. 若 CI 失败，点击 GitHub Actions 日志，定位具体失败步骤。
-5. 若为依赖或网络问题，尝试清理缓存或更换镜像源。
-
-如无法解决，可将报错日志附在 Issue 中反馈。
 # FAQ / 常见问题
 
 > **Note**: Run commands from `docker/atlas/`.
@@ -244,6 +234,17 @@ FROM nvidia/cuda:12.1-cudnn8-devel-ubuntu22.04
 
 ## 🛠️ CI/CD Issues / CI/CD 问题
 
+### Q: pre-commit 检查/CI 检查失败怎么办？
+**A**: 常见排查方法：
+
+1. 本地运行 `pre-commit run --all-files`，查看详细报错。
+2. 检查 Python/Shell 代码格式（如 black、isort、shfmt）。
+3. 检查 shell 脚本头部和 set -euo pipefail 是否规范。
+4. 若 CI 失败，点击 GitHub Actions 日志，定位具体失败步骤。
+5. 若为依赖或网络问题，尝试清理缓存或更换镜像源。
+
+如无法解决，可将报错日志附在 Issue 中反馈。
+
 ### Q: CI build fails on GitHub Actions
 ### 问：GitHub Actions 上 CI 构建失败
 
@@ -345,7 +346,7 @@ Still having issues? / 仍有问题？
    - [GitHub Issues](https://github.com/chenzhuyu2004/atlas/issues)
 
 3. **Create new issue / 创建新 issue**:
-   - Use [bug report template](../.github/ISSUE_TEMPLATE/bug_report.md)
+   - Use [bug report template](../../../.github/ISSUE_TEMPLATE/bug_report.yml)
    - Include environment information / 包含环境信息
    - Attach relevant logs / 附上相关日志
 

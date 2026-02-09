@@ -38,7 +38,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ${GPU_DEVICES:-all}
+              count: ${GPU_COUNT:-all}
               capabilities: [gpu]
     restart: unless-stopped
     networks:
@@ -64,7 +64,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: ${GPU_DEVICES:-all}
+              count: ${GPU_COUNT:-all}
               capabilities: [gpu]
     networks:
       - atlas-network

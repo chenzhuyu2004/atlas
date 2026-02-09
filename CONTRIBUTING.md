@@ -40,8 +40,8 @@ When filing a bug report, include:
 - **Expected vs actual behavior** / **预期行为 vs 实际行为**
 - **Relevant logs** / **相关日志**
 
-Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md).
-使用 [bug 报告模板](.github/ISSUE_TEMPLATE/bug_report.md)。
+Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.yml).
+使用 [bug 报告模板](.github/ISSUE_TEMPLATE/bug_report.yml)。
 
 ### Suggesting Enhancements / 提出改进建议
 
@@ -53,8 +53,8 @@ Enhancement suggestions are tracked as GitHub issues. When creating one:
 - **Explain why this would be useful** / **说明为什么有用**
 - **Include examples** / **包含示例**
 
-Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md).
-使用 [功能请求模板](.github/ISSUE_TEMPLATE/feature_request.md)。
+Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.yml).
+使用 [功能请求模板](.github/ISSUE_TEMPLATE/feature_request.yml)。
 
 ### Documentation Improvements / 文档改进
 

@@ -51,7 +51,7 @@ Key variables / 关键变量：
 - `ATLAS_IMAGE`: Image tag to use / 使用的镜像标签
 - `JUPYTER_PORT`: JupyterLab port / JupyterLab 端口
 - `JUPYTER_TOKEN`: Access token / 访问令牌
-- `GPU_DEVICES`: GPU selection / GPU 选择
+- `GPU_COUNT`: GPU count or `all` / GPU 数量或 `all`
 
 ## Custom Setups / 自定义设置
 
@@ -86,6 +86,8 @@ Ensure NVIDIA Docker runtime is installed and configured.
 - 配置文件同时使用 `runtime: nvidia` 和 `deploy.resources` 以获得最大兼容性
 - `runtime: nvidia` works with standalone docker-compose / `runtime: nvidia` 适用于独立 docker-compose
 - `deploy.resources` works with Docker Swarm / `deploy.resources` 适用于 Docker Swarm
+- For specific GPU IDs, edit `device_ids` manually in `docker-compose.yml`
+- 如需指定 GPU ID，请手动在 `docker-compose.yml` 中设置 `device_ids`
 
 **Verification / 验证**:
 ```bash

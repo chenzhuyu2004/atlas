@@ -27,8 +27,8 @@ body:
       label: Steps to reproduce / 复现步骤
       description: Steps to reproduce the behavior
       placeholder: |
-        1. Build command: `make build-base`
-        2. Run command: `make run IMAGE=atlas:v0.6-base`
+        1. Build command: `make build`
+        2. Run command: `./run.sh atlas:v0.6-base`
         3. Execute: `python -c "import torch; print(torch.cuda.is_available())"`
         4. Error occurs: `...`
       value: |

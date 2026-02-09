@@ -221,7 +221,7 @@ gh workflow run nightly-build.yml
 
 自动检测依赖更新并创建 PR：
 
-- **GitHub Actions**: 每月检查一次
+- **GitHub Actions**: 每周检查一次
 - **Python packages**: 每周检查一次（requirements*.txt）
 
 **处理 Dependabot PR**：

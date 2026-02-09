@@ -6,7 +6,7 @@ version: 2
 updates:
   # Python dependencies / Python 依赖
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/docker/atlas"
     schedule:
       interval: "weekly"
       day: "sunday"
@@ -87,7 +87,7 @@ updates:
   # Note: Manual check required as pytorch/pytorch follows custom versioning
   # 注意：需要手动检查，因为 pytorch/pytorch 使用自定义版本号
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/docker/atlas"
     schedule:
       interval: "weekly"
       day: "sunday"

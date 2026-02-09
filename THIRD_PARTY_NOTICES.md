@@ -189,10 +189,10 @@ For the complete list of dependencies with exact versions, see:
 
 完整的带版本号的依赖列表，请查看：
 
-- [requirements.txt](requirements.txt) - Core tier 0 / 核心层级 0
-- [requirements-llm.txt](requirements-llm.txt) - LLM tier 1 / LLM 层级 1
-- [requirements-accel.txt](requirements-accel.txt) - Acceleration tier 2 / 加速层级 2
-- [requirements-materials.txt](requirements-materials.txt) - Materials science / 材料科学
+- [docker/atlas/requirements.txt](docker/atlas/requirements.txt) - Core tier 0 / 核心层级 0
+- [docker/atlas/requirements-llm.txt](docker/atlas/requirements-llm.txt) - LLM tier 1 / LLM 层级 1
+- [docker/atlas/requirements-accel.txt](docker/atlas/requirements-accel.txt) - Acceleration tier 2 / 加速层级 2
+- [docker/atlas/requirements-materials.txt](docker/atlas/requirements-materials.txt) - Materials science / 材料科学
 
 ---
 

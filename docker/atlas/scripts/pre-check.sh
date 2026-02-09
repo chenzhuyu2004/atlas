@@ -85,7 +85,7 @@ fi
 
 echo
 echo "检查系统资源..."
-DISK_FREE=$(df "${ROOT_DIR}" | tail -1 | awk '{print $4}')
+DISK_FREE=$(df "${PROJECT_ROOT}" | tail -1 | awk '{print $4}')
 DISK_GB=$((DISK_FREE / 1024 / 1024))
 echo "Available disk space: ${DISK_GB} GB"
 if [ "$DISK_GB" -gt 25 ]; then
