@@ -34,6 +34,11 @@ cd docker/atlas
 Start here: `docs/README.md` (repository documentation index).
 Image docs index: `docker/atlas/docs/README.md`.
 
+Choose your path:
+- **User**: `docker/atlas/README.md`, `docker/atlas/docs/RUN.md`, `examples/README.md`, `docs/WORKSPACE.md`
+- **Builder/Maintainer**: `docker/atlas/docs/BUILD.md`, `docker/atlas/docs/TESTS.md`, `docs/RELEASE.md`, `SECURITY.md`
+- **Contributor**: `CONTRIBUTING.md`, `docs/STYLE_GUIDE.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`
+
 Core guides:
 - `docker/atlas/README.md` - Image overview and quick start
 - `docker/atlas/docs/BUILD.md` - Build guide
