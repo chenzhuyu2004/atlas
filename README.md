@@ -31,30 +31,30 @@ cd docker/atlas
 
 ## Documentation
 
-Start here: `docs/README.md` (repository documentation index).
-Image docs index: `docker/atlas/docs/README.md`.
+Start here: [docs/README.md](docs/README.md) (repository documentation index).
+Image docs index: [docker/atlas/docs/README.md](docker/atlas/docs/README.md).
 
 Choose your path:
-- **User**: `docker/atlas/README.md`, `docker/atlas/docs/RUN.md`, `examples/README.md`, `docs/WORKSPACE.md`
-- **Builder/Maintainer**: `docker/atlas/docs/BUILD.md`, `docker/atlas/docs/TESTS.md`, `docs/RELEASE.md`, `SECURITY.md`
-- **Contributor**: `CONTRIBUTING.md`, `docs/STYLE_GUIDE.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`
+- **User**: [docker/atlas/README.md](docker/atlas/README.md), [docker/atlas/docs/RUN.md](docker/atlas/docs/RUN.md), [examples/README.md](examples/README.md), [docs/WORKSPACE.md](docs/WORKSPACE.md)
+- **Builder/Maintainer**: [docker/atlas/docs/BUILD.md](docker/atlas/docs/BUILD.md), [docker/atlas/docs/TESTS.md](docker/atlas/docs/TESTS.md), [docs/RELEASE.md](docs/RELEASE.md), [SECURITY.md](SECURITY.md)
+- **Contributor**: [CONTRIBUTING.md](CONTRIBUTING.md), [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SUPPORT.md](SUPPORT.md)
 
 Core guides:
-- `docker/atlas/README.md` - Image overview and quick start
-- `docker/atlas/docs/BUILD.md` - Build guide
-- `docker/atlas/docs/RUN.md` - Runtime guide
-- `docker/atlas/docs/TESTS.md` - Tests and CI
-- `docker/atlas/docs/FAQ.md` - Troubleshooting
+- [docker/atlas/README.md](docker/atlas/README.md) - Image overview and quick start
+- [docker/atlas/docs/BUILD.md](docker/atlas/docs/BUILD.md) - Build guide
+- [docker/atlas/docs/RUN.md](docker/atlas/docs/RUN.md) - Runtime guide
+- [docker/atlas/docs/TESTS.md](docker/atlas/docs/TESTS.md) - Tests and CI
+- [docker/atlas/docs/FAQ.md](docker/atlas/docs/FAQ.md) - Troubleshooting
 
 Other references:
-- `CHANGELOG.md` - Release history and checklist
-- `CONTRIBUTING.md` - Contribution guidelines
-- `SECURITY.md` - Vulnerability disclosure policy
-- `CODE_OF_CONDUCT.md` - Community guidelines
-- `SUPPORT.md` - How to get help
-- `docs/STYLE_GUIDE.md` - Documentation structure and maintenance
-- `docs/WORKSPACE.md` - Local workspace usage
-- `docs/RELEASE.md` - Release workflow and CI triggers
+- [CHANGELOG.md](CHANGELOG.md) - Release history and checklist
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+- [SECURITY.md](SECURITY.md) - Vulnerability disclosure policy
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community guidelines
+- [SUPPORT.md](SUPPORT.md) - How to get help
+- [docs/STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Documentation structure and maintenance
+- [docs/WORKSPACE.md](docs/WORKSPACE.md) - Local workspace usage
+- [docs/RELEASE.md](docs/RELEASE.md) - Release workflow and CI triggers
 
 ## Repository Layout
 

@@ -1,6 +1,6 @@
 # Workspace Guide / 工作区指南
 
-How to use `projects/` as your local development workspace without touching image source.
+How to use [projects/](../projects/README.md) as your local development workspace without touching image source.
 如何使用 `projects/` 作为本地开发工作区，而不影响镜像源码。
 
 ## Quick Start / 快速开始
@@ -60,6 +60,6 @@ docker run --gpus all -it --rm \
 
 ## Related Docs / 相关文档
 
-- `docs/README.md` - Repository docs index / 仓库文档索引
-- `docker/atlas/docs/RUN.md` - Runtime guide / 运行指南
-- `examples/README.md` - Usage examples / 使用示例
+- [docs/README.md](README.md) - Repository docs index / 仓库文档索引
+- [docker/atlas/docs/RUN.md](../docker/atlas/docs/RUN.md) - Runtime guide / 运行指南
+- [examples/README.md](../examples/README.md) - Usage examples / 使用示例

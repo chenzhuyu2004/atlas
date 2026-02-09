@@ -11,9 +11,9 @@ This guide defines structure, tone, and maintenance rules for ATLAS documentatio
 
 ## Scope / 范围
 
-- Repo-level docs: `docs/`, `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`
-- Image docs: `docker/atlas/docs/`, `docker/atlas/README.md`
-- Examples: `examples/README.md`
+- Repo-level docs: [docs/README.md](README.md), [README.md](../README.md), [CONTRIBUTING.md](../CONTRIBUTING.md), [CHANGELOG.md](../CHANGELOG.md)
+- Image docs: [docker/atlas/docs/README.md](../docker/atlas/docs/README.md), [docker/atlas/README.md](../docker/atlas/README.md)
+- Examples: [examples/README.md](../examples/README.md)
 
 ## Required Structure / 必备结构
 
@@ -66,15 +66,15 @@ One-sentence purpose.
 
 ## Update Triggers / 更新触发点
 
-- Dockerfile, build args, requirements → update `docker/atlas/docs/BUILD.md`
-- Runtime, GPU flags, healthcheck → update `docker/atlas/docs/RUN.md`
-- CI workflows, tests, release steps → update `docker/atlas/docs/TESTS.md` or `CHANGELOG.md`
-- Scripts or flags → update `docker/atlas/docs/API.md` and `docker/atlas/scripts/README.md`
-- Examples or demos → update `examples/README.md`
+- Dockerfile, build args, requirements → update [docker/atlas/docs/BUILD.md](../docker/atlas/docs/BUILD.md)
+- Runtime, GPU flags, healthcheck → update [docker/atlas/docs/RUN.md](../docker/atlas/docs/RUN.md)
+- CI workflows, tests, release steps → update [docker/atlas/docs/TESTS.md](../docker/atlas/docs/TESTS.md) or [CHANGELOG.md](../CHANGELOG.md)
+- Scripts or flags → update [docker/atlas/docs/API.md](../docker/atlas/docs/API.md) and [docker/atlas/scripts/README.md](../docker/atlas/scripts/README.md)
+- Examples or demos → update [examples/README.md](../examples/README.md)
 
 ## Versioning / 版本同步
 
-- Keep versioned docs aligned with `docker/atlas/VERSION`.
+- Keep versioned docs aligned with [docker/atlas/VERSION](../docker/atlas/VERSION).
 - When bumping versions, run:
   - `make -C docker/atlas docs-ver OLD_VERSION=0.6 NEW_VERSION=0.7`
 

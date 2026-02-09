@@ -17,6 +17,6 @@ projects/my-app/
 ```
 
 Related docs:
-- `../docs/README.md` (repository documentation index)
-- `../docs/WORKSPACE.md` (workspace usage guide)
-- `../docker/atlas/docs/RUN.md` (runtime guide for mounted workspaces)
+- [../docs/README.md](../docs/README.md) (repository documentation index)
+- [../docs/WORKSPACE.md](../docs/WORKSPACE.md) (workspace usage guide)
+- [../docker/atlas/docs/RUN.md](../docker/atlas/docs/RUN.md) (runtime guide for mounted workspaces)
