@@ -68,14 +68,7 @@ jobs:
         run: |
           image="${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test"
           size_bytes=$(docker image inspect "$image" --format '{{.Size}}')
-          export SIZE_BYTES="$size_bytes"
-          size_mb=$(python - <<'PY'
-import os
-
-size = int(os.environ["SIZE_BYTES"])
-print(round(size / (1024 * 1024), 2))
-PY
-          )
+          size_mb=$(python -c "print(round(int('$size_bytes') / (1024 * 1024), 2))")
           echo "$image size: ${size_mb} MB" | tee "image-size-tier${{ matrix.tier }}.txt"
           echo "### Image size (tier ${{ matrix.tier }})" >> "$GITHUB_STEP_SUMMARY"
           echo "- ${size_mb} MB" >> "$GITHUB_STEP_SUMMARY"
