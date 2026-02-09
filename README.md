@@ -1,38 +1,6 @@
 
 # ATLAS Docker Image v0.6
 
-```mermaid
-flowchart LR
-    classDef build fill:#F3F7FF,stroke:#5B8DEF,stroke-width:1px,color:#1E3A8A;
-    classDef ci fill:#F3FDF6,stroke:#34A853,stroke-width:1px,color:#14532D;
-    classDef use fill:#FFF7ED,stroke:#FB923C,stroke-width:1px,color:#7C2D12;
-
-    subgraph Build["Build"]
-        B1["build.sh"] --> B2["pre-check.sh"]
-        B2 --> B3["Dockerfile"]
-        B3 --> B4["requirements*.txt"]
-    end
-
-    subgraph CI["CI/CD"]
-        C1["ci.yml"] --> C2["pre-commit"]
-        C2 --> C3["lint + smoke build"]
-        C1 --> C4["tests (syntax)"]
-        C1 --> C5["release"]
-    end
-
-    subgraph Usage["Usage"]
-        U1["run.sh"] --> U2["container start"]
-        U2 --> U3["JupyterLab"]
-    end
-
-    B3 --> C1
-    C5 --> U1
-
-    class B1,B2,B3,B4 build;
-    class C1,C2,C3,C4,C5 ci;
-    class U1,U2,U3 use;
-```
-
 [![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.10.0-EE4C2C.svg)](https://pytorch.org/)
