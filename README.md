@@ -23,8 +23,8 @@ flowchart TD
     H --> K
 ```
 
-[![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
-[![PR CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?event=pull_request)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
+[![CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?branch=main&event=push&label=CI)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
+[![PR CI](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml/badge.svg?event=pull_request&label=PR%20CI)](https://github.com/chenzhuyu2004/atlas/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.10.0-EE4C2C.svg)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-13.0-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
