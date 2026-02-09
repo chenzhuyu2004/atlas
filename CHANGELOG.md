@@ -1,6 +1,8 @@
 # ATLAS Docker Image Changelog
 
 Docs index: [docs/README.md](docs/README.md)
+Release workflow reference: `docs/RELEASE.md`.
+发布流程参考：`docs/RELEASE.md`。
 
 # ATLAS Docker 镜像更新日志
 

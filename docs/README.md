@@ -19,6 +19,8 @@ Choose the path that matches your goal:
 | --- | --- | --- |
 | `README.md` | All users | Monorepo overview and entry links |
 | `docs/STYLE_GUIDE.md` | Maintainers | Documentation structure and style |
+| `docs/WORKSPACE.md` | Users | Local workspace usage and projects directory |
+| `docs/RELEASE.md` | Maintainers | Release workflow and CI triggers |
 | `docker/atlas/README.md` | Image users | Docker image features and quick start |
 | `docker/atlas/docs/README.md` | Image users | Full image documentation index |
 | `docker/atlas/docs/BUILD.md` | Builders | Build tiers, args, and troubleshooting |

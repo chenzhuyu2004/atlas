@@ -48,6 +48,8 @@ Other references:
 - `CODE_OF_CONDUCT.md` - Community guidelines
 - `SUPPORT.md` - How to get help
 - `docs/STYLE_GUIDE.md` - Documentation structure and maintenance
+- `docs/WORKSPACE.md` - Local workspace usage
+- `docs/RELEASE.md` - Release workflow and CI triggers
 
 ## Repository Layout
 
