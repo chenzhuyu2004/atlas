@@ -76,18 +76,39 @@ jobs:
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: atlas:smoke
-          format: 'table'
-          output: trivy-pr.txt
+          format: 'json'
+          output: trivy-pr.json
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          exit-code: '1'
+          exit-code: '0'
+
+      - name: Fail on high severity findings (PR) / 高危即阻断
+        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        run: |
+          if [ ! -f trivy-pr.json ]; then
+            echo "Trivy report missing"
+            exit 1
+          fi
+          python - <<'PY'
+import json
+from pathlib import Path
+
+report = json.loads(Path("trivy-pr.json").read_text(encoding="utf-8"))
+count = 0
+for result in report.get("Results", []):
+    vulns = result.get("Vulnerabilities") or []
+    count += len(vulns)
+print(f"High/Critical vulnerabilities found: {count}")
+if count > 0:
+    raise SystemExit(1)
+PY
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
         if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-pr-report
-          path: trivy-pr.txt
+          path: trivy-pr.json
           if-no-files-found: warn
 
       - name: Validate requirements files / 验证 requirements 文件
