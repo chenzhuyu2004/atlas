@@ -12,6 +12,25 @@ Choose the path that matches your role:
 - **Builder/Maintainer / 构建与维护者**: [docker/atlas/docs/BUILD.md](../docker/atlas/docs/BUILD.md), [docker/atlas/docs/TESTS.md](../docker/atlas/docs/TESTS.md), [docs/RELEASE.md](RELEASE.md), [SECURITY.md](../SECURITY.md)
 - **Contributor / 贡献者**: [CONTRIBUTING.md](../CONTRIBUTING.md), [docs/STYLE_GUIDE.md](STYLE_GUIDE.md), [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md), [SUPPORT.md](../SUPPORT.md)
 
+## Role Quick Starts / 角色快速开始
+
+### User / 使用者
+
+- Start with [docker/atlas/README.md](../docker/atlas/README.md) for image basics.
+- Use [docker/atlas/docs/RUN.md](../docker/atlas/docs/RUN.md) to run containers.
+- Keep your work in [docs/WORKSPACE.md](WORKSPACE.md) and [projects/README.md](../projects/README.md).
+
+### Builder/Maintainer / 构建与维护者
+
+- Review [docker/atlas/docs/BUILD.md](../docker/atlas/docs/BUILD.md) for build tiers and args.
+- Validate behavior with [docker/atlas/docs/TESTS.md](../docker/atlas/docs/TESTS.md).
+- Follow [docs/RELEASE.md](RELEASE.md) before tagging.
+
+### Contributor / 贡献者
+
+- Read [CONTRIBUTING.md](../CONTRIBUTING.md) and [docs/STYLE_GUIDE.md](STYLE_GUIDE.md).
+- Check [docs/README.md](README.md) for the current docs map.
+
 ## Documentation Map / 文档地图
 
 | Document / 文档 | Audience / 面向对象 | Scope / 说明 |

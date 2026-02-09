@@ -32,6 +32,7 @@ Every guide should follow this minimum structure:
 - Use concise, action-focused sentences.
 - Keep English and Chinese side-by-side where possible.
 - Prefer absolute paths in examples (`/path/to/atlas`) unless context is clear.
+- Prefer links for file references when possible (e.g. `[docs/README.md](README.md)`).
 - Use consistent terminology (e.g. “build tier”, “smoke build”, “release job”).
 - Avoid duplicated content; link instead.
 
