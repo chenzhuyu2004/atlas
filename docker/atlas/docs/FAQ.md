@@ -355,5 +355,5 @@ Still having issues? / 仍有问题？
    - Attach relevant logs / 附上相关日志
 
 4. **Security issues / 安全问题**:
-   - See [SECURITY.md](../../SECURITY.md) for responsible disclosure
-   - 查看 [SECURITY.md](../../SECURITY.md) 进行负责任的披露
+   - See [SECURITY.md](../../../SECURITY.md) for responsible disclosure
+   - 查看 [SECURITY.md](../../../SECURITY.md) 进行负责任的披露

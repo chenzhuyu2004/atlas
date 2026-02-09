@@ -114,12 +114,12 @@ Tests run automatically in GitHub Actions:
 
 **Dependency checks / 依赖检查**: Weekly via Dependabot / 每周通过 Dependabot
 
-> **Important / 重要**: For releases, run full tests locally before tagging. See Release Checklist in [CHANGELOG.md](../../CHANGELOG.md).
+> **Important / 重要**: For releases, run full tests locally before tagging. See Release Checklist in [CHANGELOG.md](../../../CHANGELOG.md).
 >
-> **重要**：发布前请在本地运行完整测试。详见 [CHANGELOG.md](../../CHANGELOG.md) 中的发布检查清单。
+> **重要**：发布前请在本地运行完整测试。详见 [CHANGELOG.md](../../../CHANGELOG.md) 中的发布检查清单。
 
-See [ci.yml](../../.github/workflows/ci.yml) for details.
-详见 [ci.yml](../../.github/workflows/ci.yml)。
+See [ci.yml](../../../.github/workflows/ci.yml) for details.
+详见 [ci.yml](../../../.github/workflows/ci.yml)。
 
 ## Writing New Tests / 编写新测试
 

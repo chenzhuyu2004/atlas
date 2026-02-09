@@ -53,11 +53,11 @@ Suggested reading order:
 ## Other Resources / 其他资源
 
 - [docs/README.md](../../../docs/README.md) - Repository documentation index / 仓库文档索引
-- [CHANGELOG.md](../../CHANGELOG.md) - 版本历史和变更记录
-- [CONTRIBUTING.md](../../CONTRIBUTING.md) - 贡献指南和开发规范
-- [SECURITY.md](../../SECURITY.md) - 安全策略和漏洞报告
-- [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) - 第三方组件许可声明
-- [examples/](../../examples/) - 示例项目和配置模板
+- [CHANGELOG.md](../../../CHANGELOG.md) - 版本历史和变更记录
+- [CONTRIBUTING.md](../../../CONTRIBUTING.md) - 贡献指南和开发规范
+- [SECURITY.md](../../../SECURITY.md) - 安全策略和漏洞报告
+- [THIRD_PARTY_NOTICES.md](../../../THIRD_PARTY_NOTICES.md) - 第三方组件许可声明
+- [examples/](../../../examples/) - 示例项目和配置模板
 
 ## Quick Links / 快速链接
 
