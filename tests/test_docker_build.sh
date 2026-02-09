@@ -34,7 +34,7 @@ run_test() {
 
   print_test "Testing: ${test_name}"
 
-  if BUILD_TIER="${build_tier}" ENABLE_MATERIALS="${enable_materials}" NO_CACHE=0 ./build.sh; then
+  if BUILD_TIER="${build_tier}" ENABLE_MATERIALS="${enable_materials}" NO_CACHE=0 AUTO_YES=1 ./build.sh; then
     print_info "✓ ${test_name} passed"
     ((TEST_PASSED++))
     return 0

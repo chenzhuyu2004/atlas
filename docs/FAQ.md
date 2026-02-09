@@ -10,6 +10,8 @@
 如无法解决，可将报错日志附在 Issue 中反馈。
 # FAQ / 常见问题
 
+> **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
+
 Common questions and solutions for ATLAS Docker Image.
 
 ATLAS Docker 镜像的常见问题与解决方案。

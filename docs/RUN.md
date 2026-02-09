@@ -4,6 +4,8 @@ Complete guide for running ATLAS Docker containers.
 
 ATLAS Docker 容器的完整运行说明。
 
+> **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
+
 ## Quick Start / 快速开始
 
 ### Using run.sh / 使用运行脚本

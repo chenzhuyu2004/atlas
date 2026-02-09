@@ -26,6 +26,8 @@ pip-compile requirements.txt --output-file requirements.lock
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
 # ATLAS Build Guide / 构建指南
 
+> **Note**: Examples use `v0.6` tags. Replace with `v$(cat VERSION)` (or your current version) when you follow these commands.
+
 ## Build Tiers / 构建层级
 
 | BUILD_TIER | Tag / 标签 | Content / 内容 | Size / 大小 | Time / 时间 |
