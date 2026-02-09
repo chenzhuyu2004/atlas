@@ -1,0 +1,37 @@
+---
+name: Commit Message Check
+# Validate commit messages follow conventional commits format / 验证提交消息遵循约定式提交格式
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit messages
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: .commitlintrc.json
+        continue-on-error: true  # Don't fail the build, just warn
+
+      - name: Comment on PR if commit messages need improvement
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ Some commit messages may not follow the [Conventional Commits](https://www.conventionalcommits.org/) format.\n\n**Recommended format**:\n```\ntype(scope): subject\n\nOptional body\n\nOptional footer\n```\n\n**Examples**:\n- `feat: add GPU memory optimization`\n- `fix(docker): resolve build timeout issue`\n- `docs: update installation guide`\n- `chore(deps): bump pytorch to 2.10.0`\n\nWhile not required, following this format helps maintain a clean git history.'
+            })

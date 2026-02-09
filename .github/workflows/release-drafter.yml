@@ -1,7 +1,6 @@
-# Automatically draft releases based on PRs
-# 根据 PR 自动起草发布说明
-
+---
 name: Release Drafter
+# Automatically draft releases based on PRs / 根据 PR 自动起草发布说明
 
 on:
   push:

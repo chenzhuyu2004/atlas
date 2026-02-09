@@ -1,7 +1,6 @@
-# Automatically label PRs based on size
-# 根据 PR 大小自动添加标签
-
+---
 name: PR Size Labeling
+# Automatically label PRs based on size / 根据 PR 大小自动添加标签
 
 on:
   pull_request:

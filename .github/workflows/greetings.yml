@@ -1,7 +1,6 @@
-# Welcome first-time contributors
-# 欢迎首次贡献者
-
+---
 name: Greetings
+# Welcome first-time contributors / 欢迎首次贡献者
 
 on:
   issues:

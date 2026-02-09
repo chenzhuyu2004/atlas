@@ -1,7 +1,6 @@
-# Security scanning for dependencies and code
-# 依赖和代码安全扫描
-
+---
 name: Security Scan
+# Security scanning for dependencies and code / 依赖和代码安全扫描
 
 on:
   schedule:
