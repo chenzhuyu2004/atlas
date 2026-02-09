@@ -90,18 +90,18 @@ jobs:
             exit 1
           fi
           python - <<'PY'
-import json
-from pathlib import Path
+          import json
+          from pathlib import Path
 
-report = json.loads(Path("trivy-pr.json").read_text(encoding="utf-8"))
-count = 0
-for result in report.get("Results", []):
-    vulns = result.get("Vulnerabilities") or []
-    count += len(vulns)
-print(f"High/Critical vulnerabilities found: {count}")
-if count > 0:
-    raise SystemExit(1)
-PY
+          report = json.loads(Path("trivy-pr.json").read_text(encoding="utf-8"))
+          count = 0
+          for result in report.get("Results", []):
+              vulns = result.get("Vulnerabilities") or []
+              count += len(vulns)
+          print(f"High/Critical vulnerabilities found: {count}")
+          if count > 0:
+              raise SystemExit(1)
+          PY
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
         if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
