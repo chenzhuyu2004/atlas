@@ -136,9 +136,16 @@ build_image() {
     avail_space=$(df -BG "${PROJECT_ROOT}" | awk 'NR==2 {print $4}' | tr -d 'G')
     if [[ "${avail_space}" -lt 30 ]]; then
         print_warn "磁盘空间不足30GB (当前: ${avail_space}GB)，可能导致构建失败"
-        read -p "是否继续? [y/N] " -n 1 -r
-        echo
-        [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+        if [[ "${AUTO_YES:-0}" == "1" ]]; then
+            print_warn "AUTO_YES=1 set, continuing anyway"
+        elif [[ "${NON_INTERACTIVE:-0}" == "1" || ! -t 0 ]]; then
+            print_error "非交互环境下无法确认，设置 AUTO_YES=1 以继续"
+            exit 1
+        else
+            read -p "是否继续? [y/N] " -n 1 -r
+            echo
+            [[ ! $REPLY =~ ^[Yy]$ ]] && exit 1
+        fi
     fi
 
     # 检查内存 (16GB优化)
@@ -160,6 +167,7 @@ build_image() {
         --tag "${IMAGE_NAME}:${tag}" \
         --build-arg BUILD_TIER="${BUILD_TIER}" \
         --build-arg ENABLE_MATERIALS="${ENABLE_MATERIALS}" \
+        --build-arg VERSION="${VERSION}" \
         --progress=plain \
         ${cache_opt} \
         "${PROJECT_ROOT}"; then

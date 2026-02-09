@@ -20,8 +20,13 @@ print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 print_test()  { echo -e "${BLUE}[TEST]${NC} $1"; }
 
 # Configuration / 配置
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DEFAULT_VERSION="$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")"
+DEFAULT_IMAGE="atlas:v${DEFAULT_VERSION}-base"
+
 CONTAINER_NAME="${1:-}"
-IMAGE_NAME="${IMAGE_NAME:-atlas:v0.6-base}"
+IMAGE_NAME="${IMAGE_NAME:-${DEFAULT_IMAGE}}"
 TEST_PASSED=0
 TEST_FAILED=0
 

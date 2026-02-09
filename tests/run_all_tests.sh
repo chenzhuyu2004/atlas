@@ -18,6 +18,9 @@ print_header() { echo -e "\n${BLUE}=== $1 ===${NC}\n"; }
 
 # Navigate to test directory / 导航到测试目录
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DEFAULT_VERSION="$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")"
+DEFAULT_IMAGE="atlas:v${DEFAULT_VERSION}-base"
 cd "${SCRIPT_DIR}"
 
 TOTAL_PASSED=0
@@ -30,7 +33,7 @@ echo "========================================================"
 echo ""
 
 # Make scripts executable / 使脚本可执行
-chmod +x *.sh 2>/dev/null || true
+chmod +x ./*.sh 2>/dev/null || true
 
 # Test 1: Build tests / 构建测试
 print_header "1. Build Tests / 构建测试"
@@ -58,7 +61,7 @@ fi
 
 # Test 3: Package import tests / 包导入测试
 print_header "3. Package Import Tests / 包导入测试"
-IMAGE_NAME="${IMAGE_NAME:-atlas:v0.6-base}"
+IMAGE_NAME="${IMAGE_NAME:-${DEFAULT_IMAGE}}"
 if docker run --rm "${IMAGE_NAME}" python /dev/stdin < test_import_packages.py; then
   print_info "✓ Package import tests passed"
   ((TOTAL_PASSED++))

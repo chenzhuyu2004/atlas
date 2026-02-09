@@ -7,7 +7,12 @@
 set -euo pipefail  # Exit on error, unset var, pipefail / 出错、未定义变量、管道失败时退出
 
 # Configuration / 配置
-IMAGE_NAME="${1:-atlas:v0.6-base}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+DEFAULT_VERSION="$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "0.6")"
+DEFAULT_IMAGE="atlas:v${DEFAULT_VERSION}-base"
+
+IMAGE_NAME="${1:-${DEFAULT_IMAGE}}"
 CONTAINER_NAME="${2:-atlas-$(date +%s)}"
 GPU_DEVICE="${3:-all}"
 WORK_DIR="$(pwd)"
@@ -29,16 +34,16 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
 Usage / 用法: $(basename "$0") [IMAGE] [CONTAINER_NAME] [GPU_DEVICE]
 
 Arguments / 参数:
-  IMAGE           Docker image (default: atlas:v0.6-base)
-                  Docker 镜像 (默认: atlas:v0.6-base)
+  IMAGE           Docker image (default: ${DEFAULT_IMAGE})
+                  Docker 镜像 (默认: ${DEFAULT_IMAGE})
   CONTAINER_NAME  Container name (default: atlas-<timestamp>)
                   容器名称 (默认: atlas-<时间戳>)
-  GPU_DEVICE      GPU device: all, 0, 1, 0,1 (default: all)
-                  GPU 设备 (默认: all)
+  GPU_DEVICE      GPU device: all, 0, 1, 0,1, none (default: all)
+                  GPU 设备 (默认: all；none 表示禁用 GPU)
 
 Examples / 示例:
   $(basename "$0")                          # Use defaults / 使用默认值
-  $(basename "$0") atlas:v0.6-base          # Specific image / 指定镜像
+  $(basename "$0") ${DEFAULT_IMAGE}          # Specific image / 指定镜像
   $(basename "$0") atlas:stable mycontainer # Custom name / 自定义名称
   $(basename "$0") atlas:stable mycontainer 0  # GPU 0 only / 仅 GPU 0
 
@@ -69,15 +74,23 @@ main() {
     fi
 
     # GPU configuration / GPU 配置
-    if [[ ! "$GPU_DEVICE" =~ ^(all|[0-9]+(,[0-9]+)*)$ ]]; then
+    if [[ ! "$GPU_DEVICE" =~ ^(all|none|off|[0-9]+(,[0-9]+)*)$ ]]; then
         print_warn "Invalid GPU format, using 'all' / GPU 格式无效，使用 'all'"
         GPU_DEVICE="all"
     fi
 
-    if [ "$GPU_DEVICE" = "all" ]; then
-        GPU_ARG="--gpus all"
+    GPU_ARGS=()
+    if [[ "${GPU_DEVICE}" == "none" || "${GPU_DEVICE}" == "off" ]]; then
+        GPU_ARGS=()
     else
-        GPU_ARG="--gpus device=${GPU_DEVICE}"
+        if ! command -v nvidia-smi &> /dev/null || ! nvidia-smi &> /dev/null; then
+            print_warn "NVIDIA runtime not detected, running without GPU"
+            GPU_ARGS=()
+        elif [ "${GPU_DEVICE}" = "all" ]; then
+            GPU_ARGS=(--gpus all)
+        else
+            GPU_ARGS=(--gpus "device=${GPU_DEVICE}")
+        fi
     fi
 
     # Run container / 运行容器
@@ -85,7 +98,7 @@ main() {
 
     docker run -it \
         --name "${CONTAINER_NAME}" \
-        "${GPU_ARG}" \
+        "${GPU_ARGS[@]}" \
         -v "${WORK_DIR}:/workspace" \
         -w /workspace \
         --rm \
