@@ -80,7 +80,7 @@ jobs:
           docker rm -f atlas-healthcheck-tier${{ matrix.tier }}
 
       - name: Run security scan / 运行安全扫描
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test
           format: 'sarif'

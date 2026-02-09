@@ -41,40 +41,6 @@ jobs:
         run: |
           pre-commit run --all-files
 
-      - name: Check shell scripts with shellcheck / 使用 shellcheck 检查脚本
-        run: |
-          # Install shellcheck / 安装 shellcheck
-          sudo apt-get update && sudo apt-get install -y shellcheck
-
-          # Check root wrappers / 检查根目录 wrapper
-          for script in *.sh; do
-            if [ -f "$script" ]; then
-              echo "Checking $script with shellcheck..."
-              shellcheck -x "$script"
-              echo "Checking $script syntax..."
-              bash -n "$script"
-            fi
-          done
-
-          # Check actual scripts / 检查实际脚本
-          for script in scripts/*.sh; do
-            if [ -f "$script" ]; then
-              echo "Checking $script with shellcheck..."
-              shellcheck -x "$script"
-              echo "Checking $script syntax..."
-              bash -n "$script"
-            fi
-          done
-
-          echo "✅ All scripts passed checks"
-
-      - name: Check Dockerfile / 检查 Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: Dockerfile
-          failure-threshold: warning
-          config: .hadolint.yaml
-
       - name: Smoke build Dockerfile / 轻量构建校验
         run: |
           docker build --target smoke -t atlas:smoke .
@@ -178,8 +144,8 @@ jobs:
             BUILD_TIER=0
             ENABLE_MATERIALS=0
             VERSION=${{ steps.version.outputs.version }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=release
+          cache-to: type=gha,mode=max,scope=release
           platforms: linux/amd64
 
       - name: Output release summary / 输出发布摘要

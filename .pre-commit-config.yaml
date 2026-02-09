@@ -58,4 +58,4 @@ repos:
     rev: v2.12.0
     hooks:
       - id: hadolint-docker
-        args: ['--failure-threshold', 'warning']
+        args: ['--config', '.hadolint.yaml', '--failure-threshold', 'warning']
