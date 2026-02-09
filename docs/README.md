@@ -5,13 +5,12 @@ This index covers repository-level documentation and routes you to image-specifi
 
 ## Start Here / 从这里开始
 
-Choose the path that matches your goal:
-根据目标选择阅读路径：
+Choose the path that matches your role:
+根据你的角色选择阅读路径：
 
-- **Use the image quickly** / **快速使用镜像**: `README.md`, `docker/atlas/README.md`
-- **Build or customize the image** / **构建或定制镜像**: `docker/atlas/docs/BUILD.md`, `docker/atlas/docs/RUN.md`
-- **Understand CI and tests** / **理解 CI 与测试**: `docker/atlas/docs/TESTS.md`, `docker/atlas/docs/ARCHITECTURE.md`
-- **Contribute or maintain** / **贡献或维护**: `CONTRIBUTING.md`, `CHANGELOG.md`, `SECURITY.md`
+- **User / 使用者**: `docker/atlas/README.md`, `docker/atlas/docs/RUN.md`, `examples/README.md`, `docs/WORKSPACE.md`
+- **Builder/Maintainer / 构建与维护者**: `docker/atlas/docs/BUILD.md`, `docker/atlas/docs/TESTS.md`, `docs/RELEASE.md`, `SECURITY.md`
+- **Contributor / 贡献者**: `CONTRIBUTING.md`, `docs/STYLE_GUIDE.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`
 
 ## Documentation Map / 文档地图
 
