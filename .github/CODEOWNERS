@@ -33,7 +33,7 @@
 /docker/atlas/tests/ @chenzhuyu2004
 
 # Examples / 示例
-/docker/atlas/examples/ @chenzhuyu2004
+/examples/ @chenzhuyu2004
 
 # Security policy / 安全策略
 /SECURITY.md @chenzhuyu2004
@@ -44,6 +44,7 @@
 /.pre-commit-config.yaml @chenzhuyu2004
 /.gitignore @chenzhuyu2004
 /docker/atlas/.dockerignore @chenzhuyu2004
+/docker/README.md @chenzhuyu2004
 
 # Development projects / 开发目录
 /projects/ @chenzhuyu2004

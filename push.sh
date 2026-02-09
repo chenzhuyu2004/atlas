@@ -1,3 +1,14 @@
 #!/usr/bin/env bash
-# Wrapper script for build tree
-exec "$(dirname "$0")/docker/atlas/push.sh" "$@"
+# Wrapper only. All logic lives under docker/atlas/.
+# 本脚本仅作转发，所有逻辑请见 docker/atlas/。
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TARGET="${SCRIPT_DIR}/docker/atlas/push.sh"
+
+if [[ ! -x "${TARGET}" ]]; then
+  echo "Missing push script: ${TARGET}" >&2
+  exit 1
+fi
+
+exec "${TARGET}" "$@"

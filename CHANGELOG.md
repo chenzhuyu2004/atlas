@@ -9,11 +9,11 @@ Before creating a new release, ensure all items are checked:
 ### Pre-release / 发布前
 - [ ] All tests pass locally / 本地所有测试通过
   ```bash
-  ./tests/run_all_tests.sh
+  docker/atlas/tests/run_all_tests.sh
   ```
 - [ ] Update VERSION file / 更新 VERSION 文件
   ```bash
-  echo "0.7" > VERSION
+  echo "0.7" > docker/atlas/VERSION
   ```
 - [ ] Update CHANGELOG.md with new version / 更新 CHANGELOG.md 添加新版本
   - Document all changes / 记录所有变更
@@ -32,9 +32,9 @@ Before creating a new release, ensure all items are checked:
   trivy image atlas:v0.7-base
   ```
 - [ ] Update documentation if needed / 如需要更新文档
-  - [ ] README.md - version badges / 版本徽章
-  - [ ] docs/BUILD.md - build instructions / 构建说明
-  - [ ] docs/RUN.md - runtime examples / 运行示例
+  - [ ] docker/atlas/README.md - version badges / 版本徽章
+  - [ ] docker/atlas/docs/BUILD.md - build instructions / 构建说明
+  - [ ] docker/atlas/docs/RUN.md - runtime examples / 运行示例
 
 ### Release / 发布
 - [ ] Create and push git tag / 创建并推送 git 标签
@@ -63,9 +63,26 @@ Before creating a new release, ensure all items are checked:
 
 ---
 
+## [Unreleased]
+
+Changelog format: Added / Changed / Fixed / Removed.
+变更格式：Added / Changed / Fixed / Removed。
+
+### Added / 新增
+- (none)
+
+### Changed / 变更
+- (none)
+
+### Fixed / 修复
+- (none)
+
+### Removed / 移除
+- (none)
+
 ## [0.6.1] - 2026-02-08
 
-### Fixes / 修复
+### Fixed / 修复
 - HEALTHCHECK now distinguishes CUDA unavailable (exit 1) from import failure (exit 2)
 - 健康检查现在区分 CUDA 不可用 (exit 1) 与 torch 导入失败 (exit 2)
 - `tag.sh` simplified default source tag logic (uses `v$(VERSION)-base`)
@@ -75,7 +92,7 @@ Before creating a new release, ensure all items are checked:
 - `pre-check.sh` uses a `MIN_DOCKER` variable instead of hard-coded values
 - `pre-check.sh` 使用 `MIN_DOCKER` 变量替代硬编码
 
-### Docs / 文档
+### Changed / 文档
 - Added tagging examples and Makefile wrapper usage
 - 增加打标示例与 Makefile 包装用法
 - Materials stack version pinning noted in build guide
@@ -83,7 +100,9 @@ Before creating a new release, ensure all items are checked:
 
 ## [0.6] - 2026-02-08 (Stable / 稳定版)
 
-### Build Tiers Completed / 构建层级完成
+### Added / 新增
+
+Build tiers completed / 构建层级完成:
 | Tag / 标签 | Size / 大小 | PyTorch | CUDA | Status / 状态 |
 |------------|-------------|---------|------|----------------|
 | v0.6-base | 21.7GB | 2.10.0 | 13.0 | Core DS / 核心数据科学 |
@@ -91,19 +110,17 @@ Before creating a new release, ensure all items are checked:
 | v0.6-full | 37.3GB | 2.9.1 | 12.8 | + vLLM/DeepSpeed |
 | v0.6-materials | 23.2GB | 2.10.0 | 13.0 | + 材料科学 |
 
-### Version Notes / 版本说明
+### Changed / 变更
 - v0.6 and v0.6-llm: Latest PyTorch 2.10.0 + CUDA 13.0
 - v0.6 和 v0.6-llm: 最新 PyTorch 2.10.0 + CUDA 13.0
 - v0.6-full: Uses PyTorch 2.9.1 + CUDA 12.8 (vLLM 0.15.1 hard dependency)
 - v0.6-full: 使用 PyTorch 2.9.1 + CUDA 12.8 (vLLM 0.15.1 硬性依赖)
-
-### Removed auto-latest tag / 移除自动 latest 标签
-- Build script no longer auto-tags as 'latest'
-- 构建脚本不再自动打 'latest' 标签
-
-### Version Consolidation / 版本整合
 - Consolidated all image tags into single v0.6 release
 - 将所有镜像标签整合为单一 v0.6 版本
+
+### Removed / 移除
+- Build script no longer auto-tags as 'latest'
+- 构建脚本不再自动打 'latest' 标签
 - Cleaned up old image tags (v0.5-base, stable, latest)
 - 清理旧镜像标签 (v0.5-base, stable, latest)
 

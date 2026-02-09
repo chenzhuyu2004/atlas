@@ -8,6 +8,8 @@ Welcome! We're excited that you're interested in contributing to ATLAS.
 - [Code of Conduct](#code-of-conduct--行为准则)
 - [How Can I Contribute?](#how-can-i-contribute--我能做什么贡献)
 - [Development Setup](#development-setup--开发环境设置)
+- [Branching Model](#branching-model--分支模型)
+- [Testing and CI](#testing-and-ci--测试与ci)
 - [Submitting Changes](#submitting-changes--提交更改)
 - [Style Guidelines](#style-guidelines--代码规范)
 - [Community](#community--社区)
@@ -134,6 +136,21 @@ make lint
 pre-commit run --all-files
 ```
 
+## Branching Model / 分支模型
+
+- `main`: stable, release-ready
+- `feature/*`: new features
+- `fix/*`: bug fixes
+- `docs/*`: documentation changes
+- `release/*`: release preparation (optional)
+
+## Testing and CI / 测试与 CI
+
+- CI runs lint and smoke build on every PR/push
+- Full build and tests are expected to run locally before release
+- Use `docker/atlas/tests/run_all_tests.sh` for full validation
+- Install dev dependencies with `docker/atlas/requirements-dev.txt` if you run linters locally
+
 ## Submitting Changes / 提交更改
 
 ### Pull Request Process / Pull Request 流程
@@ -189,6 +206,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 - [ ] Self-review completed / 完成自我审查
 - [ ] Documentation updated / 文档已更新
 - [ ] Tests added/updated / 测试已添加/更新
+- [ ] Pre-commit run locally / 已在本地运行 pre-commit
 - [ ] CI checks pass / CI 检查通过
 - [ ] No merge conflicts / 无合并冲突
 

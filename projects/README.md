@@ -1,6 +1,7 @@
 # Projects
 
 This directory is for your development projects.
+This code does NOT participate in Docker image builds.
 It is included in CI linting to keep code quality consistent.
 
 Recommended structure:

@@ -1,79 +1,55 @@
 # ATLAS Documentation / 文档中心
 
 Complete documentation for the ATLAS Docker Image project.
-
 ATLAS Docker 镜像项目的完整文档。
 
 ## Table of Contents / 目录
 
-### 🔨 [BUILD.md](BUILD.md) - 构建指南
-**Build Guide / 构建详细说明**
-
-- 完整构建选项和环境变量
-- 三层构建系统详解 (tier 0/1/2)
+### [BUILD.md](BUILD.md) - 构建指南
+- 构建选项与环境变量
+- 构建层级 (tier 0/1/2)
 - 材料科学工具包集成
 - 常见构建问题与故障排除
-- 硬件要求和内存优化
-- 包版本说明和兼容性
 
-**适用场景**: 需要自定义构建、故障排除、了解镜像层级差异
-
----
-
-### 🚀 [RUN.md](RUN.md) - 运行指南
-**Runtime Guide / 容器运行详解**
-
-- Docker 运行参数和 GPU 配置
-- JupyterLab 启动和端口映射
-- 工作目录挂载和权限管理
+### [RUN.md](RUN.md) - 运行指南
+- Docker 运行参数与 GPU 配置
+- JupyterLab 启动与端口映射
+- 工作目录挂载与权限管理
 - 健康检查机制说明
-- 容器管理脚本使用 (run.sh, tag.sh, push.sh)
-- 生产环境部署建议
 
-**适用场景**: 日常使用镜像、配置 GPU、部署应用
-
----
-
-### 🧪 [TESTS.md](TESTS.md) - 测试与 CI
-**Testing & CI/CD / 测试和持续集成**
-
+### [TESTS.md](TESTS.md) - 测试与 CI
 - 本地测试套件使用
 - CI/CD 工作流策略
-- 健康检查和包导入测试
-- 安全扫描 (Trivy)
-- Dependabot 配置
-- 手动触发 nightly 构建
+- 健康检查与包导入测试
+- 安全扫描说明
 
-**适用场景**: 贡献代码、了解测试覆盖、调试 CI 问题
-
----
-
-### ❓ [FAQ.md](FAQ.md) - 常见问题
-**Frequently Asked Questions / 常见问题解答**
-
+### [FAQ.md](FAQ.md) - 常见问题
 - 构建问题（OOM、磁盘空间、vLLM 兼容性）
 - 运行时问题（CUDA 不可用、权限错误）
-- 配置问题（自定义包、CUDA 版本）
 - CI/CD 问题排查
-- 最佳实践建议
 
-**适用场景**: 遇到问题先看这里、快速故障排除
+### [ARCHITECTURE.md](ARCHITECTURE.md) - 架构概览
+- 构建与运行结构
+- CI 流程与权衡
 
----
+### [API.md](API.md) - 接口与配置
+- 脚本接口
+- 环境变量
+- 容器默认行为
 
 ## Other Resources / 其他资源
 
-- 📜 [CHANGELOG.md](../CHANGELOG.md) - 版本历史和变更记录
-- 🤝 [CONTRIBUTING.md](../CONTRIBUTING.md) - 贡献指南和开发规范
-- 🔒 [SECURITY.md](../SECURITY.md) - 安全策略和漏洞报告
-- � [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) - 第三方组件许可声明
-- �💡 [examples/](../examples/) - 示例项目和配置模板
+- [CHANGELOG.md](../../CHANGELOG.md) - 版本历史和变更记录
+- [CONTRIBUTING.md](../../CONTRIBUTING.md) - 贡献指南和开发规范
+- [SECURITY.md](../../SECURITY.md) - 安全策略和漏洞报告
+- [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) - 第三方组件许可声明
+- [examples/](../../examples/) - 示例项目和配置模板
 
 ## Quick Links / 快速链接
 
-- [GitHub Repository](https://github.com/chenzhuyu2004/atlas)
-- [CI/CD Status](https://github.com/chenzhuyu2004/atlas/actions)
-- [Container Registry](https://github.com/chenzhuyu2004/atlas/pkgs/container/atlas)
+- GitHub Repository: https://github.com/chenzhuyu2004/atlas
+- CI/CD Status: https://github.com/chenzhuyu2004/atlas/actions
+- Container Registry: https://github.com/chenzhuyu2004/atlas/pkgs/container/atlas
 
 ## Document Maintenance / 文档维护
 

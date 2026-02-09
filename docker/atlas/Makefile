@@ -40,6 +40,13 @@ help:
 	@echo "  make list       List ATLAS images / 列出 ATLAS 镜像"
 	@echo "  make tag        Tag image (TAG_VERSION=1.0.0, SOURCE=v0.6-base) / 镜像打标"
 	@echo "  make docs-ver   Update doc version tags / 更新文档版本标签"
+	@echo ""
+	@echo "Recommended Workflow / 推荐流程"
+	@echo "================================"
+	@echo "  make lint      Run pre-commit checks / 运行预提交检查"
+	@echo "  make build     Build base image / 构建基础镜像"
+	@echo "  make run       Run container / 运行容器"
+	@echo "  make test      Run Python tests / 运行 Python 测试"
 # 快速代码格式化
 format:
 	@black . || true

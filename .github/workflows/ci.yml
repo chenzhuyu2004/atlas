@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - 'docker/atlas/**'
+      - 'docker/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
       - '.hadolint.yaml'
       - 'mypy.ini'
       - '*.sh'
+      - 'examples/**'
       - 'projects/**'
     tags:
       - 'v*'
@@ -17,11 +19,13 @@ on:
     branches: [main]
     paths:
       - 'docker/atlas/**'
+      - 'docker/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
       - '.hadolint.yaml'
       - 'mypy.ini'
       - '*.sh'
+      - 'examples/**'
       - 'projects/**'
   workflow_dispatch:
 

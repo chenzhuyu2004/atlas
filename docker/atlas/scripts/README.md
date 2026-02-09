@@ -79,6 +79,9 @@ BUILD_TIER=2 ./scripts/build.sh
 
 # Update documentation version tags / 更新文档版本标签
 ./scripts/update-doc-version.sh 0.6 0.7
+
+# Dry run / 仅预览（不修改）
+./scripts/update-doc-version.sh --dry-run 0.6 0.7
 ```
 
 ## Environment Variables / 环境变量
@@ -93,6 +96,17 @@ Scripts respect the following environment variables:
 
 > **Note**: `run.sh` uses positional parameters instead of `IMAGE_TAG` environment variable. Use `./run.sh <image:tag>` to specify image.
 > **注意**：`run.sh` 使用位置参数而非 `IMAGE_TAG` 环境变量。使用 `./run.sh <镜像:标签>` 指定镜像。
+
+## Prerequisites / 前置要求
+
+- Docker 20.10+ with BuildKit enabled
+- Bash 4+ for script compatibility
+- NVIDIA runtime for GPU features (optional)
+
+## Troubleshooting / 故障排除
+
+- `permission denied`: run `chmod +x scripts/*.sh`
+- `docker: command not found`: install Docker and ensure it is on `PATH`
 
 ## See Also / 相关文档
 

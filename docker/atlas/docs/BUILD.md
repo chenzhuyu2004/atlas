@@ -9,15 +9,17 @@
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 # conda 示例
 conda create -n atlas python=3.10
 conda activate atlas
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
 依赖锁定建议：
-- requirements.txt/llm/materials/accel 文件已锁定主要依赖版本，确保可复现性。
+- requirements.txt/llm/materials/accel/dev 文件已锁定主要依赖版本，确保可复现性。
 - 如需进一步锁定所有依赖（含间接依赖），可用 pip-tools 生成 requirements.lock：
 
 ```bash
@@ -133,39 +135,33 @@ If you update materials packages, keep versions pinned and rebuild the image.
 ## File Structure / 文件结构
 
 ```
-atlas/docker/atlas/
-├── Dockerfile              # Build file / 构建文件
-├── VERSION                 # Version number / 版本号
-│
-├── scripts/                # Actual scripts / 实际脚本目录
-│   ├── build.sh            # Build implementation / 构建实现
-│   ├── run.sh              # Run implementation / 运行实现
-│   ├── pre-check.sh        # Pre-check implementation / 预检查实现
-│   ├── tag.sh              # Tag management / 标签管理
-│   ├── push.sh             # Push to registry / 推送到注册表
-│   └── check-updates.sh    # Check package updates / 检查包更新
-│
-├── build.sh                # Wrapper (→ scripts/build.sh)
-├── run.sh                  # Wrapper (→ scripts/run.sh)
-├── pre-check.sh            # Wrapper (→ scripts/pre-check.sh)
-├── tag.sh                  # Wrapper (→ scripts/tag.sh)
-├── push.sh                 # Wrapper (→ scripts/push.sh)
-├── check-updates.sh        # Wrapper (→ scripts/check-updates.sh)
-│
-├── requirements.txt        # Core dependencies / 核心依赖
-├── requirements-llm.txt    # LLM base / LLM 基础
-├── requirements-accel.txt  # LLM acceleration / LLM 加速
-├── requirements-materials.txt # Materials science / 材料科学
-│
-├── README.md               # Main documentation / 主文档
-├── CHANGELOG.md            # Version history / 版本历史
-├── docs/                   # Detailed documentation / 详细文档
-│   ├── README.md           # Documentation index / 文档索引
-│   ├── BUILD.md            # This file / 本文件
-│   ├── RUN.md              # Runtime guide / 运行指南
-│   └── TESTS.md            # Testing guide / 测试指南
-└── tests/                  # Test suite / 测试套件
-    └── test_*.{py,sh}      # Test scripts / 测试脚本
+atlas/
+├── docker/
+│   └── atlas/
+│       ├── Dockerfile              # Build file / 构建文件
+│       ├── VERSION                 # Version number / 版本号
+│       ├── scripts/                # Actual scripts / 实际脚本目录
+│       ├── requirements.txt        # Core dependencies / 核心依赖
+│       ├── requirements-llm.txt    # LLM base / LLM 基础
+│       ├── requirements-accel.txt  # LLM acceleration / LLM 加速
+│       ├── requirements-materials.txt # Materials science / 材料科学
+│       ├── requirements-dev.txt    # Dev/test deps / 开发测试依赖
+│       ├── README.md               # Image README / 镜像说明
+│       ├── docs/                   # Detailed documentation / 详细文档
+│       │   ├── README.md           # Documentation index / 文档索引
+│       │   ├── BUILD.md            # Build guide / 构建指南
+│       │   ├── RUN.md              # Runtime guide / 运行指南
+│       │   ├── TESTS.md            # Testing guide / 测试指南
+│       │   ├── FAQ.md              # FAQ / 常见问题
+│       │   ├── ARCHITECTURE.md     # Architecture / 架构概览
+│       │   └── API.md              # Interfaces / 接口说明
+│       └── tests/                  # Test suite / 测试套件
+├── examples/                       # Usage examples / 使用示例
+├── projects/                       # Local projects / 本地项目
+├── CHANGELOG.md                    # Version history / 版本历史
+├── CONTRIBUTING.md                 # Contribution guide / 贡献指南
+├── SECURITY.md                     # Security policy / 安全策略
+└── README.md                       # Monorepo overview / 主目录说明
 ```
 
 > **Note**: Root directory scripts are wrappers for backward compatibility.

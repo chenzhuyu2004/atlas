@@ -29,7 +29,7 @@ if torch.cuda.is_available():
 
 # Simple CNN Model / 简单 CNN 模型
 class SimpleCNN(nn.Module):
-    def __init__(self):
+    def __init__(self) -> None:
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 32, 3, padding=1)
         self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
@@ -39,7 +39,7 @@ class SimpleCNN(nn.Module):
         self.fc2 = nn.Linear(512, 10)
         self.dropout = nn.Dropout(0.5)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.pool(torch.relu(self.conv1(x)))
         x = self.pool(torch.relu(self.conv2(x)))
         x = self.pool(torch.relu(self.conv3(x)))

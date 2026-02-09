@@ -32,6 +32,13 @@ cd /path/to/atlas/docker/atlas
 BUILD_TIER=1 ./build.sh
 ```
 
+For local linting and unit tests, install dev dependencies:
+本地 lint 和单元测试请安装开发依赖：
+
+```bash
+pip install -r requirements-dev.txt
+```
+
 ### Run All Tests / 运行所有测试
 
 ```bash
@@ -130,7 +137,7 @@ ATLAS 采用**轻量级 CI 策略**，针对大型 Docker 镜像优化：
 
 ### 1. CI Workflow / 持续集成工作流
 
-**File**: `.github/workflows/ci.yml`
+**File**: `../../.github/workflows/ci.yml`
 
 #### Lint Job / 语法检查任务
 
@@ -176,7 +183,7 @@ steps:
 
 ### 2. Nightly Build Workflow / 定时构建工作流
 
-**File**: `.github/workflows/nightly-build.yml` (如已配置)
+**File**: `../../.github/workflows/nightly-build.yml` (如已配置)
 
 每晚定期运行完整构建和测试（需配置）：
 
@@ -409,7 +416,7 @@ gh cache delete <cache-id>
 
 ## See Also / 相关文档
 
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - 贡献指南（包括测试要求）
-- [SECURITY.md](../SECURITY.md) - 安全策略和漏洞报告流程
+- [CONTRIBUTING.md](../../CONTRIBUTING.md) - 贡献指南（包括测试要求）
+- [SECURITY.md](../../SECURITY.md) - 安全策略和漏洞报告流程
 - [tests/README.md](../tests/README.md) - 测试套件详细说明
-- [GitHub Actions Workflows](../.github/workflows/) - 工作流源文件
+- [GitHub Actions Workflows](../../.github/workflows/) - 工作流源文件

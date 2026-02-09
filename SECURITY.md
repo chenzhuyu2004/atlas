@@ -106,6 +106,20 @@ docker run --gpus all \
 - **Pin Dependencies / 固定依赖**: All Python packages are pinned in requirements files
   所有 Python 包在 requirements 文件中已固定版本
 
+## Dependency and Image Scanning / 依赖与镜像扫描
+
+We recommend running vulnerability scans before release:
+建议在发布前运行漏洞扫描：
+
+```bash
+# Container image scan / 容器镜像扫描
+trivy image atlas:v0.6-base
+
+# Python dependency scan (optional) / Python 依赖扫描（可选）
+pip install pip-audit
+pip-audit -r docker/atlas/requirements.txt
+```
+
 ## Known Issues / 已知问题
 
 ### CVEs in Base Image / 基础镜像中的 CVE

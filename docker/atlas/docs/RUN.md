@@ -175,10 +175,10 @@ docker run --gpus all -it --rm \
 
 ### Docker Compose / 使用 Docker Compose
 
-完整示例请参考 [examples/docker-compose/](../examples/docker-compose/)：
+完整示例请参考 [examples/docker-compose/](../../examples/docker-compose/)：
 
 ```bash
-cd examples/docker-compose
+cd ../../examples/docker-compose
 docker-compose up -d
 ```
 
@@ -344,4 +344,4 @@ docker run --gpus all --dns=8.8.8.8 atlas:v0.6-base
 
 - [BUILD.md](BUILD.md) - 构建镜像的详细说明
 - [TESTS.md](TESTS.md) - 测试和 CI/CD 流程
-- [examples/docker-compose/](../examples/docker-compose/) - Docker Compose 配置示例
+- [examples/docker-compose/](../../examples/docker-compose/) - Docker Compose 配置示例
