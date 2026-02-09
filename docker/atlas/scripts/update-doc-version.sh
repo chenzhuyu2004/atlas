@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 OLD_VERSION="${args[0]:-}"
-NEW_VERSION="${args[1]:-$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "")}" 
+NEW_VERSION="${args[1]:-$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || echo "")}"
 
 if [[ -z "${OLD_VERSION}" ]]; then
   usage
