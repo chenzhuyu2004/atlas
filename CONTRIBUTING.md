@@ -305,6 +305,7 @@ pandas==3.0.0
 
 Documentation scope / 文档范围：
 - `docs/README.md` is the repository documentation index / 仓库文档索引
+- `docs/STYLE_GUIDE.md` defines doc structure and quality rules / 文档结构与质量规范
 - `docker/atlas/docs/` contains image-specific guides / 镜像专用指南
 - `examples/README.md` contains usage examples / 使用示例
 
