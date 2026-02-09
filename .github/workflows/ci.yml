@@ -6,6 +6,7 @@ on:
     paths:
       - 'docker/atlas/**'
       - 'docker/**'
+      - 'docs/**'
       - 'tests/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
@@ -22,6 +23,7 @@ on:
     paths:
       - 'docker/atlas/**'
       - 'docker/**'
+      - 'docs/**'
       - 'tests/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
