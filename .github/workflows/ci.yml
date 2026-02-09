@@ -42,11 +42,7 @@ jobs:
 
       - name: Run pre-commit on all files
         run: |
-          if [ "${{ matrix.python-version }}" = "3.12" ]; then
-            SKIP=shellcheck pre-commit run --all-files
-          else
-            pre-commit run --all-files
-          fi
+          pre-commit run --all-files
 
       - name: Smoke build Dockerfile / 轻量构建校验
         run: |
