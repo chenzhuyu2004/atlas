@@ -12,7 +12,19 @@ Choose the path that matches your role:
 - **Builder/Maintainer / 构建与维护者**: [docker/atlas/docs/BUILD.md](../docker/atlas/docs/BUILD.md), [docker/atlas/docs/TESTS.md](../docker/atlas/docs/TESTS.md), [docs/RELEASE.md](RELEASE.md), [SECURITY.md](../SECURITY.md)
 - **Contributor / 贡献者**: [CONTRIBUTING.md](../CONTRIBUTING.md), [docs/STYLE_GUIDE.md](STYLE_GUIDE.md), [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md), [SUPPORT.md](../SUPPORT.md)
 
+Runnable examples: [docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md)
+常用命令示例：[docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md)
+
+Common workflows: [docs/WORKFLOWS.md](WORKFLOWS.md)
+常见流程：[docs/WORKFLOWS.md](WORKFLOWS.md)
+
+Glossary: [docs/GLOSSARY.md](GLOSSARY.md)
+术语表：[docs/GLOSSARY.md](GLOSSARY.md)
+
 ## Role Quick Starts / 角色快速开始
+
+Runnable commands live in [docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md).
+可执行命令示例见 [docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md)。
 
 ### User / 使用者
 
@@ -37,6 +49,9 @@ Choose the path that matches your role:
 | --- | --- | --- |
 | [README.md](../README.md) | All users | Monorepo overview and entry links |
 | [docs/STYLE_GUIDE.md](STYLE_GUIDE.md) | Maintainers | Documentation structure and style |
+| [docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md) | All users | Runnable commands for common roles |
+| [docs/WORKFLOWS.md](WORKFLOWS.md) | All users | Common workflows and release paths |
+| [docs/GLOSSARY.md](GLOSSARY.md) | All users | Glossary of terms |
 | [docs/WORKSPACE.md](WORKSPACE.md) | Users | Local workspace usage and projects directory |
 | [docs/RELEASE.md](RELEASE.md) | Maintainers | Release workflow and CI triggers |
 | [docker/atlas/README.md](../docker/atlas/README.md) | Image users | Docker image features and quick start |
@@ -59,6 +74,9 @@ Choose the path that matches your role:
 atlas/
 ├── README.md
 ├── docs/                         # Repo-level documentation index
+│   ├── GLOSSARY.md
+│   ├── ROLE_QUICKSTARTS.md
+│   ├── WORKFLOWS.md
 ├── docker/
 │   └── atlas/
 │       ├── README.md             # Image quick start

@@ -12,6 +12,7 @@ This guide defines structure, tone, and maintenance rules for ATLAS documentatio
 ## Scope / 范围
 
 - Repo-level docs: [docs/README.md](README.md), [README.md](../README.md), [CONTRIBUTING.md](../CONTRIBUTING.md), [CHANGELOG.md](../CHANGELOG.md)
+- Repo references: [docs/WORKFLOWS.md](WORKFLOWS.md), [docs/ROLE_QUICKSTARTS.md](ROLE_QUICKSTARTS.md), [docs/GLOSSARY.md](GLOSSARY.md)
 - Image docs: [docker/atlas/docs/README.md](../docker/atlas/docs/README.md), [docker/atlas/README.md](../docker/atlas/README.md)
 - Examples: [examples/README.md](../examples/README.md)
 
