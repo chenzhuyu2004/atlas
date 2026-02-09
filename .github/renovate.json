@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate configuration for ATLAS (Optional alternative/supplement to Dependabot)",
+  "extends": [
+    "config:base"
+  ],
+  "enabled": false,
+  "notes": "Disabled by default. Enable if you prefer Renovate over Dependabot",
+  "packageRules": [
+    {
+      "matchDatasources": ["pypi"],
+      "groupName": "PyTorch ecosystem",
+      "matchPackagePatterns": ["^torch"],
+      "schedule": ["before 3am on Monday"]
+    },
+    {
+      "matchDatasources": ["pypi"],
+      "groupName": "Data Science",
+      "matchPackageNames": [
+        "numpy",
+        "pandas",
+        "scipy",
+        "scikit-learn",
+        "matplotlib",
+        "seaborn"
+      ],
+      "schedule": ["before 3am on Monday"]
+    },
+    {
+      "matchDatasources": ["docker"],
+      "enabled": true,
+      "commitMessageTopic": "Docker base image"
+    }
+  ],
+  "separateMinorPatch": true,
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
+  "timezone": "Asia/Shanghai",
+  "schedule": ["before 3am on Monday"]
+}
