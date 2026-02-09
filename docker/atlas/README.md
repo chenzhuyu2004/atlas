@@ -75,6 +75,8 @@ ENABLE_MATERIALS=1 ./build.sh
 
 ## Documentation / 文档
 
+- 📚 [Image Docs Index / 镜像文档索引](docs/README.md)
+- 🧭 [Repo Docs Index / 仓库文档索引](../../docs/README.md)
 - 📖 [构建指南 (Build Guide)](docs/BUILD.md) - 详细构建选项、故障排除、层级说明
 - 🚀 [运行指南 (Run Guide)](docs/RUN.md) - 容器运行、GPU 配置、JupyterLab 使用
 - 🧪 [测试与 CI (Tests & CI)](docs/TESTS.md) - 测试套件使用、CI 策略、健康检查

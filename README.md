@@ -31,7 +31,8 @@ cd docker/atlas
 
 ## Documentation
 
-Start here: `docker/atlas/docs/README.md` (full documentation index).
+Start here: `docs/README.md` (repository documentation index).
+Image docs index: `docker/atlas/docs/README.md`.
 
 Core guides:
 - `docker/atlas/README.md` - Image overview and quick start
@@ -50,6 +51,7 @@ Other references:
 ## Repository Layout
 
 - `docker/atlas/` - Docker image source, scripts, and docs
+- `docs/` - Repository-level documentation index
 - `examples/` - Usage examples (Docker Compose, training demo)
 - `projects/` - Your development projects (no image source code)
 
@@ -57,6 +59,7 @@ Other references:
 
 ```text
 atlas/
+├── docs/                      # Repo-level docs index
 ├── docker/
 │   └── atlas/                 # Image build context
 │       ├── Dockerfile

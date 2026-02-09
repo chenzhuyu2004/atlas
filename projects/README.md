@@ -15,3 +15,7 @@ projects/my-app/
   .gitignore
   src/
 ```
+
+Related docs:
+- `../docs/README.md` (repository documentation index)
+- `../docker/atlas/docs/RUN.md` (runtime guide for mounted workspaces)
