@@ -61,29 +61,41 @@ if [ -n "${CONTAINER_NAME}" ]; then
   # Check if container exists and is running / 检查容器是否存在且运行中
   # Temporarily disable exit on error for container check / 临时禁用错误退出以检查容器
   set +e
-  CONTAINER_EXISTS=$(docker ps --format "{{.Names}}" | grep "^${CONTAINER_NAME}$")
+  CONTAINER_EXISTS=$(docker ps -a --format "{{.Names}}" | grep "^${CONTAINER_NAME}$")
   GREP_EXIT=$?
   set -e
   print_info "Container check exit code: $GREP_EXIT"
 
   if [ -n "${CONTAINER_EXISTS}" ]; then
-    # Wait for healthcheck to initialize / 等待健康检查初始化
-    sleep 5
-    HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "${CONTAINER_NAME}" 2>/dev/null || echo "none")
-    print_info "Container health status: ${HEALTH_STATUS}"
+    CONTAINER_RUNNING=$(docker inspect --format='{{.State.Running}}' "${CONTAINER_NAME}" 2>/dev/null || echo "false")
+    if [ "${CONTAINER_RUNNING}" = "true" ]; then
+      # Wait for healthcheck to initialize / 等待健康检查初始化
+      sleep 5
+      HEALTH_STATUS=$(docker inspect --format='{{.State.Health.Status}}' "${CONTAINER_NAME}" 2>/dev/null || echo "none")
+      print_info "Container health status: ${HEALTH_STATUS}"
 
-    if [ "${HEALTH_STATUS}" = "healthy" ] || [ "${HEALTH_STATUS}" = "starting" ]; then
-      print_info "✓ HEALTHCHECK is functional (status: ${HEALTH_STATUS})"
-      ((TEST_PASSED++))
-    elif [ "${HEALTH_STATUS}" = "none" ]; then
-      print_warn "⚠ No HEALTHCHECK defined in image"
-      ((TEST_PASSED++))
-    elif [ "${HEALTH_STATUS}" = "unhealthy" ]; then
-      print_error "✗ Container is unhealthy"
-      ((TEST_FAILED++))
+      if [ "${HEALTH_STATUS}" = "healthy" ] || [ "${HEALTH_STATUS}" = "starting" ]; then
+        print_info "✓ HEALTHCHECK is functional (status: ${HEALTH_STATUS})"
+        ((TEST_PASSED++))
+      elif [ "${HEALTH_STATUS}" = "none" ]; then
+        print_warn "⚠ No HEALTHCHECK defined in image"
+        ((TEST_PASSED++))
+      elif [ "${HEALTH_STATUS}" = "unhealthy" ]; then
+        print_error "✗ Container is unhealthy"
+        ((TEST_FAILED++))
+      else
+        print_warn "⚠ Unknown health status: ${HEALTH_STATUS}"
+        ((TEST_PASSED++))
+      fi
     else
-      print_warn "⚠ Unknown health status: ${HEALTH_STATUS}"
-      ((TEST_PASSED++))
+      print_warn "Container '${CONTAINER_NAME}' exists but is not running, testing image health command directly"
+      if docker run --rm "${IMAGE_NAME}" python -c "import torch; print(f'PyTorch {torch.__version__}')"; then
+        print_info "✓ Health check command works"
+        ((TEST_PASSED++))
+      else
+        print_error "✗ Health check command failed"
+        ((TEST_FAILED++))
+      fi
     fi
   else
     print_warn "Container '${CONTAINER_NAME}' not found, testing image health command directly"

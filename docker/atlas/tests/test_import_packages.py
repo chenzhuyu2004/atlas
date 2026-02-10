@@ -35,8 +35,11 @@ def test_import(module_name: str, attr: str | None = None) -> bool:
         if attr:
             getattr(module, attr)
         return True
-    except ImportError as e:
+    except (ImportError, AttributeError) as e:
         print_error(f"Failed to import {module_name}: {e}")
+        return False
+    except Exception as e:
+        print_error(f"Unexpected error importing {module_name}: {e}")
         return False
 
 

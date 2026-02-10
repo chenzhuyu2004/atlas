@@ -26,22 +26,7 @@ pip install -r requirements-dev.txt
 
 依赖锁定建议：
 - requirements.txt/llm/materials/accel/dev 文件已锁定主要依赖版本，确保可复现性。
-- 如需进一步锁定所有依赖（含间接依赖），可用 pip-tools 生成 requirements.lock：
-
-```bash
-pip install pip-tools
-pip-compile requirements.txt --output-file requirements.lock
-```
-
-如需生成带 SHA256 哈希的锁定文件（更严格的可复现性）：
-
-```bash
-# Generate hashed lockfiles for all requirements*.txt
-./scripts/generate-hashes.sh
-
-# Output directory (default): docker/atlas/requirements-locks/
-ls requirements-locks/
-```
+- 当前不维护 requirements.lock 或 requirements-locks（哈希锁）文件；如需更严格锁定，可在本地自行生成并维护。
 
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
 
