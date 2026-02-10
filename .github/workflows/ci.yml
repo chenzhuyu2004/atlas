@@ -1,5 +1,9 @@
 name: ATLAS CI/CD
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main]
@@ -45,9 +49,20 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.12']
     steps:
       - uses: actions/checkout@v4
+
+      - name: Detect path changes / 变更路径检测
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docker:
+              - 'docker/**'
+              - '.hadolint.yaml'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/nightly-build.yml'
 
       - name: Set up Python for pre-commit
         uses: actions/setup-python@v5
@@ -56,15 +71,33 @@ jobs:
 
       - name: Run pre-commit on all files
         uses: pre-commit/action@v3.0.1
+        env:
+          SKIP: hadolint-docker,pytest
         with:
           extra_args: --all-files
 
+      - name: Install hadolint / 安装 hadolint
+        if: steps.changes.outputs.docker == 'true'
+        run: |
+          HADOLINT_VERSION=v2.12.0
+          mkdir -p ~/.local/bin
+          curl -sSL \
+            "https://github.com/hadolint/hadolint/releases/download/${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
+            -o ~/.local/bin/hadolint
+          chmod +x ~/.local/bin/hadolint
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Hadolint Dockerfile / Dockerfile 静态检查
+        if: steps.changes.outputs.docker == 'true'
+        run: |
+          hadolint --config .hadolint.yaml --failure-threshold warning docker/atlas/Dockerfile
+
       - name: Set up Docker Buildx
-        if: matrix.python-version == '3.10'
+        if: steps.changes.outputs.docker == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Smoke build Dockerfile / 轻量构建校验
-        if: matrix.python-version == '3.10'
+        if: steps.changes.outputs.docker == 'true'
         uses: docker/build-push-action@v5
         with:
           context: docker/atlas
@@ -76,7 +109,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=smoke
 
       - name: Trivy scan (PR) / Trivy 扫描（PR）
-        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: atlas:smoke
@@ -87,12 +120,12 @@ jobs:
           exit-code: '0'
 
       - name: Fail on high severity findings (PR) / 高危即阻断
-        if: matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         run: |
           python .github/scripts/trivy_gate.py --report trivy-pr.json --fail-on HIGH,CRITICAL
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
-        if: always() && matrix.python-version == '3.10' && github.event_name == 'pull_request'
+        if: always() && steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-pr-report
@@ -100,6 +133,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Validate requirements files / 验证 requirements 文件
+        if: steps.changes.outputs.docker == 'true'
         working-directory: docker/atlas
         run: |
           set -e
@@ -118,6 +152,20 @@ jobs:
           done
           echo "All requirements files validated"
 
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python / 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
       - name: Install test dependencies / 安装测试依赖
         run: |
           python -m pip install --upgrade pip
@@ -126,16 +174,14 @@ jobs:
       - name: Run unit tests / 运行单元测试
         working-directory: docker/atlas
         run: |
-          # 测试脚本逻辑（不需要 Docker 镜像）
+          # 测试脚本语法（不需要 Docker 镜像）
           cd tests
-          # 检查测试脚本语法
           for test in test_*.sh; do
             if [ -f "$test" ]; then
               echo "Checking $test syntax..."
               bash -n "$test"
             fi
           done
-          # 检查 Python 测试文件语法
           if command -v python3 &> /dev/null; then
             for test in test_*.py; do
               if [ -f "$test" ]; then
@@ -153,7 +199,7 @@ jobs:
   # Release build and push / 发布构建和推送（仅在 tag 时）
   release:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: [lint, tests]
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read
