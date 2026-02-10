@@ -82,7 +82,7 @@ fi
 if [[ -n "$TAG_FILTER" ]]; then
     TAGS=("$TAG_FILTER")
 else
-    mapfile -t TAGS < <(docker images atlas --format "{{.Tag}}" | grep "^v${VERSION}")
+    mapfile -t TAGS < <(docker images "${IMAGE_NAME}" --format "{{.Tag}}" | grep "^v${VERSION}")
 fi
 
 if [[ ${#TAGS[@]} -eq 0 ]]; then
