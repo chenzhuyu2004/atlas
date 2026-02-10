@@ -196,7 +196,8 @@ RUN set -e; \
     group_name="${USERNAME}"; \
     if ! getent group "${group_name}" >/dev/null; then \
       if getent group "${USER_GID}" >/dev/null; then \
-        group_name="$(getent group "${USER_GID}" | cut -d: -f1)"; \
+        group_entry="$(getent group "${USER_GID}")"; \
+        group_name="${group_entry%%:*}"; \
       else \
         groupadd --gid "${USER_GID}" "${group_name}"; \
       fi; \
