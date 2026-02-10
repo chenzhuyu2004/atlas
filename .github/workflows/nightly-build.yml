@@ -89,13 +89,13 @@ jobs:
           fi
           echo "Tier ${tier} size: ${size_mb} MB (max ${max_mb} MB)"
           python - <<'PY'
-import os
-size = float(os.environ["SIZE_MB"])
-max_size = float(os.environ["MAX_MB"])
-if size > max_size:
-    raise SystemExit(f"Image size {size} MB exceeds budget {max_size} MB")
-print("Image size within budget")
-PY
+          import os
+          size = float(os.environ["SIZE_MB"])
+          max_size = float(os.environ["MAX_MB"])
+          if size > max_size:
+              raise SystemExit(f"Image size {size} MB exceeds budget {max_size} MB")
+          print("Image size within budget")
+          PY
         env:
           SIZE_MB: ${{ steps.image_size.outputs.size_mb }}
           MAX_MB: ${{ matrix.tier == 0 && env.MAX_IMAGE_SIZE_MB_TIER0 || env.MAX_IMAGE_SIZE_MB_TIER1 }}
