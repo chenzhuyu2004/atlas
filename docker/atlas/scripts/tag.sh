@@ -59,7 +59,7 @@ CURRENT_VERSION="$(tr -d '[:space:]' < "${PROJECT_ROOT}/VERSION" 2>/dev/null || 
 tag_image() {
     local version=$1
     local source_tag=${2:-"v${CURRENT_VERSION}-base"}  # Optional source tag / 可选的源标签
-    local image_name="atlas"
+    local image_name="${IMAGE_NAME:-atlas}"
 
     if [[ ! $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         print_error "Invalid version format. Use X.Y.Z (e.g., 1.0.0)"

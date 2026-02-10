@@ -192,17 +192,24 @@ RUN apt-get purge -y build-essential gfortran cmake ninja-build && \
 # ==============================================================================
 # Non-root runtime user / 非 root 运行用户
 # ==============================================================================
-RUN if ! getent group "${USERNAME}" >/dev/null; then \
-      groupadd --gid "${USER_GID}" "${USERNAME}"; \
-    fi && \
+RUN set -e; \
+    group_name="${USERNAME}"; \
+    if ! getent group "${group_name}" >/dev/null; then \
+      if getent group "${USER_GID}" >/dev/null; then \
+        group_entry="$(getent group "${USER_GID}")"; \
+        group_name="${group_entry%%:*}"; \
+      else \
+        groupadd --gid "${USER_GID}" "${group_name}"; \
+      fi; \
+    fi; \
     if ! getent passwd "${USERNAME}" >/dev/null; then \
-      useradd --uid "${USER_UID}" --gid "${USER_GID}" --create-home --shell /bin/bash "${USERNAME}"; \
-    fi && \
+      useradd --uid "${USER_UID}" --gid "${group_name}" --create-home --shell /bin/bash "${USERNAME}"; \
+    fi; \
     if getent group video >/dev/null; then \
       usermod -aG video "${USERNAME}"; \
-    fi && \
+    fi; \
     mkdir -p /workspace /app && \
-    chown -R "${USERNAME}:${USER_GID}" /workspace /app
+    chown -R "${USERNAME}:${group_name}" /workspace /app
 
 ENV HOME=/home/${USERNAME}
 USER ${USERNAME}

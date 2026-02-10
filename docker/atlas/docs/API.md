@@ -30,6 +30,11 @@ Build-time:
 - `ENABLE_MATERIALS`: 0 or 1 (default: 0)
 - `NO_CACHE`: 1 to disable build cache
 - `VERSION`: used for tagging and labels
+- `BASE_IMAGE`: base image for full build stage
+- `SMOKE_BASE_IMAGE`: base image for smoke stage
+- `USERNAME`: non-root runtime user name
+- `USER_UID`: non-root runtime UID
+- `USER_GID`: non-root runtime GID
 
 Runtime:
 运行阶段：

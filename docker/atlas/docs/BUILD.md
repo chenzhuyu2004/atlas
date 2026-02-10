@@ -61,6 +61,31 @@ Each requirements file has a specific scope. Use the matching file for your buil
 CI validates all `requirements*.txt` files for syntax, but image builds install only the files required for the selected tier.
 CI 会检查所有 `requirements*.txt` 的语法，但镜像只会按层级安装所需文件。
 
+## Build Arguments / 构建参数
+
+These build args customize the base image and runtime user:
+以下构建参数可用于自定义基础镜像与运行用户：
+
+| Arg / 参数 | Default | Purpose / 作用 |
+| --- | --- | --- |
+| `BASE_IMAGE` | `pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel` | Base image for full build stage |
+| `SMOKE_BASE_IMAGE` | `python:3.10-slim` | Lightweight base for CI smoke stage |
+| `USERNAME` | `atlas` | Non-root runtime user name |
+| `USER_UID` | `1000` | Non-root runtime UID |
+| `USER_GID` | `1000` | Non-root runtime GID |
+
+Example:
+
+```bash
+docker build \
+  --build-arg BASE_IMAGE=pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel \
+  --build-arg SMOKE_BASE_IMAGE=python:3.10-slim \
+  --build-arg USERNAME=atlas \
+  --build-arg USER_UID=1000 \
+  --build-arg USER_GID=1000 \
+  -t atlas:v0.6-base .
+```
+
 ## Build Tiers / 构建层级
 
 | BUILD_TIER | Tag / 标签 | Content / 内容 | Size / 大小 | Time / 时间 |

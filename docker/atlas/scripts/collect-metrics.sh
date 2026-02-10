@@ -30,8 +30,8 @@ if docker image inspect "${IMAGE_NAME}" >/dev/null 2>&1; then
     "  ID={{.Id}}\n  Size={{.Size}} bytes\n  Created={{.Created}}\n  Labels={{json .Config.Labels}}"
 else
   print_warn "Image not found: ${IMAGE_NAME}"
-  print_info "Available atlas images:"
-  docker images atlas --format "  {{.Repository}}:{{.Tag}}\t{{.Size}}" || true
+  print_info "Available images:"
+  docker images "${IMAGE_NAME}" --format "  {{.Repository}}:{{.Tag}}\t{{.Size}}" || true
 fi
 
 echo ""

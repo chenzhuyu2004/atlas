@@ -5,7 +5,8 @@
 
 # Read version from VERSION file / 从 VERSION 文件读取版本号
 VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
-IMAGE_BASE := atlas:v$(VERSION)-base
+IMAGE_NAME ?= atlas
+IMAGE_BASE := $(IMAGE_NAME):v$(VERSION)-base
 
 .PHONY: help build base llm full materials clean prune run jupyter check push updates hashes metrics lint tag format test typecheck sec lint-fast clean-all
 
@@ -119,7 +120,7 @@ check:
 	@./pre-check.sh
 
 list:
-	@docker images atlas --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+	@docker images $(IMAGE_NAME) --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 
 clean:
 	@docker builder prune -f
