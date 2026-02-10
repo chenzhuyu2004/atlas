@@ -54,7 +54,7 @@ help:
 format:
 	@black . || true
 	@isort . || true
-	@shfmt -i 2 -ci -w scripts/*.sh || true
+	@command -v shfmt >/dev/null 2>&1 && shfmt -i 2 -ci -w scripts/*.sh || echo "Install shfmt to format shell scripts"
 
 # Python 测试
 test:

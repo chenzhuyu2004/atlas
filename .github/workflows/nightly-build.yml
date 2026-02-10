@@ -6,6 +6,10 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:  # 允许手动触发 / Allow manual trigger
 
+concurrency:
+  group: nightly-build-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   IMAGE_NAME: atlas
   REGISTRY: ghcr.io
@@ -14,13 +18,34 @@ env:
   MAX_IMAGE_SIZE_MB_TIER1: "35000"
 
 jobs:
-  build-and-test:
+  smoke-validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Smoke validate requirements / 轻量校验依赖
+        uses: docker/build-push-action@v5
+        with:
+          context: docker/atlas
+          file: docker/atlas/Dockerfile
+          target: smoke
+
+  build-and-test:
+    needs: smoke-validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     permissions:
       contents: read
       packages: write
       security-events: write  # For Trivy results upload
     strategy:
+      fail-fast: false
       matrix:
         tier: [0, 1]  # 只构建 tier 0 和 1，tier 2 有 vLLM 兼容性问题
 
@@ -36,6 +61,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /opt/hostedtoolcache/CodeQL
           sudo docker image prune --all --force
+          sudo docker builder prune --all --force || true
           echo "After cleanup:"
           df -h
 
@@ -72,7 +98,7 @@ jobs:
         run: |
           image="${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test"
           size_bytes=$(docker image inspect "$image" --format '{{.Size}}')
-          size_mb=$(python -c "print(round(int('$size_bytes') / (1024 * 1024), 2))")
+          size_mb=$(python3 -c "print(round(int('$size_bytes') / (1024 * 1024), 2))")
           echo "$image size: ${size_mb} MB" | tee "image-size-tier${{ matrix.tier }}.txt"
           echo "size_mb=${size_mb}" >> "$GITHUB_OUTPUT"
           echo "### Image size (tier ${{ matrix.tier }})" >> "$GITHUB_STEP_SUMMARY"
@@ -82,20 +108,8 @@ jobs:
         run: |
           tier="${{ matrix.tier }}"
           size_mb="${{ steps.image_size.outputs.size_mb }}"
-          if [ "$tier" = "0" ]; then
-            max_mb="${MAX_IMAGE_SIZE_MB_TIER0}"
-          else
-            max_mb="${MAX_IMAGE_SIZE_MB_TIER1}"
-          fi
-          echo "Tier ${tier} size: ${size_mb} MB (max ${max_mb} MB)"
-          python - <<'PY'
-          import os
-          size = float(os.environ["SIZE_MB"])
-          max_size = float(os.environ["MAX_MB"])
-          if size > max_size:
-              raise SystemExit(f"Image size {size} MB exceeds budget {max_size} MB")
-          print("Image size within budget")
-          PY
+          echo "Tier ${tier} size: ${size_mb} MB (max ${MAX_MB} MB)"
+          python3 -c "import os; size = float(os.environ['SIZE_MB']); max_size = float(os.environ['MAX_MB']);\nif size > max_size: raise SystemExit(f'Image size {size} MB exceeds budget {max_size} MB'); print('Image size within budget')"
         env:
           SIZE_MB: ${{ steps.image_size.outputs.size_mb }}
           MAX_MB: ${{ matrix.tier == 0 && env.MAX_IMAGE_SIZE_MB_TIER0 || env.MAX_IMAGE_SIZE_MB_TIER1 }}
