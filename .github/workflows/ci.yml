@@ -47,6 +47,9 @@ jobs:
   # Fast checks for every PR/push / 快速检查（每次 PR/push）
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
     strategy:
       matrix:
         python-version: ['3.12']
@@ -119,17 +122,36 @@ jobs:
           ignore-unfixed: true
           exit-code: '0'
 
+      - name: Trivy scan (PR, SARIF) / Trivy 扫描（PR, SARIF）
+        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: atlas:smoke
+          format: 'sarif'
+          output: trivy-pr.sarif
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
+
       - name: Fail on high severity findings (PR) / 高危即阻断
         if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         run: |
           python .github/scripts/trivy_gate.py --report trivy-pr.json --fail-on HIGH,CRITICAL
+
+      - name: Upload Trivy SARIF (PR) / 上传 Trivy SARIF（PR）
+        if: always() && steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-pr.sarif
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
         if: always() && steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-pr-report
-          path: trivy-pr.json
+          path: |
+            trivy-pr.json
+            trivy-pr.sarif
           if-no-files-found: warn
 
       - name: Validate requirements files / 验证 requirements 文件

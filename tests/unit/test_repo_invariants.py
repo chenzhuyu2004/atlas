@@ -23,6 +23,17 @@ def test_requirements_not_empty() -> None:
         assert content, f"{req.name} is empty"
 
 
+def test_requirements_lockfiles_exist() -> None:
+    req_dir = ROOT / "docker" / "atlas"
+    req_files = sorted(req_dir.glob("requirements*.txt"))
+    missing: list[str] = []
+    for req in req_files:
+        lock = req.with_suffix(".lock")
+        if not lock.exists():
+            missing.append(lock.name)
+    assert not missing, "Missing lockfiles: " + ", ".join(missing)
+
+
 def test_docs_index_exists() -> None:
     repo_docs_index = ROOT / "docs" / "README.md"
     image_docs_index = ROOT / "docker" / "atlas" / "docs" / "README.md"

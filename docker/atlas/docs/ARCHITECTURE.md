@@ -46,6 +46,7 @@ Key build inputs:
 - `BUILD_TIER`: tier selection (0/1/2)
 - `ENABLE_MATERIALS`: materials stack toggle
 - `SMOKE_BASE_IMAGE`: lightweight base for CI smoke stage
+- `USE_HASHED_REQUIREMENTS`: install `requirements*.lock` when available
 
 ## Runtime Architecture / 运行结构
 

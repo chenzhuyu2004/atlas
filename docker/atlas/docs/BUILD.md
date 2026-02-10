@@ -26,11 +26,12 @@ pip install -r requirements-dev.txt
 
 依赖锁定建议：
 - requirements.txt/llm/materials/accel/dev 文件已锁定主要依赖版本，确保可复现性。
-- 如需进一步锁定所有依赖（含间接依赖），可用 pip-tools 生成 requirements.lock：
+- 如需进一步锁定所有依赖（含间接依赖），可用 pip-tools 生成 `.lock` 文件：
 
 ```bash
 pip install pip-tools
-pip-compile requirements.txt --output-file requirements.lock
+pip-compile --generate-hashes --allow-unsafe \
+  requirements.txt --output-file requirements.lock
 ```
 
 如需生成带 SHA256 哈希的锁定文件（更严格的可复现性）：
@@ -39,8 +40,11 @@ pip-compile requirements.txt --output-file requirements.lock
 # Generate hashed lockfiles for all requirements*.txt
 ./scripts/generate-hashes.sh
 
-# Output directory (default): docker/atlas/requirements-locks/
-ls requirements-locks/
+# Output directory (default): docker/atlas/
+ls requirements*.lock
+
+> **Tip**: Hash-locked files are Python-version specific. If your base image
+> uses a different Python version, regenerate the locks in a matching venv.
 ```
 
 如需升级依赖，建议先在本地虚拟环境中测试，确认无冲突后再更新 requirements 文件。
@@ -73,6 +77,7 @@ These build args customize the base image and runtime user:
 | `USERNAME` | `atlas` | Non-root runtime user name |
 | `USER_UID` | `1000` | Non-root runtime UID |
 | `USER_GID` | `1000` | Non-root runtime GID |
+| `USE_HASHED_REQUIREMENTS` | `0` | Use `requirements*.lock` with `--require-hashes` (set `1` to enable) |
 
 Example:
 

@@ -9,6 +9,9 @@ on:
 env:
   IMAGE_NAME: atlas
   REGISTRY: ghcr.io
+  # Image size budget (MB) / 镜像大小阈值（MB）
+  MAX_IMAGE_SIZE_MB_TIER0: "30000"
+  MAX_IMAGE_SIZE_MB_TIER1: "35000"
 
 jobs:
   build-and-test:
@@ -65,13 +68,37 @@ jobs:
           cache-to: type=gha,mode=max,scope=tier${{ matrix.tier }}
 
       - name: Record image size / 记录镜像大小
+        id: image_size
         run: |
           image="${{ env.IMAGE_NAME }}:tier${{ matrix.tier }}-test"
           size_bytes=$(docker image inspect "$image" --format '{{.Size}}')
           size_mb=$(python -c "print(round(int('$size_bytes') / (1024 * 1024), 2))")
           echo "$image size: ${size_mb} MB" | tee "image-size-tier${{ matrix.tier }}.txt"
+          echo "size_mb=${size_mb}" >> "$GITHUB_OUTPUT"
           echo "### Image size (tier ${{ matrix.tier }})" >> "$GITHUB_STEP_SUMMARY"
           echo "- ${size_mb} MB" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Enforce image size budget / 检查镜像大小阈值
+        run: |
+          tier="${{ matrix.tier }}"
+          size_mb="${{ steps.image_size.outputs.size_mb }}"
+          if [ "$tier" = "0" ]; then
+            max_mb="${MAX_IMAGE_SIZE_MB_TIER0}"
+          else
+            max_mb="${MAX_IMAGE_SIZE_MB_TIER1}"
+          fi
+          echo "Tier ${tier} size: ${size_mb} MB (max ${max_mb} MB)"
+          python - <<'PY'
+import os
+size = float(os.environ["SIZE_MB"])
+max_size = float(os.environ["MAX_MB"])
+if size > max_size:
+    raise SystemExit(f"Image size {size} MB exceeds budget {max_size} MB")
+print("Image size within budget")
+PY
+        env:
+          SIZE_MB: ${{ steps.image_size.outputs.size_mb }}
+          MAX_MB: ${{ matrix.tier == 0 && env.MAX_IMAGE_SIZE_MB_TIER0 || env.MAX_IMAGE_SIZE_MB_TIER1 }}
 
       - name: Test package imports / 测试包导入
         run: |
