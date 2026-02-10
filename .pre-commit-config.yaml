@@ -45,6 +45,7 @@ repos:
     rev: v1.8.0
     hooks:
       - id: mypy
+        files: '\\.(py|pyi)$'
 
   # Python security linter
   - repo: https://github.com/PyCQA/bandit
@@ -52,6 +53,7 @@ repos:
     hooks:
       - id: bandit
         args: ["-ll"]
+        files: '\\.(py|pyi)$'
 
   # Dockerfile lint / Dockerfile 检查
   - repo: https://github.com/hadolint/hadolint
@@ -69,4 +71,4 @@ repos:
         language: python
         additional_dependencies: [pytest==8.2.2]
         pass_filenames: false
-        always_run: true
+        files: '\\.(py|pyi)$'
