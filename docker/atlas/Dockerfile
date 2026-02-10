@@ -97,7 +97,6 @@ ENV PYTHONUNBUFFERED=1 \
 # Build arguments / 构建参数
 ARG BUILD_TIER=0
 ARG ENABLE_MATERIALS=0
-ARG USE_HASHED_REQUIREMENTS=0
 
 # ==============================================================================
 # System Dependencies / 系统依赖 (Minimal)
@@ -119,27 +118,19 @@ RUN pip install --upgrade pip setuptools wheel
 # Layer 0: Core Data Science Stack / 核心数据科学栈
 # Packages: numpy, pandas, scipy, scikit-learn, matplotlib, jupyterlab, etc.
 # ==============================================================================
-COPY requirements.txt requirements.lock ./
+COPY requirements.txt ./
 RUN echo "=== Installing Core DS Stack / 安装核心数据科学栈 ===" && \
-    if [ "${USE_HASHED_REQUIREMENTS}" = "1" ] && [ -f requirements.lock ]; then \
-      pip install --no-cache-dir --require-hashes -r requirements.lock; \
-    else \
-      pip install --no-cache-dir -r requirements.txt; \
-    fi && \
+    pip install --no-cache-dir -r requirements.txt && \
     echo "✓ Core stack installed / 核心栈安装完成"
 
 # ==============================================================================
 # Layer 1: LLM Base Stack / LLM 基础栈 (BUILD_TIER >= 1)
 # Packages: transformers, accelerate, datasets, peft, bitsandbytes
 # ==============================================================================
-COPY requirements-llm.txt requirements-llm.lock ./
+COPY requirements-llm.txt ./
 RUN if [ "${BUILD_TIER}" -ge "1" ]; then \
       echo "=== Installing LLM Stack / 安装 LLM 栈 ===" && \
-      if [ "${USE_HASHED_REQUIREMENTS}" = "1" ] && [ -f requirements-llm.lock ]; then \
-        pip install --no-cache-dir --require-hashes -r requirements-llm.lock; \
-      else \
-        pip install --no-cache-dir -r requirements-llm.txt; \
-      fi && \
+      pip install --no-cache-dir -r requirements-llm.txt && \
       echo "✓ LLM stack installed / LLM 栈安装完成"; \
     else \
       echo "Skipping LLM stack / 跳过 LLM 栈 (BUILD_TIER=${BUILD_TIER})"; \
@@ -149,14 +140,10 @@ RUN if [ "${BUILD_TIER}" -ge "1" ]; then \
 # Layer 2: LLM Acceleration Stack / LLM 加速栈 (BUILD_TIER >= 2)
 # Packages: vLLM, DeepSpeed (precompiled wheels)
 # ==============================================================================
-COPY requirements-accel.txt requirements-accel.lock ./
+COPY requirements-accel.txt ./
 RUN if [ "${BUILD_TIER}" -ge "2" ]; then \
       echo "=== Installing LLM Accel Stack / 安装 LLM 加速栈 ===" && \
-      if [ "${USE_HASHED_REQUIREMENTS}" = "1" ] && [ -f requirements-accel.lock ]; then \
-        pip install --no-cache-dir --require-hashes -r requirements-accel.lock; \
-      else \
-        pip install --no-cache-dir -r requirements-accel.txt; \
-      fi && \
+      pip install --no-cache-dir -r requirements-accel.txt && \
       echo "✓ LLM accel stack installed / LLM 加速栈安装完成"; \
     else \
       echo "Skipping LLM accel / 跳过 LLM 加速 (BUILD_TIER=${BUILD_TIER})"; \
@@ -166,14 +153,10 @@ RUN if [ "${BUILD_TIER}" -ge "2" ]; then \
 # Layer 3: Materials Science Stack / 材料科学栈 (ENABLE_MATERIALS=1)
 # Packages: ase, pymatgen, spglib, mendeleev, mp-api
 # ==============================================================================
-COPY requirements-materials.txt requirements-materials.lock ./
+COPY requirements-materials.txt ./
 RUN if [ "${ENABLE_MATERIALS}" = "1" ]; then \
       echo "=== Installing Materials Stack / 安装材料科学栈 ===" && \
-      if [ "${USE_HASHED_REQUIREMENTS}" = "1" ] && [ -f requirements-materials.lock ]; then \
-        pip install --no-cache-dir --require-hashes -r requirements-materials.lock; \
-      else \
-        pip install --no-cache-dir -r requirements-materials.txt; \
-      fi && \
+      pip install --no-cache-dir -r requirements-materials.txt && \
       echo "✓ Materials stack installed / 材料科学栈安装完成"; \
     else \
       echo "Skipping materials / 跳过材料科学 (ENABLE_MATERIALS=0)"; \

@@ -15,7 +15,7 @@ pymatgen==2025.1.24
 spglib==2.6.0
 
 # Periodic Table / 元素周期表
-mendeleev==1.1.0
+mendeleev==1.2.0
 
 # Materials Project API / 材料项目 API
 mp-api==0.45.2
@@ -25,17 +25,17 @@ phonopy==2.32.0
 
 # ===== Feature Engineering / 特征工程 =====
 # Materials descriptors for ML / ML材料描述符
-matminer==0.10.0
+matminer==0.9.2
 dscribe==2.1.1
 
 # ===== ML Interatomic Potentials / 机器学习原子势 =====
 # MACE: Multi-ACE equivariant model
-mace-torch==0.3.14
+mace-torch==0.3.8
 # CHGNet: Universal neural network potential
-chgnet==0.4.2
+chgnet==0.4.1
 
 # ===== Databases / 数据库 =====
-jarvis-tools==2025.8.30
+jarvis-tools==2025.1.20
 
 # ===== Visualization / 可视化 =====
 nglview==3.1.2
@@ -44,4 +44,4 @@ nglview==3.1.2
 # Saddle point optimization / 鞍点优化
 sella==2.3.4
 # Diffusion analysis (NEB, migration barriers) / 扩散分析 (NEB, 迁移能垒)
-pymatgen-analysis-diffusion==2025.11.15
+pymatgen-analysis-diffusion==2024.12.4

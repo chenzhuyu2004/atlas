@@ -35,7 +35,6 @@ Build-time:
 - `USERNAME`: non-root runtime user name
 - `USER_UID`: non-root runtime UID
 - `USER_GID`: non-root runtime GID
-- `USE_HASHED_REQUIREMENTS`: use `requirements*.lock` with `--require-hashes` (default: 1)
 
 Runtime:
 运行阶段：

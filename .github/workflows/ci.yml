@@ -8,15 +8,20 @@ on:
   push:
     branches: [main]
     paths:
-      - 'docker/atlas/**'
-      - 'docker/**'
-      - 'docs/**'
+      - 'docker/atlas/Dockerfile'
+      - 'docker/atlas/.dockerignore'
+      - 'docker/atlas/.env.example'
+      - 'docker/atlas/Makefile'
+      - 'docker/atlas/VERSION'
+      - 'docker/atlas/*.sh'
+      - 'docker/atlas/requirements*.txt'
+      - 'docker/atlas/scripts/**'
+      - 'docker/atlas/tests/**'
       - 'tests/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
       - '.hadolint.yaml'
       - 'mypy.ini'
-      - '*.md'
       - '*.sh'
       - 'examples/**'
       - 'projects/**'
@@ -25,15 +30,20 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'docker/atlas/**'
-      - 'docker/**'
-      - 'docs/**'
+      - 'docker/atlas/Dockerfile'
+      - 'docker/atlas/.dockerignore'
+      - 'docker/atlas/.env.example'
+      - 'docker/atlas/Makefile'
+      - 'docker/atlas/VERSION'
+      - 'docker/atlas/*.sh'
+      - 'docker/atlas/requirements*.txt'
+      - 'docker/atlas/scripts/**'
+      - 'docker/atlas/tests/**'
       - 'tests/**'
       - '.github/workflows/**'
       - '.pre-commit-config.yaml'
       - '.hadolint.yaml'
       - 'mypy.ini'
-      - '*.md'
       - '*.sh'
       - 'examples/**'
       - 'projects/**'
@@ -44,8 +54,58 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      docker: ${{ steps.filter.outputs.docker }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect path changes / 变更路径检测
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            code:
+              - 'docker/atlas/Dockerfile'
+              - 'docker/atlas/requirements*.txt'
+              - 'docker/atlas/scripts/**'
+              - 'docker/atlas/tests/**'
+              - 'docker/atlas/VERSION'
+              - 'tests/**'
+              - '.github/workflows/**'
+              - '.pre-commit-config.yaml'
+              - '.hadolint.yaml'
+              - 'mypy.ini'
+              - '*.sh'
+            docker:
+              - 'docker/atlas/Dockerfile'
+              - 'docker/atlas/requirements*.txt'
+              - 'docker/atlas/scripts/**'
+              - 'docker/atlas/tests/**'
+              - 'docker/atlas/VERSION'
+              - '.hadolint.yaml'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/nightly-build.yml'
+
+      - name: Summary / 变更摘要
+        run: |
+          echo "## CI change detection" >> "$GITHUB_STEP_SUMMARY"
+          echo "- code changes: \`${{ steps.filter.outputs.code }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- docker changes: \`${{ steps.filter.outputs.docker }}\`" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.filter.outputs.code }}" != "true" ]; then
+            echo "- tests: skipped (no code changes)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- tests: will run" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   # Fast checks for every PR/push / 快速检查（每次 PR/push）
   lint:
+    needs: [changes]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -55,32 +115,39 @@ jobs:
         python-version: ['3.12']
     steps:
       - uses: actions/checkout@v4
-
-      - name: Detect path changes / 变更路径检测
-        id: changes
-        uses: dorny/paths-filter@v3
         with:
-          filters: |
-            docker:
-              - 'docker/**'
-              - '.hadolint.yaml'
-              - '.github/workflows/ci.yml'
-              - '.github/workflows/nightly-build.yml'
+          fetch-depth: 0
 
       - name: Set up Python for pre-commit
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Run pre-commit on all files
+      - name: Compute pre-commit args
+        id: precommit_args
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "args=--from-ref ${{ github.event.pull_request.base.sha }} --to-ref ${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          BEFORE="${{ github.event.before }}"
+          SHA="${{ github.sha }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "args=--all-files" >> "$GITHUB_OUTPUT"
+          else
+            echo "args=--from-ref $BEFORE --to-ref $SHA" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
         env:
           SKIP: hadolint-docker,pytest
         with:
-          extra_args: --all-files
+          extra_args: ${{ steps.precommit_args.outputs.args }}
 
       - name: Install hadolint / 安装 hadolint
-        if: steps.changes.outputs.docker == 'true'
+        if: needs.changes.outputs.docker == 'true'
         run: |
           HADOLINT_VERSION=v2.12.0
           mkdir -p ~/.local/bin
@@ -91,16 +158,16 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Hadolint Dockerfile / Dockerfile 静态检查
-        if: steps.changes.outputs.docker == 'true'
+        if: needs.changes.outputs.docker == 'true'
         run: |
           hadolint --config .hadolint.yaml --failure-threshold warning docker/atlas/Dockerfile
 
       - name: Set up Docker Buildx
-        if: steps.changes.outputs.docker == 'true'
+        if: needs.changes.outputs.docker == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Smoke build Dockerfile / 轻量构建校验
-        if: steps.changes.outputs.docker == 'true'
+        if: needs.changes.outputs.docker == 'true'
         uses: docker/build-push-action@v5
         with:
           context: docker/atlas
@@ -112,7 +179,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=smoke
 
       - name: Trivy scan (PR) / Trivy 扫描（PR）
-        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        if: needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: atlas:smoke
@@ -123,7 +190,7 @@ jobs:
           exit-code: '0'
 
       - name: Trivy scan (PR, SARIF) / Trivy 扫描（PR, SARIF）
-        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        if: needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: atlas:smoke
@@ -134,18 +201,18 @@ jobs:
           exit-code: '0'
 
       - name: Fail on high severity findings (PR) / 高危即阻断
-        if: steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        if: needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         run: |
           python .github/scripts/trivy_gate.py --report trivy-pr.json --fail-on HIGH,CRITICAL
 
       - name: Upload Trivy SARIF (PR) / 上传 Trivy SARIF（PR）
-        if: always() && steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        if: always() && needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-pr.sarif
 
       - name: Upload Trivy report (PR) / 上传 Trivy 报告（PR）
-        if: always() && steps.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
+        if: always() && needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-pr-report
@@ -155,7 +222,7 @@ jobs:
           if-no-files-found: warn
 
       - name: Validate requirements files / 验证 requirements 文件
-        if: steps.changes.outputs.docker == 'true'
+        if: needs.changes.outputs.docker == 'true'
         working-directory: docker/atlas
         run: |
           set -e
@@ -175,7 +242,9 @@ jobs:
           echo "All requirements files validated"
 
   tests:
+    needs: [changes]
     runs-on: ubuntu-latest
+    if: needs.changes.outputs.code == 'true' || startsWith(github.ref, 'refs/tags/v')
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']

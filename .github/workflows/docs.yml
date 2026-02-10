@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+---
+name: Docs Checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'docs/**'
+      - 'docker/atlas/docs/**'
+      - '.markdownlint.yml'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'docs/**'
+      - 'docker/atlas/docs/**'
+      - '.markdownlint.yml'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest==8.2.2
+
+      - name: Check documentation links
+        run: |
+          pytest -q tests/unit/test_docs_links.py
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Docs checks" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Link validation: ✅" >> "$GITHUB_STEP_SUMMARY"

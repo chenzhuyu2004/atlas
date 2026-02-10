@@ -28,7 +28,6 @@ DOCKERFILE="${PROJECT_ROOT}/Dockerfile"
 IMAGE_NAME="${IMAGE_NAME:-atlas}"
 BUILD_TIER="${BUILD_TIER:-0}"
 ENABLE_MATERIALS="${ENABLE_MATERIALS:-0}"
-USE_HASHED_REQUIREMENTS="${USE_HASHED_REQUIREMENTS:-0}"
 
 # 使用说明
 usage() {
@@ -65,7 +64,6 @@ ATLAS Build Script
   IMAGE_NAME        镜像名称 (默认: atlas)
   BUILD_TIER        构建层级 0-2 (默认: 0)
   ENABLE_MATERIALS  启用材料科学 0/1 (默认: 0)
-  USE_HASHED_REQUIREMENTS  使用哈希锁文件 0/1 (默认: 0)
   NO_CACHE          禁用缓存 0/1 (默认: 0)
 
 EOF
@@ -169,7 +167,6 @@ build_image() {
         --tag "${IMAGE_NAME}:${tag}" \
         --build-arg BUILD_TIER="${BUILD_TIER}" \
         --build-arg ENABLE_MATERIALS="${ENABLE_MATERIALS}" \
-        --build-arg USE_HASHED_REQUIREMENTS="${USE_HASHED_REQUIREMENTS}" \
         --build-arg VERSION="${VERSION}" \
         --progress=plain \
         ${cache_opt} \

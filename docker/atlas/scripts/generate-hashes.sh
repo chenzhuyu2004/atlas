@@ -12,7 +12,7 @@ NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-OUTPUT_DIR="${OUTPUT_DIR:-${PROJECT_ROOT}}"
+OUTPUT_DIR="${OUTPUT_DIR:-${PROJECT_ROOT}/requirements-locks}"
 
 if ! command -v pip-compile >/dev/null 2>&1; then
   echo -e "${RED}[ERROR]${NC} pip-compile not found."
@@ -38,7 +38,7 @@ for file in "${FILES[@]}"; do
     exit 1
   fi
   base="$(basename "${file}" .txt)"
-  out="${OUTPUT_DIR}/${base}.lock"
+  out="${OUTPUT_DIR}/${base}.lock.txt"
   echo -e "${GREEN}[INFO]${NC} ${file} -> ${out}"
   pip-compile --generate-hashes --allow-unsafe --output-file "${out}" "${src}"
 done
