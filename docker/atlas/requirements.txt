@@ -29,5 +29,5 @@ safetensors==0.7.0
 h5py==3.15.1
 
 # ===== Image Processing / 图像处理 =====
-pillow==12.1.0
+pillow==12.1.1
 opencv-python-headless==4.13.0.92
