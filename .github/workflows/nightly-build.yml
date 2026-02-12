@@ -141,7 +141,7 @@ jobs:
         continue-on-error: true  # 不因扫描失败而中断
 
       - name: Upload Trivy results / 上传扫描结果
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: ${{ always() && hashFiles(format('trivy-results-tier{0}.sarif', matrix.tier)) != '' }}
         with:
           sarif_file: 'trivy-results-tier${{ matrix.tier }}.sarif'

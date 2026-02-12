@@ -207,7 +207,7 @@ jobs:
 
       - name: Upload Trivy SARIF (PR) / 上传 Trivy SARIF（PR）
         if: always() && needs.changes.outputs.docker == 'true' && github.event_name == 'pull_request'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-pr.sarif
 
