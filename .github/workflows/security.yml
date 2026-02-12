@@ -50,7 +50,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: TruffleHog Secret Scan (PR)
+      - name: TruffleHog Secret Scan
         if: github.event_name == 'pull_request'
         uses: trufflesecurity/trufflehog@main
         with:
@@ -59,12 +59,12 @@ jobs:
           head: HEAD
           extra_args: --only-verified
 
-      - name: TruffleHog Secret Scan (Push/Schedule)
+      - name: Skip TruffleHog (GitHub Secret Scanning enabled)
         if: github.event_name != 'pull_request'
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          extra_args: --only-verified --since-commit HEAD~1
+        run: |
+          echo "ℹ️ TruffleHog is only run on pull requests"
+          echo "ℹ️ GitHub Secret Scanning is enabled for push events"
+          echo "✓ No additional scanning needed"
 
   codeql:
     name: CodeQL Analysis
