@@ -26,7 +26,7 @@ phonopy==2.32.0
 # ===== Feature Engineering / 特征工程 =====
 # Materials descriptors for ML / ML材料描述符
 matminer==0.9.2
-dscribe==2.1.1
+dscribe==2.1.2
 
 # ===== ML Interatomic Potentials / 机器学习原子势 =====
 # MACE: Multi-ACE equivariant model
