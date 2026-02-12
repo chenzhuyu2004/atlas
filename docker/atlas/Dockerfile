@@ -191,28 +191,42 @@ RUN apt-get purge -y build-essential gfortran cmake ninja-build && \
 
 # ==============================================================================
 # Non-root runtime user / 非 root 运行用户
+# Handles existing users in base image (e.g., ubuntu:1000 in PyTorch images)
 # ==============================================================================
 RUN set -e; \
+    target_username="${USERNAME}"; \
+    target_uid="${USER_UID}"; \
+    target_gid="${USER_GID}"; \
     group_name="${USERNAME}"; \
-    if ! getent group "${group_name}" >/dev/null; then \
-      if getent group "${USER_GID}" >/dev/null; then \
-        group_entry="$(getent group "${USER_GID}")"; \
-        group_name="${group_entry%%:*}"; \
-      else \
-        groupadd --gid "${USER_GID}" "${group_name}"; \
+    actual_username="${USERNAME}"; \
+    if getent passwd "${target_uid}" >/dev/null; then \
+      user_entry="$(getent passwd "${target_uid}")"; \
+      actual_username="${user_entry%%:*}"; \
+      echo "INFO: UID ${target_uid} already exists as user '${actual_username}', reusing it"; \
+      if [ "${actual_username}" != "${target_username}" ]; then \
+        echo "INFO: Target user '${target_username}' will be aliased to '${actual_username}'"; \
       fi; \
-    fi; \
-    if ! getent passwd "${USERNAME}" >/dev/null; then \
-      useradd --uid "${USER_UID}" --gid "${group_name}" --create-home --shell /bin/bash "${USERNAME}"; \
+    else \
+      if ! getent group "${group_name}" >/dev/null; then \
+        if getent group "${target_gid}" >/dev/null; then \
+          group_entry="$(getent group "${target_gid}")"; \
+          group_name="${group_entry%%:*}"; \
+        else \
+          groupadd --gid "${target_gid}" "${group_name}"; \
+        fi; \
+      fi; \
+      useradd --uid "${target_uid}" --gid "${group_name}" --create-home --shell /bin/bash "${target_username}"; \
+      actual_username="${target_username}"; \
+      echo "INFO: Created new user '${actual_username}' (UID ${target_uid})"; \
     fi; \
     if getent group video >/dev/null; then \
-      usermod -aG video "${USERNAME}"; \
+      usermod -aG video "${actual_username}" || echo "WARN: Could not add ${actual_username} to video group"; \
     fi; \
     mkdir -p /workspace /app && \
-    chown -R "${USERNAME}:${group_name}" /workspace /app
+    chown -R "${actual_username}:$(id -gn ${actual_username})" /workspace /app
 
-ENV HOME=/home/${USERNAME}
-USER ${USERNAME}
+# Switch to the runtime user by UID (works regardless of username)
+USER ${USER_UID}:${USER_GID}
 
 # Health check: exit code indicates CUDA availability
 # 健康检查：用退出码区分 CUDA 状态

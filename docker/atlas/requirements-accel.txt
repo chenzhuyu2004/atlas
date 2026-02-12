@@ -5,8 +5,23 @@
 # ==============================================================================
 # Note: Uses precompiled wheels to avoid source compilation
 # 注意: 使用预编译 wheel 避免源码编译
-# vLLM 0.15.1 currently expects PyTorch 2.9.1 + CUDA 12.8.
-# vLLM 0.15.1 当前期望 PyTorch 2.9.1 + CUDA 12.8。
+#
+# KNOWN ISSUE / 已知问题:
+# vLLM 0.15.1 requires PyTorch 2.9.1 + CUDA 12.8, but the base image uses
+# PyTorch 2.10.0 + CUDA 13.0. This causes pip to automatically downgrade
+# PyTorch during BUILD_TIER=2 installation, creating version conflicts.
+#
+# vLLM 0.15.1 要求 PyTorch 2.9.1 + CUDA 12.8，但基础镜像使用 PyTorch 2.10.0
+# + CUDA 13.0。这会导致 pip 在 BUILD_TIER=2 安装时自动降级 PyTorch，产生版本冲突。
+#
+# STATUS / 状态:
+# Waiting for vLLM to release version compatible with PyTorch 2.10+.
+# Once available, the base image can be rebuilt without modifications.
+# In the meantime, BUILD_TIER=2 is considered experimental.
+# 正在等待 vLLM 发布兼容 PyTorch 2.10+ 的版本。届时无需修改即可重新构建镜像。
+# 在此期间，BUILD_TIER=2 视为实验性功能。
+#
+# Tracking: https://github.com/vllm-project/vllm/issues
 # ==============================================================================
 
 # ===== High-Performance Inference / 高性能推理 =====

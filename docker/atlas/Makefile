@@ -134,9 +134,6 @@ prune:
 updates:
 	@./check-updates.sh
 
-hashes:
-	@./scripts/generate-hashes.sh
-
 metrics:
 	@./scripts/collect-metrics.sh $(CONTAINER)
 

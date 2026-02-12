@@ -14,7 +14,6 @@ This directory contains the main operational scripts for ATLAS Docker image.
 | `push.sh` | Push image to registry / 推送镜像到注册表 | `./push.sh v0.6-base` |
 | `pre-check.sh` | Pre-build checks / 预构建检查 | Called by `build.sh` |
 | `check-updates.sh` | Check package updates / 检查包更新 | `./check-updates.sh` |
-| `generate-hashes.sh` | Generate hashed lockfiles / 生成带哈希锁定文件 | `./generate-hashes.sh` |
 | `update-doc-version.sh` | Update doc version tags / 更新文档版本标签 | `./update-doc-version.sh 0.6 0.7` |
 | `collect-metrics.sh` | Collect local metrics / 采集本地指标 | `./collect-metrics.sh <container>` |
 
@@ -75,9 +74,6 @@ BUILD_TIER=2 ./scripts/build.sh
 ```bash
 # Check for package updates / 检查包更新
 ./scripts/check-updates.sh
-
-# Generate hashed lockfiles / 生成带哈希锁定文件
-./scripts/generate-hashes.sh
 
 # Manual pre-check / 手动预检查
 ./scripts/pre-check.sh
