@@ -3,7 +3,7 @@
 # Tooling / 工具
 pre-commit==4.5.1
 black==24.3.0
-isort==5.13.2
+isort==7.0.0
 mypy==1.8.0
 bandit==1.7.7
 
