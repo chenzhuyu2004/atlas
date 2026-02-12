@@ -4,6 +4,13 @@ name: Security Scan
 # Security scanning for dependencies and code / 依赖和代码安全扫描
 
 'on':
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker/atlas/requirements*.txt'
+      - '.github/workflows/security.yml'
+      - '**/*.py'
   schedule:
     - cron: '0 0 * * 0'  # Weekly on Sunday / 每周日运行
   workflow_dispatch:  # Manual trigger / 手动触发
@@ -90,7 +97,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install pip-audit
         run: pip install pip-audit
@@ -125,7 +132,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install Bandit
         run: pip install bandit[toml]
