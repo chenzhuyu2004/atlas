@@ -61,7 +61,7 @@ jobs:
       code: ${{ steps.filter.outputs.code }}
       docker: ${{ steps.filter.outputs.docker }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -114,7 +114,7 @@ jobs:
       matrix:
         python-version: ['3.12']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -249,7 +249,7 @@ jobs:
       matrix:
         python-version: ['3.12']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python / 配置 Python
         uses: actions/setup-python@v5
@@ -297,7 +297,7 @@ jobs:
       actions: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Free up disk space / 释放磁盘空间
         run: |
