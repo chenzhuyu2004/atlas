@@ -38,7 +38,7 @@ chgnet==0.4.1
 jarvis-tools==2025.1.20
 
 # ===== Visualization / 可视化 =====
-nglview==3.1.2
+nglview==4.0.1
 
 # ===== Transition State & Activation Energy / 过渡态与活化能 =====
 # Saddle point optimization / 鞍点优化
