@@ -168,7 +168,7 @@ jobs:
 
       - name: Smoke build Dockerfile / 轻量构建校验
         if: needs.changes.outputs.docker == 'true'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker/atlas
           file: docker/atlas/Dockerfile
@@ -337,7 +337,7 @@ jobs:
 
       - name: Build and push base image / 构建和推送基础镜像
         id: docker_build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: docker/atlas
           file: docker/atlas/Dockerfile
