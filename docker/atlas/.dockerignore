@@ -1,10 +1,14 @@
 # Build context hygiene
 .git
+.git/**
 .gitignore
+.gitattributes
 .idea
 .vscode
 .env
 .env.*
+**/.venv
+**/.conda
 __pycache__/
 *.pyc
 *.pyo
@@ -13,6 +17,17 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .DS_Store
+
+# Secrets and credentials / 密钥和凭证
+secrets/
+**/secrets/
+credentials*
+*.pem
+*.key
+*.crt
+*.pfx
+*_rsa
+*_rsa.pub
 
 # Docs and logs
 *.log

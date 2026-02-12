@@ -19,7 +19,7 @@ seaborn==0.13.2
 
 # ===== Development Tools / 开发工具 =====
 ipython==9.10.0
-jupyterlab==4.5.3
+jupyterlab==4.5.4
 ipykernel==7.2.0
 tqdm==4.67.3
 
