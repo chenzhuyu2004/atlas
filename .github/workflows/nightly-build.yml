@@ -24,7 +24,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -50,7 +50,7 @@ jobs:
         tier: [0, 1]  # 只构建 tier 0 和 1，tier 2 有 vLLM 兼容性问题
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Free up disk space / 释放磁盘空间
         run: |
