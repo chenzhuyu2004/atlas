@@ -4,7 +4,7 @@
 # ==============================================================================
 
 # Read version from VERSION file / 从 VERSION 文件读取版本号
-VERSION := $(shell cat VERSION 2>/dev/null || echo "0.6")
+VERSION := $(shell tr -d '[:space:]' < VERSION 2>/dev/null || echo "0.6")
 IMAGE_NAME ?= atlas
 IMAGE_BASE := $(IMAGE_NAME):v$(VERSION)-base
 

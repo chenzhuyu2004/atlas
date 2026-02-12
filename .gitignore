@@ -10,6 +10,19 @@
 .claude.json.backup
 .claude.json.backup.*
 
+# Secrets and credentials / 密钥和凭证
+secrets/
+**/secrets/
+credentials*
+*.pem
+*.key
+*.crt
+*.pfx
+*_rsa
+*_rsa.pub
+.secrets
+.credentials
+
 # Python
 __pycache__/
 *.py[cod]

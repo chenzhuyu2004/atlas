@@ -31,9 +31,8 @@
 # Optional / 可选: ENABLE_MATERIALS=1 adds Materials Science / 添加材料科学
 # ==============================================================================
 
-ARG SMOKE_BASE_IMAGE=python:3.10-slim
+ARG SMOKE_BASE_IMAGE=python:3.12-slim
 ARG BASE_IMAGE=pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
-ARG VERSION=0.6
 
 # ==============================================================================
 # Smoke Stage / 轻量校验阶段（CI 用）
