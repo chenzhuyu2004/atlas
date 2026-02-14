@@ -18,7 +18,7 @@ spglib==2.7.0
 mendeleev==1.1.0
 
 # Materials Project API / 材料项目 API
-mp-api==0.45.2
+mp-api==0.46.0
 
 # ===== Phonons & Thermodynamics / 声子与热力学 =====
 phonopy==2.47.1
