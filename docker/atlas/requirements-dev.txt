@@ -9,4 +9,4 @@ bandit==1.7.7
 
 # Testing / 测试
 pytest==9.0.2
-pytest-cov==5.0.0
+pytest-cov==7.0.0
