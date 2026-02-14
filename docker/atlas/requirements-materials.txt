@@ -9,7 +9,7 @@
 ase==3.27.0
 
 # Materials Analysis / 材料分析
-pymatgen==2025.1.24
+pymatgen==2025.10.7
 
 # Symmetry Analysis / 对称性分析
 spglib==2.7.0
